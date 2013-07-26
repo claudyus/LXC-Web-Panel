@@ -1,3 +1,5 @@
+lwp.conf
+
 *.py[cod]
 
 # C extensions
