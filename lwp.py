@@ -51,7 +51,7 @@ def teardown_request(exception):
         g.db.close()
 
 
-def if_logged_in(function=render_template, args=('login.html', )):
+def if_logged_in(function=render_template, f_args=('login.html', )):
     '''
     helper decorator to verify if a user is logged
     '''
@@ -60,7 +60,7 @@ def if_logged_in(function=render_template, args=('login.html', )):
             if 'logged_in' in session:
                 return handler(*args, **kwargs)
             else:
-                return function(*args)
+                return function(*f_args)
         new_handler.func_name = handler.func_name
         return new_handler
     return decorator
@@ -546,7 +546,7 @@ def clone_container():
     if request.method == 'POST':
         orig = request.form['orig']
         name = request.form['name']
-        
+
         try:
             snapshot = request.form['snapshot']
             if snapshot == 'True': snapshot = True
@@ -645,7 +645,7 @@ def refresh_memory_containers(name=None):
             containers.append({'name': container, 'memusg': lwp.memory_usage(container)})
         return jsonify(data=containers)
     elif name == 'host':
-        return jsonify(lwp.host_memory_usage())   
+        return jsonify(lwp.host_memory_usage())
     return jsonify({'memusg': lwp.memory_usage(name)})
 
 
