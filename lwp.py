@@ -239,33 +239,13 @@ def lxc_net():
             ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
 
             form = {}
-            try: form['use'] = request.form['use']
-            except KeyError: form['use'] = 'false'
-
-            try: form['bridge'] = request.form['bridge']
-            except KeyError: form['bridge'] = None
-
-            try: form['address'] = request.form['address']
-            except KeyError: form['address'] = None
-
-            try: form['netmask'] = request.form['netmask']
-            except KeyError: form['netmask'] = None
-
-            try: form['network'] = request.form['network']
-            except KeyError: form['network'] = None
-
-            try: form['range'] = request.form['range']
-            except KeyError: form['range'] = None
-
-            try: form['max'] = request.form['max']
-            except KeyError: form['max'] = None
+            for key in ['bridge', 'address', 'netmask', 'network', 'range', 'max']:
+                form[key] = request.form.get(key, None)
+            form['use'] = request.form.get('use', None)
 
 
-            if form['use'] == 'true' and form['use'] != cfg['use']:
-                lwp.push_net_value('USE_LXC_BRIDGE', 'true')
-
-            elif form['use'] == 'false' and form['use'] != cfg['use']:
-                lwp.push_net_value('USE_LXC_BRIDGE', 'false')
+            if form['use'] != cfg['use']:
+                lwp.push_net_value('USE_LXC_BRIDGE', 'true' if form['use'] else 'false')
 
             if form['bridge'] and form['bridge'] != cfg['bridge'] and re.match('^[a-zA-Z0-9_-]+$', form['bridge']):
                 lwp.push_net_value('LXC_BRIDGE', form['bridge'])
