@@ -288,8 +288,8 @@ def get_container_settings(name):
     except ConfigParser.NoOptionError:
         cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'^%s \'|egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
         try:
-            ip = subprocess.check_output(cmd, shell=True)
-            cfg['ipv4'] = ip
+            cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
+            push_config_value(cgroup['ipv4'], cfg['ipv4'], name)
         except:
             cfg['ipv4'] = ''
     try:
