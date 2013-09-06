@@ -20,6 +20,14 @@ DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
 ADDRESS = config.get('global', 'address')
 PORT = int(config.get('global', 'port'))
+try:
+       SSL = bool(config.get('global','ssl'))
+       PKEY = config.get('global','pkey')
+       CERT = config.get('global','cert')
+       if not os.path.isfile(PKEY) or not os.path.isfile(CERT):
+               SSL = False
+except ConfigParser.NoOptionError:
+       SSL = False
 
 
 # Flask app
@@ -697,4 +705,11 @@ def check_session_limit():
             session['last_activity'] = now
 
 if __name__ == '__main__':
-    app.run(host=app.config['ADDRESS'], port=app.config['PORT'])
+    if app.config['SSL']: 
+        from OpenSSL import SSL
+        context = SSL.Context(SSL.SSLv23_METHOD)
+        context.use_privatekey_file(app.config['PKEY'])
+        context.use_certificate_file(app.config['CERT'])
+        app.run(host=app.config['ADDRESS'], port=app.config['PORT'],ssl_context=context)
+    else:
+        app.run(host=app.config['ADDRESS'], port=app.config['PORT'])
