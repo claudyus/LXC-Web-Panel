@@ -37,6 +37,8 @@ class ContainerAlreadyExists(Exception): pass
 class ContainerDoesntExists(Exception): pass
 class ContainerAlreadyRunning(Exception): pass
 class ContainerNotRunning(Exception): pass
+class DirectoryDoesntExists(Exception): pass
+class NFSDirectoryNotMounted(Exception): pass
 
 def exists(container):
     '''
@@ -57,7 +59,7 @@ def create(container, template='ubuntu', storage=None, xargs=None):
     command += ' -t {}'.format(template)
     if storage: command += ' -B {}'.format(storage)
     if xargs: command += ' -- {}'.format(storage)
-            
+
     return _run(command)
 
 
@@ -188,3 +190,18 @@ def checkconfig():
 def cgroup(container, key, value):
     if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
     return _run('lxc-cgroup -n {} {} {}'.format(container, key, value))
+
+def backup(container, sr_type='local', destination='/var/lxc-backup/'):
+    '''
+    Backup container with rsync to a storage repository (SR). E.g: localy or with nfs
+    If SR is localy then the path is /var/lxc-backup/
+    otherwise if SR is NFS type then we just check if the SR is mounted in host side in /mnt/lxc-backup
+    '''
+    if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
+    source = '/var/lib/lxc/' + container
+    if sr_type == 'local':
+    	if not os.path.isdir(destination)): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
+    if sr_type == 'nfs':
+        if not os.path.ismount(destination): raise NFSDirectoryNotMounted('NFS {} is not mounted !'.format(destination))
+    command = 'rsync --archive --recursive  --compress {} {}'.format(source, destination)
+    return _run(command)
