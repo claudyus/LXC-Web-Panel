@@ -200,7 +200,7 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
     source = '/var/lib/lxc/' + container
     if sr_type == 'local':
-    	if not os.path.isdir(destination)): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
+    	if not os.path.isdir(destination): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
     if sr_type == 'nfs':
         if not os.path.ismount(destination): raise NFSDirectoryNotMounted('NFS {} is not mounted !'.format(destination))
     command = 'rsync --archive --recursive  --compress {} {}'.format(source, destination)
