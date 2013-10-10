@@ -10,7 +10,7 @@ import ConfigParser
 import re
 
 class CalledProcessError(Exception): pass
-
+class LxcConfigFileNotComplete(Exception): pass
 cgroup = {}
 cgroup['type'] = 'lxc.network.type'
 cgroup['link'] = 'lxc.network.link'
@@ -232,6 +232,7 @@ def get_net_settings():
     filename = '/etc/default/lxc'
     if not file_exist(filename):
         return False
+    if check_ubuntu() == "unknown": raise LxcConfigFileNotComplete('This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc')
     config = ConfigParser.SafeConfigParser()
     cfg = {}
     config.readfp(FakeSection(open(filename)))

@@ -222,10 +222,15 @@ def lxc_net():
     if 'logged_in' in session:
         if session['su'] != 'Yes':
             return abort(403)
+        cfg = []
 
         if request.method == 'POST':
-            if lxc.running() == []:
+            try:
                 cfg = lwp.get_net_settings()
+            except lwp.LxcConfigFileNotComplete:
+                cfg = []
+
+            if lxc.running() == []:
                 ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
 
                 form = {}
@@ -282,6 +287,9 @@ def lxc_net():
                     flash(u'Failed to restart LXC networking.', 'error')
             else:
                 flash(u'Stop all containers before restart lxc-net.', 'warning')
+        if cfg == []:
+            flash(u'This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc','warning')
+            return redirect(url_for('home'))
         return render_template('lxc-net.html', containers=lxc.ls(), cfg=lwp.get_net_settings(), running=lxc.running())
     return render_template('login.html')
 
