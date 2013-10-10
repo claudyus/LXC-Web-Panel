@@ -222,13 +222,12 @@ def lxc_net():
     if 'logged_in' in session:
         if session['su'] != 'Yes':
             return abort(403)
-        cfg = []
+        try:
+            cfg = lwp.get_net_settings()
+        except lwp.LxcConfigFileNotComplete:
+            cfg = []
 
-        if request.method == 'POST':
-            try:
-                cfg = lwp.get_net_settings()
-            except lwp.LxcConfigFileNotComplete:
-                cfg = []
+        if request.method == 'POST': #By default the request method is GET
 
             if lxc.running() == []:
                 ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
@@ -290,7 +289,7 @@ def lxc_net():
         if cfg == []:
             flash(u'This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc','warning')
             return redirect(url_for('home'))
-        return render_template('lxc-net.html', containers=lxc.ls(), cfg=lwp.get_net_settings(), running=lxc.running())
+        return render_template('lxc-net.html', containers=lxc.ls(), cfg=cfg, running=lxc.running())
     return render_template('login.html')
 
 
