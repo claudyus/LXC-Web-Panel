@@ -191,6 +191,7 @@
 
 				$(".destroy").on('click',function(e){
 					$(".destroy-link").attr('href',"{{url_for('action', action='destroy') }}" + "&token="+ token +"&name="+ $(this).data('container-name'));
+					$('.modal-body #destroy-container-name').text($(this).data('container-name'));
 					$('#destroy').modal('show');
 				});
 
