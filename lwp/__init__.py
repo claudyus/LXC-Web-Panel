@@ -185,11 +185,13 @@ def check_ubuntu():
     return the System version
     '''
     dist = '%s %s' % (platform.linux_distribution()[0], platform.linux_distribution()[1])
-    if dist == 'Ubuntu 12.04':
-        return dist
-    elif dist == 'Ubuntu 12.10':
-        return dist
-    elif dist == 'Ubuntu 13.04':
+
+    supported_dists = [ 'Ubuntu 12.04',
+                        'Ubuntu 12.10',
+                        'Ubuntu 13.04',
+                        'Ubuntu 13.10' ]
+
+    if dist in supported_dists:
         return dist
     return 'unknown'
 
