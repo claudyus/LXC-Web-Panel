@@ -1,0 +1,5 @@
+# Compiled python modules
+*.pyc
+
+# Local database
+lwp.db
