@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../')
-from lxclite import exists, stopped
+from lxclite import exists, stopped, info
 import subprocess
 import os
 import platform
@@ -241,6 +241,13 @@ def get_net_settings():
     return cfg
 
 
+def get_ipv4_dhcp(name):
+    if info(name)['state'] == 'RUNNING':
+        return os.popen("/usr/bin/lxc-attach -n %s /sbin/ifconfig" % name).read().split()[6][5:]
+    else:
+        return ''
+
+
 def get_container_settings(name):
     '''
     returns a dict of all utils settings for a container
@@ -282,7 +289,7 @@ def get_container_settings(name):
     try:
         cfg['ipv4'] = config.get('DEFAULT', cgroup['ipv4'])
     except ConfigParser.NoOptionError:
-        cfg['ipv4'] = ''
+        cfg['ipv4'] = get_ipv4_dhcp(name)
     try:
         cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['memlimit']))
     except ConfigParser.NoOptionError:
