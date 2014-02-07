@@ -6,9 +6,16 @@
 {% block content %}
 <div class="span9">
 	{{ super() }}
-	{% if session.su == 'Yes' %}<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-danger" data-toggle="modal" data-target="#reboot"><i class="icon-off icon-white"></i> Reboot</a></p>
-	{% if containers != [] %}<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-inverse" data-toggle="modal" data-target="#cloneCT"> <i class="icon-repeat icon-white"></i> Clone <abbr title="Container">CT</abbr></a></p>{% endif %}
-	<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-success" data-toggle="modal" data-target="#createCT"><i class="icon-plus-sign icon-white"></i> Create <abbr title="Container">CT</abbr></a></p>{% endif %}
+	{% if session.su == 'Yes' %}
+		<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-danger" data-toggle="modal" data-target="#reboot"><i class="icon-off icon-white"></i> Reboot</a></p>
+		{% if containers != [] %}
+			<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-inverse" data-toggle="modal" data-target="#cloneCT"> <i class="icon-repeat icon-white"></i> Clone <abbr title="Container">CT</abbr></a></p>
+			{% if storage_repos %}
+				<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="icon-hdd icon-white"></i> Backup <abbr title="Container">CT</abbr></a></p>
+			{% endif %}
+		{% endif %}
+		<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-success" data-toggle="modal" data-target="#createCT"><i class="icon-plus-sign icon-white"></i> Create <abbr title="Container">CT</abbr></a></p>
+	{% endif %}
 
 	<div class="hero-unit">
 		{% if dist == 'Unknown' %}<div class="alert alert-error">LXC Web Panel is optimized for Ubuntu 12.10 !</div>{% endif %}
@@ -78,6 +85,7 @@
 
 	{% if containers != [] %}
 		{% include "includes/modal_clone.html" %}
+		{% include "includes/modal_backup.html" %}
 		{% include "includes/modal_destroy.html" %}
 	{% endif %}
 {% endif %}
