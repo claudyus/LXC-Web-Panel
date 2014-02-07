@@ -20,7 +20,6 @@ DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
 ADDRESS = config.get('global', 'address')
 PORT = int(config.get('global', 'port'))
-<<<<<<< HEAD
 try:
        SSL = bool(config.get('global','ssl'))
        PKEY = config.get('global','pkey')
@@ -30,9 +29,7 @@ try:
 except ConfigParser.NoOptionError:
        SSL = False
 
-=======
 storage_repos = config.items('storage_repository')
->>>>>>> 5fd7d0aa95f76b47671d1b8873b4b948b27b55c5
 
 # Flask app
 app = Flask(__name__)
