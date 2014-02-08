@@ -1,5 +1,6 @@
 import subprocess
 import os
+import time
 
 # LXC Python Library
 # for compatibility with LXC 0.8 and 0.9
@@ -207,15 +208,18 @@ def cgroup(container, key, value):
 
 def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     '''
-    Backup container with rsync to a storage repository (SR). E.g: localy or with nfs
+    Backup container with tar to a storage repository (SR). E.g: localy or with nfs
     If SR is localy then the path is /var/lxc-backup/
     otherwise if SR is NFS type then we just check if the SR is mounted in host side in /mnt/lxc-backup
     '''
+    prefix = time.strftime("%Y-%m-%d__%H:%m.tar.gz")
+    filename = '{}/{}-{}'.format(destination, container, prefix)
+
     if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
     source = '/var/lib/lxc/' + container
     if sr_type == 'local':
     	if not os.path.isdir(destination): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
     if sr_type == 'nfs':
         if not os.path.ismount(destination): raise NFSDirectoryNotMounted('NFS {} is not mounted !'.format(destination))
-    command = 'rsync --archive --recursive  --compress {} {}'.format(source, destination)
+    command = 'tar czf {} {}'.format(filename, source)
     return _run(command)
