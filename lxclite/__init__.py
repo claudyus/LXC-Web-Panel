@@ -221,5 +221,7 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     	if not os.path.isdir(destination): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
     if sr_type == 'nfs':
         if not os.path.ismount(destination): raise NFSDirectoryNotMounted('NFS {} is not mounted !'.format(destination))
-    command = 'tar czf {} {}'.format(filename, source)
-    return _run(command)
+    freeze(container)
+    create_backup  = _run('tar czf {} {}'.format(filename, source))
+    unfreeze(container)
+    return create_backup
