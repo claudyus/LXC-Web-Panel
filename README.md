@@ -8,11 +8,11 @@ Visit http://lxc-webpanel.github.io/ for more informations
 # Installation
 
 ```
-wget https://github.com/rasmuskr/LXC-Web-Panel/blob/master/tools/install.sh -O - | bash
+wget https://raw2.github.com/rasmuskr/LXC-Web-Panel/master/tools/install.sh -O - | bash
 ```
 
 
 # Update
 ```
-wget https://github.com/rasmuskr/LXC-Web-Panel/blob/master/tools/update.sh -O - | bash
+wget https://raw2.github.com/rasmuskr/LXC-Web-Panel/master/tools/update.sh -O - | bash
 ```
