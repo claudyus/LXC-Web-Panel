@@ -29,7 +29,7 @@ if [[ -d "$INSTALL_DIR" && $(< $INSTALL_DIR/version) == '0.2' ]]; then
 	rm -rf $INSTALL_DIR/* $INSTALL_DIR/.* &> /dev/null
 
 	echo 'Installing LXC Web Panel v0.2...'
-	git clone https://github.com/rasmuskr/LXC-Web-Panel.git "$INSTALL_DIR"
+	git clone https://github.com/claudyus/LXC-Web-Panel.git "$INSTALL_DIR"
 
 	echo 'Restore database...'
 	cp "$tmp/lwp.db" "$INSTALL_DIR/lwp.db"
