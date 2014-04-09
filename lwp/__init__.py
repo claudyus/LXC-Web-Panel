@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../')
-from lxclite import exists, stopped
+from lxclite import exists, stopped, info
 import subprocess
 import os
 import platform
@@ -10,7 +10,7 @@ import ConfigParser
 import re
 
 class CalledProcessError(Exception): pass
-
+class LxcConfigFileNotComplete(Exception): pass
 cgroup = {}
 cgroup['type'] = 'lxc.network.type'
 cgroup['link'] = 'lxc.network.link'
@@ -236,6 +236,7 @@ def get_net_settings():
         filename = '/etc/default/lxc'
     if not file_exist(filename):
         return False
+    if check_ubuntu() == "unknown": raise LxcConfigFileNotComplete('This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc')
     config = ConfigParser.SafeConfigParser()
     cfg = {}
     config.readfp(FakeSection(open(filename)))
@@ -247,6 +248,13 @@ def get_net_settings():
     cfg['range'] = config.get('DEFAULT', 'LXC_DHCP_RANGE').strip('"')
     cfg['max'] = config.get('DEFAULT', 'LXC_DHCP_MAX').strip('"')
     return cfg
+
+
+def get_ipv4_dhcp(name):
+    if info(name)['state'] == 'RUNNING':
+        return os.popen("/usr/bin/lxc-attach -n %s /sbin/ifconfig" % name).read().split()[6][5:]
+    else:
+        return ''
 
 
 def get_container_settings(name):
@@ -290,7 +298,7 @@ def get_container_settings(name):
     try:
         cfg['ipv4'] = config.get('DEFAULT', cgroup['ipv4'])
     except ConfigParser.NoOptionError:
-        cfg['ipv4'] = ''
+        cfg['ipv4'] = get_ipv4_dhcp(name)
     try:
         cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['memlimit']))
     except ConfigParser.NoOptionError:

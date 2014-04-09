@@ -1,5 +1,6 @@
 import subprocess
 import os
+import time
 
 # LXC Python Library
 # for compatibility with LXC 0.8 and 0.9
@@ -37,6 +38,8 @@ class ContainerAlreadyExists(Exception): pass
 class ContainerDoesntExists(Exception): pass
 class ContainerAlreadyRunning(Exception): pass
 class ContainerNotRunning(Exception): pass
+class DirectoryDoesntExists(Exception): pass
+class NFSDirectoryNotMounted(Exception): pass
 
 def exists(container):
     '''
@@ -68,7 +71,7 @@ def create(container, template='ubuntu', storage=None, xargs=None):
     command += ' -t {}'.format(template)
     if storage: command += ' -B {}'.format(storage)
     if xargs: command += ' -- {}'.format(xargs)
-            
+
     return _run(command)
 
 
@@ -110,9 +113,16 @@ def ls():
 
     Note: Directory mode for Ubuntu 12/13 compatibility
     '''
-    base_path='/var/lib/lxc'
-    try: ct_list = [x for x in os.listdir(base_path) if os.path.isdir(os.path.join(base_path, x))]
-    except OSError: ct_list = []
+    lxcdir = '/var/lib/lxc/'
+    ct_list = []
+
+    try: 
+	lsdir  = os.listdir(lxcdir)
+	for i in lsdir:
+    	    if os.path.isdir(lxcdir+i):
+    		ct_list.append(i)
+    except OSError: 
+	ct_list = []
     return sorted(ct_list)
 
 
@@ -206,3 +216,23 @@ def checkconfig():
 def cgroup(container, key, value):
     if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
     return _run('lxc-cgroup -n {} {} {}'.format(container, key, value))
+
+def backup(container, sr_type='local', destination='/var/lxc-backup/'):
+    '''
+    Backup container with tar to a storage repository (SR). E.g: localy or with nfs
+    If SR is localy then the path is /var/lxc-backup/
+    otherwise if SR is NFS type then we just check if the SR is mounted in host side in /mnt/lxc-backup
+    '''
+    prefix = time.strftime("%Y-%m-%d__%H:%m.tar.gz")
+    filename = '{}/{}-{}'.format(destination, container, prefix)
+
+    if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
+    source = '/var/lib/lxc/' + container
+    if sr_type == 'local':
+    	if not os.path.isdir(destination): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
+    if sr_type == 'nfs':
+        if not os.path.ismount(destination): raise NFSDirectoryNotMounted('NFS {} is not mounted !'.format(destination))
+    freeze(container)
+    create_backup  = _run('tar czf {} {}'.format(filename, source))
+    unfreeze(container)
+    return create_backup
