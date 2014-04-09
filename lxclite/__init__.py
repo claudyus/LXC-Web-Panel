@@ -45,6 +45,17 @@ def exists(container):
     if container in ls(): return True
     return False
 
+def get_ipv4(container):
+    '''
+    Get the IPv4 address for a container
+    '''
+    if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
+    output = _run('lxc-ls --fancy {}'.format(container), output=True).splitlines()
+    for l in output:
+        parts = l.split()
+        if parts[0] == container:
+            return parts[2]
+    return None
 
 def create(container, template='ubuntu', storage=None, xargs=None):
     '''
@@ -56,7 +67,7 @@ def create(container, template='ubuntu', storage=None, xargs=None):
     command = 'lxc-create -n {}'.format(container)
     command += ' -t {}'.format(template)
     if storage: command += ' -B {}'.format(storage)
-    if xargs: command += ' -- {}'.format(storage)
+    if xargs: command += ' -- {}'.format(xargs)
             
     return _run(command)
 
@@ -99,7 +110,8 @@ def ls():
 
     Note: Directory mode for Ubuntu 12/13 compatibility
     '''
-    try: ct_list = os.listdir('/var/lib/lxc/')
+    base_path='/var/lib/lxc'
+    try: ct_list = [x for x in os.listdir(base_path) if os.path.isdir(os.path.join(base_path, x))]
     except OSError: ct_list = []
     return sorted(ct_list)
 

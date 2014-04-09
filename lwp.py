@@ -6,6 +6,7 @@ import time
 import re
 import hashlib
 import signal
+import socket
 import sqlite3
 import os
 import ConfigParser
@@ -70,14 +71,15 @@ def home():
                 containers_by_status.append({
                     'name': container,
                     'memusg': lwp.memory_usage(container),
-                    'settings': lwp.get_container_settings(container)
+                    'settings': lwp.get_container_settings(container),
+                    'ipv4': lxc.get_ipv4(container)
                 })
             containers_all.append({
                         'status' : status.lower(),
                         'containers' : containers_by_status
                 })
 
-        return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), templates=lwp.get_templates_list())
+        return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, host=socket.gethostname(), dist=lwp.check_ubuntu(), templates=lwp.get_templates_list())
     return render_template('login.html')
 
 
