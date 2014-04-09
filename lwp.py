@@ -94,7 +94,7 @@ def home():
             containers_by_status.append({
                 'name': container,
                 'memusg': lwp.memory_usage(container),
-                'settings': lwp.get_container_settings(container)
+                'settings': lwp.get_container_settings(container),
                 'ipv4': lxc.get_ipv4(container)
 
             })
