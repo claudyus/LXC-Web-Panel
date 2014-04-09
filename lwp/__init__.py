@@ -291,7 +291,12 @@ def get_container_settings(name):
     try:
         cfg['ipv4'] = config.get('DEFAULT', cgroup['ipv4'])
     except ConfigParser.NoOptionError:
-        cfg['ipv4'] = ''
+        cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'^%s \'|egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
+        try:
+            cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
+            push_config_value(cgroup['ipv4'], cfg['ipv4'], name)
+        except:
+            cfg['ipv4'] = ''
     try:
         cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['memlimit']))
     except ConfigParser.NoOptionError:
