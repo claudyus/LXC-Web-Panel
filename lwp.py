@@ -589,41 +589,38 @@ def clone_container():
     return redirect(url_for('home'))
 
 @app.route('/action/backup-container', methods=['GET', 'POST'])
+@if_logged_in()
 def backup_container():
     '''
     Verify the form to backup a container
     '''
-    if 'logged_in' in session:
-        if session['su'] != 'Yes':
-            return abord(403)
-        if request.method == 'POST':
-            container = request.form['orig']
-            sr_type = request.form['dest']
-            for sr in storage_repos:
-                if sr_type in sr:
-                    sr_path = sr[1]
-                    break
-                else:
-                    sr_path = None
-            
-            out = None
-            
-            try:
-                out = lxc.backup(container=container, sr_type=sr_type, destination=sr_path)
-            except lxc.ContainerDoesntExists:
-                flash(u'The Container %s does not exist !' % container, 'error')
-            except lxc.DirectoryDoesntExists:
-                flash(u'Local backup directory "%s" does not exist !' %sr_path, 'error')
-            except lxc.NFSDirectoryNotMounted:
-                flash(u'NFS repository "%s" not mounted !' % sr_path,'error')
-            except subprocess.CalledProcessError:
-                flash(u'Error during transfert !','error')
+    if request.method == 'POST':
+        container = request.form['orig']
+        sr_type = request.form['dest']
+        for sr in storage_repos:
+            if sr_type in sr:
+                sr_path = sr[1]
+                break
+            else:
+                sr_path = None
 
-            if out == 0: flash(u'Container %s backed up successfully' % container,'success')
-            elif out != 0: flash(u'Failed to backup %s container' % container,'error')
+        out = None
 
-        return redirect(url_for('home'))
-    return render_template('login.html')
+        try:
+            out = lxc.backup(container=container, sr_type=sr_type, destination=sr_path)
+        except lxc.ContainerDoesntExists:
+            flash(u'The Container %s does not exist !' % container, 'error')
+        except lxc.DirectoryDoesntExists:
+            flash(u'Local backup directory "%s" does not exist !' %sr_path, 'error')
+        except lxc.NFSDirectoryNotMounted:
+            flash(u'NFS repository "%s" not mounted !' % sr_path,'error')
+        except subprocess.CalledProcessError:
+            flash(u'Error during transfert !','error')
+
+        if out == 0: flash(u'Container %s backed up successfully' % container,'success')
+        elif out != 0: flash(u'Failed to backup %s container' % container,'error')
+
+    return redirect(url_for('home'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
