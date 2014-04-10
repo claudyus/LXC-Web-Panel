@@ -228,6 +228,7 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     '''
     prefix = time.strftime("%Y-%m-%d__%H:%m.tar.gz")
     filename = '{}/{}-{}'.format(destination, container, prefix)
+    was_running = False
 
     if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
     source = '/var/lib/lxc/' + container
@@ -235,7 +236,14 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     	if not os.path.isdir(destination): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
     if sr_type == 'nfs':
         if not os.path.ismount(destination): raise NFSDirectoryNotMounted('NFS {} is not mounted !'.format(destination))
-    freeze(container)
+
+    if info(container)['state'] == 'RUNNING':
+        was_running = True
+        freeze(container)
+
     create_backup  = _run('tar czf {} {}'.format(filename, source))
-    unfreeze(container)
+
+    if was_running == True:
+        unfreeze(container)
+
     return create_backup
