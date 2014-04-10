@@ -61,7 +61,7 @@
 						<td><a href="{{ url_for('edit',container=container.name) }}" title="Click to edit {{container.name}}">{{container.name}}</a></td>
 						<td>{{container.settings.utsname}}</td>
 						<td>{% if container.settings.flags == 'up' %}{% if container.settings.ipv4 != '' %}{{container.settings.ipv4}}{% else %}{% if container.ipv4 %}{{ container.ipv4 }}{% else %}Undefined{% endif %}{% endif %}{% elif container.settings.flags == 'down' %}Link Down{% endif %}</td>
-						<td id="{{container.name}}">{{ render_memory_wrapper(container.memusg) }}</td>
+						<td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
 						<td>
 							<div class="btn-toolbar" style="margin:8px 0;">
 								<div class="btn-group">
@@ -93,8 +93,8 @@
 {% endblock %}
 
 {% macro memory_color(value) -%}{% if value != 0 %}{% if 0 <= value <= 511 %}success{% elif 512 <= value < 980 %}warning{% else %}important{% endif %}{% endif %}{%- endmacro %}
-{% macro render_memory_wrapper(value) -%}
-	{% if value != 0 %}<span class="label label-{{ memory_color(value) }}">{{ value }} MB</span>{% endif %}
+{% macro render_memory_wrapper(value, limit) -%}
+	{% if value != 0 %}<span class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</span>{% endif %}
 {%- endmacro %}
 
 {% block script %}
@@ -133,7 +133,11 @@
 					data = data.data;
 					for (i in data) {
 						var el = $('#'+data[i].name+' span');
-						el.text(data[i].memusg+' MB');
+						if (data[i].settings.memlimit == '') {
+							el.text(data[i].memusg + ' MB');
+						} else {
+							el.text(data[i].memusg + " / " + data[i].settings.memlimit + ' MB');
+						}
 						el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg));
 					}
 				});

@@ -688,7 +688,7 @@ def refresh_memory_containers(name=None):
         containers = []
         for container in containers_running:
             container = container.replace(' (auto)', '')
-            containers.append({'name': container, 'memusg': lwp.memory_usage(container)})
+            containers.append({'name': container, 'memusg': lwp.memory_usage(container), 'settings': lwp.get_container_settings(container)})
         return jsonify(data=containers)
     elif name == 'host':
         return jsonify(lwp.host_memory_usage())
