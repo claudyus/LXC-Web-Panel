@@ -1,5 +1,57 @@
-## Version 0.2 beta
-## 2013-04-30
+0.3 / 2014-03-10
+================
+
+  delete compiled/ignored file
+  fix lxc-clone for lxc v1.0
+  fix lxc-info output parse
+  Just some info on README, clone this repo during installation
+  fix syntax after merge
+  Merge remote-tracking branch 'xbddc/master'
+  Merge remote-tracking branch 'tonnydourado/dev'
+  Revert "Get IP addres directly from running container instead of config file"
+  Merge remote-tracking branch 'rasmuskr/master'
+  Merge remote-tracking branch 'nevelis/aptimize'
+  Adding runtime files to gitignore
+  Adding install and update scripts and updateing urls to point to this reposetory
+  Merge branch 'master' of git://github.com/jureqq/LXC-Web-Panel
+  added gitignore file
+  Freezing container before backup and unfreeze after
+  Using Tar and Gzip for backup Append date and time to the backup archive file name
+  merge ssl and backup changes in lwp.conf
+  fix merge
+  Merge branch 'lwp-backup' of https://github.com/vaytess/LXC-Web-Panel
+  Merge branch 'ssl' of https://github.com/remixtj/LXC-Web-Panel
+  Get IP addres directly from running container instead of config file
+  * fix platform info. * exclude file from containers list
+  Merge pull request #51 from orgoj/patch-1
+  Update __init__.py
+  Adding .gitignore
+  Display IPv4 addresses for containers using DHCP
+  Added Ubuntu 13.10 to supported distributions
+  Use correct variable for extra arguments
+  Don't include files in container listing
+  Merge pull request #44 from gweis/master
+  make lxc web panel deployable behind reverse proxy by using url_for for all url’s in templates
+  fixing lxc-info
+  code refactoring within lxc_net() action
+  fixing bug of 'internal server error (error 500)' when clicking to Networking link (sidebar nav) when the host is not ubuntu
+  add backup_container() action in lwp.py and modal_backup.html view to templates/includes/
+  add some params to lwp.config and add a backup() method in lxclite module
+  newline missing
+  Added SSL Support to lwp panel
+  write container's ip back to config to speed up the load time of dashboard
+  container can only be destroyed in stopped stage.
+  detect container's ip address automatically when not specified in config file.
+  Fixing argument name in if_logged_in decorator
+  Ignoring the config file.
+  Some refactoring on the lxc_net function.
+  Added .gitignore file
+  Added @if_logged_in decorator, plus some minor style changes
+  Merge pull request #13 from 4lexx/master
+  allow IP address in CIDR notation
+
+0.2 / 2013-04-30
+================
 
 + Instant push memory and CPU options to cgroup values
 + Added partition option in the config file, you can choose which partition you want to monitor in the overview
