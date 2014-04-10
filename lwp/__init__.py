@@ -219,11 +219,8 @@ def check_version():
     '''
     returns latest LWP version (dict with current and latest)
     '''
-    f = open('version')
-    current = float(f.read())
-    f.close()
     latest = float(urllib2.urlopen('http://lxc-webpanel.github.com/version').read())
-    return {'current':current,
+    return {'current': subprocess.check_output('git describe --tags', shell=True),
             'latest':latest}
 
 
