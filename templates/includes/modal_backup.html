@@ -9,7 +9,13 @@
 				<div class="controls input-prepend">
 					<span class="add-on"><i class="icon-download-alt"></i></span>
 					<select id="selectContainer" name="orig">
-						{% for c in containers %}<option value="{{ c }}">{{c}}</li>{% endfor %}
+						{% for c in containers %}
+							{% if c == container %}
+								<option value="{{ c }}" selected>{{c}}</li>
+							{% else %}
+								<option value="{{ c }}">{{c}}</li>
+							{% endif %}
+						{% endfor %}
 					</select>
 				</div>
 

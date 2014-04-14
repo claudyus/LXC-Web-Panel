@@ -233,7 +233,7 @@ def edit(container=None):
     pid = info['pid']
 
     infos = {'status': status, 'pid': pid, 'memusg': lwp.memory_usage(container)}
-    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=lwp.get_container_settings(container), host_memory=host_memory)
+    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=lwp.get_container_settings(container), host_memory=host_memory, storage_repos = storage_repos)
 
 
 @app.route('/settings/lxc-net', methods=['POST', 'GET'])
