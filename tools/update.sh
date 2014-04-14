@@ -16,7 +16,7 @@ fi
 
 INSTALL_DIR='/srv/lwp'
 
-if [[ -d "$INSTALL_DIR" && $(< $INSTALL_DIR/version) == '0.3' ]]; then
+if [[ -d "$INSTALL_DIR" && $(< $INSTALL_DIR/version) == '0.4' ]]; then
 
 	/etc/init.d/lwp stop
 

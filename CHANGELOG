@@ -1,4 +1,17 @@
-0.3 / 2014-03-10
+0.4 / 2014-04-14
+================
+
+  feat(backup): omit /var/lib/lxc prefix during backup, don't use ':' inside filename
+  Update Readme.md with remove info
+  Show container name in confirmation dialog when destroying a container.
+  Show memory limit (if set) beside memory usage in overview page.
+  Add .editorconfig
+  feat: retrieve project version using git describe
+  rework: use logge_in decorator for backup_container()
+  fix: avoid exception during backup if container was stopped
+
+
+0.3 / 2014-04-10
 ================
 
   delete compiled/ignored file
