@@ -226,12 +226,11 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     If SR is localy then the path is /var/lxc-backup/
     otherwise if SR is NFS type then we just check if the SR is mounted in host side in /mnt/lxc-backup
     '''
-    prefix = time.strftime("%Y-%m-%d__%H:%m.tar.gz")
+    prefix = time.strftime("%Y-%m-%d__%H-%m.tar.gz")
     filename = '{}/{}-{}'.format(destination, container, prefix)
     was_running = False
 
     if not exists(container): raise ContainerDoesntExists('Container {} does not exist!'.format(container))
-    source = '/var/lib/lxc/' + container
     if sr_type == 'local':
     	if not os.path.isdir(destination): raise DirectoryDoesntExists('Directory {} does not exist !'.format(destination))
     if sr_type == 'nfs':
@@ -241,7 +240,7 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
         was_running = True
         freeze(container)
 
-    create_backup  = _run('tar czf {} {}'.format(filename, source))
+    create_backup  = _run('tar czf {} -C /var/lib/lxc {}'.format(filename, container))
 
     if was_running == True:
         unfreeze(container)
