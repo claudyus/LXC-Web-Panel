@@ -1,0 +1,58 @@
+html, body {
+    height: 100%;
+}
+html {
+    overflow-y: scroll;
+}
+h3.head {
+    margin: 0;
+}
+h3.head-networking, .switch-networking {
+    display:inline-block;
+}
+.switch-networking {
+    position:relative;
+    top:-5px;
+    margin-left:17px;
+}
+.sidebar-nav {
+    padding: 9px 0;
+}
+.table td {
+    vertical-align: middle;
+    padding: 0 8px;
+    text-align: center;
+}
+.hero-unit {
+    padding: 5px 30px;
+}
+.help-block ul {
+    margin:0 0 -10px 0;
+}
+.help-block li {
+    list-style-type:none;
+}
+.fix-height {
+    line-height: 30px;
+    min-height: 30px;
+    height: 30px;
+}
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -60px;
+}
+#push, #footer {
+    height: 60px;
+}
+#wrap > .container {
+    padding-top: 60px;
+}
+.container .credit {
+    margin: 20px 0;
+}
+
+.contributor {
+	vertical-align: top;
+}
