@@ -5,8 +5,6 @@ import subprocess
 import time
 import re
 import hashlib
-import signal
-import socket
 import sqlite3
 import os
 import ConfigParser
@@ -22,13 +20,13 @@ DATABASE = config.get('database', 'file')
 ADDRESS = config.get('global', 'address')
 PORT = int(config.get('global', 'port'))
 try:
-       SSL = bool(config.get('global','ssl'))
-       PKEY = config.get('global','pkey')
-       CERT = config.get('global','cert')
-       if not os.path.isfile(PKEY) or not os.path.isfile(CERT):
-               SSL = False
+    SSL = bool(config.get('global', 'ssl'))
+    PKEY = config.get('global', 'pkey')
+    CERT = config.get('global', 'cert')
+    if not os.path.isfile(PKEY) or not os.path.isfile(CERT):
+        SSL = False
 except ConfigParser.NoOptionError:
-       SSL = False
+    SSL = False
 
 storage_repos = config.items('storage_repository')
 
