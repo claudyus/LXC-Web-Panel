@@ -28,6 +28,20 @@ try:
 except ConfigParser.NoOptionError:
     SSL = False
 
+try:
+    AUTH = config.get('global', 'auth')
+    print ' * Auth type: ' + AUTH
+    if (AUTH == 'ldap'):
+        import ldap
+        LDAP_HOST = config.get('ldap', 'host')
+        LDAP_PORT = int(config.get('ldap', 'port'))
+        LDAP_BASE = config.get('ldap', 'base')
+        LDAP_BIND_DN = config.get('ldap', 'bind_dn')
+        LDAP_PASS = config.get('ldap', 'password')
+except NameError as err:
+    print ' ! Revert to DB authentication ' + err
+    AUTH = 'database'
+
 storage_repos = config.items('storage_repository')
 
 # Flask app
@@ -101,7 +115,7 @@ def home():
             'containers': containers_by_status
         })
 
-    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), templates=lwp.get_templates_list(), storage_repos = storage_repos)
+    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), templates=lwp.get_templates_list(), storage_repos = storage_repos, auth=AUTH)
 
 @app.route('/about')
 @if_logged_in()
@@ -294,6 +308,9 @@ def lwp_users():
     '''
     if session['su'] != 'Yes':
         return abort(403)
+
+    if (AUTH == 'ldap'):
+        return abort(403, 'You are using ldap as AUTH backend.')
 
     try:
         trash = request.args.get('trash')
@@ -609,7 +626,7 @@ def backup_container():
         except lxc.ContainerDoesntExists:
             flash(u'The Container %s does not exist !' % container, 'error')
         except lxc.DirectoryDoesntExists:
-            flash(u'Local backup directory "%s" does not exist !' %sr_path, 'error')
+            flash(u'Local backup directory "%s" does not exist !' % sr_path, 'error')
         except lxc.NFSDirectoryNotMounted:
             flash(u'NFS repository "%s" not mounted !' % sr_path,'error')
         except subprocess.CalledProcessError:
@@ -625,11 +642,31 @@ def backup_container():
 def login():
     if request.method == 'POST':
         request_username = request.form['username']
-        request_passwd = hash_passwd(request.form['password'])
+        request_passwd = request.form['password']
 
         current_url = request.form['url']
 
-        user = query_db('select name, username, su from users where username=? and password=?', [request_username, request_passwd], one=True)
+        if (AUTH == 'ldap'):
+            try:
+                l = ldap.open(LDAP_HOST, LDAP_PORT)
+                l.set_option(ldap.OPT_REFERRALS, 0)
+                l.protocol_version = 3
+                l.simple_bind(LDAP_BIND_DN, LDAP_PASS)
+                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=user)(sAMAccountName=' + request_username + '))', [])
+                # print q
+                common_name = q[0][1]['displayName'][0]
+                l.bind_s('cn=' + common_name + ',' + LDAP_BASE, request_passwd, ldap.AUTH_SIMPLE)
+                #set the parameters for user
+                user = {}
+                user['username'] = q[0][1]['sAMAccountName'][0]
+                user['name'] = common_name
+                user['su'] = 'Yes'   # on ldap all user are admin
+            except Exception, e:
+                print str(e)
+                user = None
+        else:
+            request_passwd = hash_passwd(request_passwd)
+            user = query_db('select name, username, su from users where username=? and password=?', [request_username, request_passwd], one=True)
 
         if user:
             session['logged_in'] = True

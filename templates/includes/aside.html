@@ -17,7 +17,9 @@
 		</ul>{% endif %}
 		<ul class="nav nav-list">
 			<li class="nav-header">LXC Web Panel</li>
-			{% if session.su == 'Yes' %}<li{% if request.path=="/lwp/users" %} class="active"{% endif %}><a href="{{ url_for('lwp_users') }}"><i class="icon-user"></i> Users</a></li>{% endif %}
+			{% if session.su == 'Yes' and auth != 'ldap' %}
+				<li{% if request.path=="/lwp/users" %} class="active"{% endif %}><a href="{{ url_for('lwp_users') }}"><i class="icon-user"></i> Users</a></li>
+			{% endif %}
 			<li{% if request.path=="/about" %} class="active"{% endif %}><a href="{{ url_for('about') }}"><i class="icon-info-sign"></i> About</a></li>
 		</ul>
 	</div>
