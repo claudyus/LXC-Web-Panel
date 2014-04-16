@@ -10,7 +10,16 @@ Tested on Ubuntu 12.04 using lxc from daily ppa: https://launchpad.net/~ubuntu-l
 wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O - | sudo bash
 ```
 
+## Configuration
+
+1. Copy lwp.example.conf as lwp.conf
+2. edit it
+3. done!
+
 ## Update
+
+_Using this script to update is deprecated !_
+
 ```
 wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/update.sh -O - | sudo bash
 ```
