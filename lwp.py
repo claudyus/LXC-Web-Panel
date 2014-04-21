@@ -8,6 +8,7 @@ import hashlib
 import sqlite3
 import os
 import ConfigParser
+import socket
 
 # configuration
 config = ConfigParser.SafeConfigParser()
@@ -115,7 +116,7 @@ def home():
             'containers': containers_by_status
         })
 
-    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), templates=lwp.get_templates_list(), storage_repos = storage_repos, auth=AUTH)
+    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), host=socket.gethostname(), templates=lwp.get_templates_list(), storage_repos = storage_repos, auth=AUTH)
 
 @app.route('/about')
 @if_logged_in()
