@@ -189,7 +189,8 @@ def check_ubuntu():
     supported_dists = [ 'Ubuntu 12.04',
                         'Ubuntu 12.10',
                         'Ubuntu 13.04',
-                        'Ubuntu 13.10' ]
+                        'Ubuntu 13.10',
+                        'Ubuntu 14.04']
 
     if dist in supported_dists:
         return dist
