@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 import lxclite as lxc
 import lwp
@@ -673,8 +676,8 @@ def login():
                 l.bind_s('cn=' + common_name + ',' + LDAP_BASE, request_passwd, ldap.AUTH_SIMPLE)
                 #set the parameters for user
                 user = {}
-                user['username'] = q[0][1]['sAMAccountName'][0]
-                user['name'] = common_name
+                user['username'] = q[0][1]['sAMAccountName'][0].decode('utf8')
+                user['name'] = common_name.decode('utf8')
                 user['su'] = 'Yes'   # on ldap all user are admin
             except Exception, e:
                 print str(e)
