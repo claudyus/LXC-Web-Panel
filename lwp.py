@@ -12,10 +12,21 @@ import sqlite3
 import os
 import ConfigParser
 import socket
+import sys
 
 # configuration
 config = ConfigParser.SafeConfigParser()
-config.readfp(open('lwp.conf'))
+
+try:
+    config.readfp(open('/etc/lwp/lwp.conf'))
+except:
+    print ' * missed /etc/lwp/lwp.conf file'
+    try:
+        # fallback on local config file
+        config.readfp(open('lwp.conf'))
+    except:
+        print ' * cannot read config files. Exit!'
+        sys.exit(1)
 
 SECRET_KEY = '\xb13\xb6\xfb+Z\xe8\xd1n\x80\x9c\xe7KM\x1c\xc1\xa7\xf8\xbeY\x9a\xfa<.'
 

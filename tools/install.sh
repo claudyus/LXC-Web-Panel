@@ -47,6 +47,7 @@ hash git &> /dev/null || {
 }
 
 git clone https://github.com/claudyus/LXC-Web-Panel.git "$INSTALL_DIR"
+mkdir -p /etc/lwp
 
 echo -e '\nInstallation complete!\n\n'
 

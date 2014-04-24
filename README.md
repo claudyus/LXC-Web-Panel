@@ -6,23 +6,24 @@ Tested on Ubuntu 12.04 using lxc from daily ppa: https://launchpad.net/~ubuntu-l
 
 ## Installation
 
+_Deprecated!!_
 ```
 wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O - | sudo bash
 ```
 
 ## Configuration
 
-1. Copy lwp.example.conf as lwp.conf
+1. Copy lwp.example.conf as /etc/lwp/lwp.conf
 2. edit it
-3. done!
+3. restart lwp service
 
 ## Update
 
-_Using this script to update is deprecated !_
-
 ```
-wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/update.sh -O - | sudo bash
+cd /srv/lwp
+sudo git pull
 ```
+Than check the lwp.example.conf with your /etc/lwp/lwp.conf file for new options and depends.
 
 ## Remove
 ```
