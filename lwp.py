@@ -240,20 +240,9 @@ def edit(container=None):
             lwp.push_config_value('lxc.rootfs', form['rootfs'], container=container)
             flash(u'Rootfs updated!' % container, 'success')
 
-        auto = lwp.ls_auto()
-        if form['autostart'] == 'True' and not ('%s.conf' % container) in auto:
-            try:
-                os.symlink('/var/lib/lxc/%s/config' % container, '/etc/lxc/auto/%s.conf' % container)
-                flash(u'Autostart enabled for %s' % container, 'success')
-            except OSError:
-                flash(u'Unable to create symlink \'/etc/lxc/auto/%s.conf\'' % container, 'error')
-        elif not form['autostart'] and ('%s.conf' % container) in auto:
-            try:
-                os.remove('/etc/lxc/auto/%s.conf' % container)
-                flash(u'Autostart disabled for %s' % container, 'success')
-            except OSError:
-                flash(u'Unable to remove symlink', 'error')
-
+        if form['autostart'] != cfg['auto']:
+            lwp.push_config_value('lxc.start.auto', 1 if form['autostart'] else 0, container=container)
+            flash(u'Autostart saved for %s' % container, 'success')
 
     info = lxc.info(container)
     status = info['state']

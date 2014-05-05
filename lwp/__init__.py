@@ -26,6 +26,7 @@ cgroup['cpus'] = 'lxc.cgroup.cpuset.cpus'
 cgroup['shares'] = 'lxc.cgroup.cpu.shares'
 cgroup['deny'] = 'lxc.cgroup.devices.deny'
 cgroup['allow'] = 'lxc.cgroup.devices.allow'
+cgroup['auto'] = 'lxc.start.auto'
 
 class FakeSection(object):
     def __init__(self, fp):
@@ -66,17 +67,6 @@ def file_exist(filename):
             return True
     except IOError:
         return False
-
-
-def ls_auto():
-    '''
-    returns a list of autostart containers
-    '''
-    try:
-        auto_list = os.listdir('/etc/lxc/auto/')
-    except OSError:
-        auto_list = []
-    return auto_list
 
 
 def memory_usage(name):
@@ -311,11 +301,10 @@ def get_container_settings(name):
         cfg['shares'] = config.get('DEFAULT', cgroup['shares'])
     except ConfigParser.NoOptionError:
         cfg['shares'] = ''
-
-    if '%s.conf' % name in ls_auto():
-        cfg['auto'] = True
-    else:
-        cfg['auto'] = False
+    try:
+        cfg['auto'] = config.get('DEFAULT', cgroup['auto'])
+    except ConfigParser.NoOptionError:
+        cfg['auto'] = 0
 
     return cfg
 
