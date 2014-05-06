@@ -20,13 +20,16 @@ wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O -
 ### SSL configuration
 To add SSL Support add to global section of lwp.conf this entries:
 
+```
 ssl = True
 pkey = mykey.key
 cert = mykey.cert
+```
 
 Where mykey.key and mykey.cert are the key and the certificate generated previously for example by the command:
-
+```
  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mykey.cert
+```
 
 ## Update
 
