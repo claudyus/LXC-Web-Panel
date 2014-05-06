@@ -9,8 +9,14 @@ import urllib2
 import ConfigParser
 import re
 
-class CalledProcessError(Exception): pass
-class LxcConfigFileNotComplete(Exception): pass
+
+class CalledProcessError(Exception):
+    pass
+
+
+class LxcConfigFileNotComplete(Exception):
+    pass
+
 cgroup = {}
 cgroup['type'] = 'lxc.network.type'
 cgroup['link'] = 'lxc.network.link'
@@ -28,10 +34,12 @@ cgroup['deny'] = 'lxc.cgroup.devices.deny'
 cgroup['allow'] = 'lxc.cgroup.devices.allow'
 cgroup['auto'] = 'lxc.start.auto'
 
+
 class FakeSection(object):
     def __init__(self, fp):
         self.fp = fp
         self.sechead = '[DEFAULT]\n'
+
     def readline(self):
         if self.sechead:
             try:
@@ -82,7 +90,7 @@ def memory_usage(name):
         out = subprocess.check_output(cmd, shell=True).splitlines()
     except:
         return 0
-    return int(out[0])/1024/1024
+    return int(out[0]) / 1024 / 1024
 
 
 def host_memory_usage():
@@ -109,10 +117,10 @@ def host_memory_usage():
             cached = float(split[1])
     out.close()
     used = (total - (free + buffers + cached))
-    return {'percent': int((used/total)*100),
-            'percent_cached': int(((cached)/total)*100),
-            'used': int(used/1024),
-            'total': int(total/1024)}
+    return {'percent': int((used / total) * 100),
+            'percent_cached': int(((cached) / total) * 100),
+            'used': int(used / 1024),
+            'total': int(total / 1024)}
 
 
 def host_cpu_percent():
@@ -197,7 +205,7 @@ def get_templates_list():
     try:
         path = os.listdir('/usr/share/lxc/templates')
     except:
-        path = os.listdir('/usr/lib/lxc/templates') 
+        path = os.listdir('/usr/lib/lxc/templates')
 
     if path:
         for line in path:
@@ -212,7 +220,7 @@ def check_version():
     '''
     latest = float(urllib2.urlopen('http://lxc-webpanel.github.com/version').read())
     return {'current': subprocess.check_output('git describe --tags', shell=True),
-            'latest':latest}
+            'latest': latest}
 
 
 def get_net_settings():
@@ -224,7 +232,8 @@ def get_net_settings():
         filename = '/etc/default/lxc'
     if not file_exist(filename):
         return False
-    if check_ubuntu() == "unknown": raise LxcConfigFileNotComplete('This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc')
+    if check_ubuntu() == "unknown":
+        raise LxcConfigFileNotComplete('This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc')
     config = ConfigParser.SafeConfigParser()
     cfg = {}
     config.readfp(FakeSection(open(filename)))
@@ -376,7 +385,7 @@ def push_config_value(key, value, container=None):
         config.readfp(FakeSection(open(filename)))
         if not value:
             config.remove_option('DEFAULT', key)
-        elif key == cgroup['memlimit'] or key == cgroup['swlimit'] and value != False:
+        elif key == cgroup['memlimit'] or key == cgroup['swlimit'] and value is not False:
             config.set('DEFAULT', key, '%sM' % value)
         else:
             config.set('DEFAULT', key, value)

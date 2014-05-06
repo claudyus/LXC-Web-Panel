@@ -130,7 +130,8 @@ def home():
             'containers': containers_by_status
         })
 
-    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), host=socket.gethostname(), templates=lwp.get_templates_list(), storage_repos = storage_repos, auth=AUTH)
+    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(), host=socket.gethostname(), templates=lwp.get_templates_list(), storage_repos=storage_repos, auth=AUTH)
+
 
 @app.route('/about')
 @if_logged_in()
@@ -212,10 +213,13 @@ def edit(container=None):
             if int(form['swlimit']) == int(host_memory['total'] * 2):
                 form['swlimit'] = ''
 
-            if form['swlimit'].isdigit(): form['swlimit'] = int(form['swlimit'])
-            if form['memlimit'].isdigit(): form['memlimit'] = int(form['memlimit'])
+            if form['swlimit'].isdigit():
+                form['swlimit'] = int(form['swlimit'])
 
-            if ( form['memlimit'] == '' and form['swlimit'] != '' ) or ( form['memlimit'] > form['swlimit'] and form['swlimit'] != '' ):
+            if form['memlimit'].isdigit():
+                form['memlimit'] = int(form['memlimit'])
+
+            if (form['memlimit'] == '' and form['swlimit'] != '') or (form['memlimit'] > form['swlimit'] and form['swlimit'] != ''):
                 flash(u'Can\'t assign swap memory lower than the memory limit', 'warning')
 
             elif form['swlimit'] != cfg['swlimit'] and form['memlimit'] <= form['swlimit']:
@@ -224,13 +228,13 @@ def edit(container=None):
                     lxc.cgroup(container, 'lxc.cgroup.memory.memsw.limit_in_bytes', form['swlimit'])
                 flash(u'Swap limit updated for %s!' % container, 'success')
 
-        if ( not form['cpus'] and form['cpus'] != cfg['cpus'] ) or ( form['cpus'] != cfg['cpus'] and re.match('^[0-9,-]+$', form['cpus']) ):
+        if (not form['cpus'] and form['cpus'] != cfg['cpus']) or (form['cpus'] != cfg['cpus'] and re.match('^[0-9,-]+$', form['cpus'])):
             lwp.push_config_value('lxc.cgroup.cpuset.cpus', form['cpus'], container=container)
             if info["state"].lower() != 'stopped':
                     lxc.cgroup(container, 'lxc.cgroup.cpuset.cpus', form['cpus'])
             flash(u'CPUs updated for %s!' % container, 'success')
 
-        if ( not form['shares'] and form['shares'] != cfg['shares'] ) or ( form['shares'] != cfg['shares'] and re.match('^[0-9]+$', form['shares']) ):
+        if (not form['shares'] and form['shares'] != cfg['shares']) or (form['shares'] != cfg['shares'] and re.match('^[0-9]+$', form['shares'])):
             lwp.push_config_value('lxc.cgroup.cpu.shares', form['shares'], container=container)
             if info["state"].lower() != 'stopped':
                     lxc.cgroup(container, 'lxc.cgroup.cpu.shares', form['shares'])
@@ -249,7 +253,7 @@ def edit(container=None):
     pid = info['pid']
 
     infos = {'status': status, 'pid': pid, 'memusg': lwp.memory_usage(container)}
-    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=lwp.get_container_settings(container), host_memory=host_memory, storage_repos = storage_repos)
+    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=lwp.get_container_settings(container), host_memory=host_memory, storage_repos=storage_repos)
 
 
 @app.route('/settings/lxc-net', methods=['POST', 'GET'])
@@ -271,7 +275,6 @@ def lxc_net():
                 form[key] = request.form.get(key, None)
             form['use'] = request.form.get('use', None)
 
-
             if form['use'] != cfg['use']:
                 lwp.push_net_value('USE_LXC_BRIDGE', 'true' if form['use'] else 'false')
 
@@ -292,7 +295,6 @@ def lxc_net():
 
             if form['max'] and form['max'] != cfg['max'] and re.match('^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', form['max']):
                 lwp.push_net_value('LXC_DHCP_MAX', form['max'])
-
 
             if lwp.net_restart() == 0:
                 flash(u'LXC Network settings applied successfully!', 'success')
@@ -353,15 +355,19 @@ def lwp_users():
                             if re.match('[a-z A-Z0-9]{3,32}', request.form['name']):
                                 g.db.execute("INSERT INTO users (name, username, password) VALUES (?, ?, ?)", [request.form['name'], request.form['username'], hash_passwd(request.form['password1'])])
                                 g.db.commit()
-                            else: flash(u'Invalid name!', 'error')
+                            else:
+                                flash(u'Invalid name!', 'error')
                         else:
                             g.db.execute("INSERT INTO users (username, password) VALUES (?, ?)", [request.form['username'], hash_passwd(request.form['password1'])])
                             g.db.commit()
 
                         flash(u'Created %s' % request.form['username'], 'success')
-                    else: flash(u'No password match', 'error')
-                else: flash(u'Invalid username or password!', 'error')
-            else: flash(u'Username already exist!', 'error')
+                    else:
+                        flash(u'No password match', 'error')
+                else:
+                    flash(u'Invalid username or password!', 'error')
+            else:
+                flash(u'Username already exist!', 'error')
 
         elif request.form['newUser'] == 'False':
             if request.form['password1'] == request.form['password2']:
@@ -421,14 +427,14 @@ def action():
     manage all actions related to containers
     lxc-start, lxc-stop, etc...
     '''
-    if request.args['token'] == session.get('token') :
+    if request.args['token'] == session.get('token'):
         action = request.args['action']
         name = request.args['name']
 
         if action == 'start':
             try:
                 if lxc.start(name) == 0:
-                    time.sleep(1) # Fix bug : "the container is randomly not displayed in overview list after a boot"
+                    time.sleep(1)  # Fix bug : "the container is randomly not displayed in overview list after a boot"
                     flash(u'Container %s started successfully!' % name, 'success')
                 else:
                     flash(u'Unable to start %s!' % name, 'error')
@@ -594,7 +600,8 @@ def clone_container():
 
         try:
             snapshot = request.form['snapshot']
-            if snapshot == 'True': snapshot = True
+            if snapshot == 'True':
+                snapshot = True
         except KeyError:
             snapshot = False
 
@@ -621,6 +628,7 @@ def clone_container():
 
     return redirect(url_for('home'))
 
+
 @app.route('/action/backup-container', methods=['GET', 'POST'])
 @if_logged_in()
 def backup_container():
@@ -646,12 +654,14 @@ def backup_container():
         except lxc.DirectoryDoesntExists:
             flash(u'Local backup directory "%s" does not exist !' % sr_path, 'error')
         except lxc.NFSDirectoryNotMounted:
-            flash(u'NFS repository "%s" not mounted !' % sr_path,'error')
+            flash(u'NFS repository "%s" not mounted !' % sr_path, 'error')
         except subprocess.CalledProcessError:
-            flash(u'Error during transfert !','error')
+            flash(u'Error during transfert !', 'error')
 
-        if out == 0: flash(u'Container %s backed up successfully' % container,'success')
-        elif out != 0: flash(u'Failed to backup %s container' % container,'error')
+        if out == 0:
+            flash(u'Container %s backed up successfully' % container, 'success')
+        elif out != 0:
+            flash(u'Failed to backup %s container' % container, 'error')
 
     return redirect(url_for('home'))
 
@@ -769,22 +779,22 @@ def query_db(query, args=(), one=False):
 
 
 def check_session_limit():
-    if 'logged_in' in session and session.get('last_activity') != None:
+    if 'logged_in' in session and session.get('last_activity') is not None:
         now = int(time.time())
         limit = now - 60 * int(config.get('session', 'time'))
         last_activity = session.get('last_activity')
         if last_activity < limit:
-            flash(u'Session timed out !','info')
+            flash(u'Session timed out !', 'info')
             logout()
         else:
             session['last_activity'] = now
 
 if __name__ == '__main__':
-    if app.config['SSL']: 
+    if app.config['SSL']:
         from OpenSSL import SSL
         context = SSL.Context(SSL.SSLv23_METHOD)
         context.use_privatekey_file(app.config['PKEY'])
         context.use_certificate_file(app.config['CERT'])
-        app.run(host=app.config['ADDRESS'], port=app.config['PORT'],ssl_context=context)
+        app.run(host=app.config['ADDRESS'], port=app.config['PORT'], ssl_context=context)
     else:
         app.run(host=app.config['ADDRESS'], port=app.config['PORT'])
