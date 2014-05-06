@@ -790,6 +790,8 @@ def check_session_limit():
             session['last_activity'] = now
 
 if __name__ == '__main__':
+    # override debug configuration from command line
+    app.debug = True if '--debug' in sys.argv[1:] else DEBUG
     if app.config['SSL']:
         from OpenSSL import SSL
         context = SSL.Context(SSL.SSLv23_METHOD)
