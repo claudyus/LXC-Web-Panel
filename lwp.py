@@ -240,7 +240,7 @@ def edit(container=None):
             lwp.push_config_value('lxc.rootfs', form['rootfs'], container=container)
             flash(u'Rootfs updated!' % container, 'success')
 
-        if form['autostart'] != cfg['auto']:
+        if bool(form['autostart']) != bool(cfg['auto']):
             lwp.push_config_value('lxc.start.auto', 1 if form['autostart'] else 0, container=container)
             flash(u'Autostart saved for %s' % container, 'success')
 

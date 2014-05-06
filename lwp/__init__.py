@@ -302,9 +302,9 @@ def get_container_settings(name):
     except ConfigParser.NoOptionError:
         cfg['shares'] = ''
     try:
-        cfg['auto'] = config.get('DEFAULT', cgroup['auto'])
+        cfg['auto'] = True if config.get('DEFAULT', cgroup['auto']) else False
     except ConfigParser.NoOptionError:
-        cfg['auto'] = 0
+        cfg['auto'] = False
 
     return cfg
 
