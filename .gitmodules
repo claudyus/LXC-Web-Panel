@@ -1,0 +1,4 @@
+[submodule "gh-pages"]
+	path = gh-pages
+	url = git@github.com:claudyus/LXC-Web-Panel.git
+	branch = gh-pages

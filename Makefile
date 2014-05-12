@@ -20,3 +20,6 @@ debian: Makefile lwp.py
 	tar cvzf build/control.tar.gz -C build control
 	cd build && ar rc lwp.deb debian-binary control.tar.gz data.tar.gz && cd ..
 	mv build/lwp.deb gh-pages/lwp_`git describe --tags`.deb
+
+site: debian
+	make -C gh-pages/
