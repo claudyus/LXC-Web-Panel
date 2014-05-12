@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>File Bucket</h1>
+    <p>No-auth backup system over HTTP!</p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+
+    <div class="col-lg-7">
+      {% include "README.html" %}
+    </div>
+
+    <div class="col-lg-5">
+      <h2>Project stargazers</h2>
+      <p><a href="https://github.com/claudyus/LXC-Web-Panel" target="_blank" class="btn btn-success btn-primary"><i class="glyphicon glyphicon-star glyphicon-white"></i> Do you like the idea? Star the project!</a></p> 
+      <div id="stars"></div>
+      <h2>Contributors</h2>
+      <div id="contributors"></div>
+    </div>
+{% endblock %}
+{% block script %}
+  <script>
+    $( document ).ready(function() {
+      $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stats/contributors',
+        {
+          success: function (data, status) {
+            for (var i = data.length - 1; i >= 0; i--) {
+              var author = data[i].author;
+              $('#contributors').append('<div class="contributor"><img src="' + author.avatar_url + '"/>' +
+                '<strong><a href="' + author.html_url + '">' + author.login + '</a></strong>' +
+                '<commits><i class="glyphicon glyphicon-plus"></i>' + data[i].total + ' commits</commits></div>');
+            }
+          }
+        });
+      $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stargazers',
+        {
+          success: function (data, status) {
+            for (var i = data.length - 1; i >= 0; i--) {
+              var author = data[i];
+              $('#stars').append('<a href="' + author.html_url + '"><img src="' + author.avatar_url + '" class="img-circle star"/></a>');
+            }
+          }
+        });
+    });
+  </script>
+{% endblock %}

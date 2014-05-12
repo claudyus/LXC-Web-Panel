@@ -1,0 +1,28 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+.contributor {
+	vertical-align: top;
+	padding: 0 0 3px 20px;
+}
+.contributor strong {
+	position: absolute;
+	margin: 3px 0 0 10px;
+}
+.contributor img {
+	width: 70px;
+	height: 70px;
+}
+.contributor commits {
+	margin-left: 15px;
+}
+.contributor i {
+    margin-right: 3px;
+}
+
+.star {
+	height: 60px;
+	margin: 0 0 3px 20px;
+}
