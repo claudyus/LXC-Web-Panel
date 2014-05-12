@@ -149,9 +149,13 @@ def edit(container=None):
     edit containers page and actions if form post request
     '''
     host_memory = lwp.host_memory_usage()
-
+    cfg = lwp.get_container_settings(container)
+    # read config also from databases
+    cfg['bucket'] = query_db("SELECT bucket_token FROM machine WHERE machine_name=?", [container], one=True)['bucket_token']
+    if cfg['bucket'] is None:
+        cfg['bucket'] = ""
+    print cfg
     if request.method == 'POST':
-        cfg = lwp.get_container_settings(container)
         ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(/(3[0-2]|[12]?[0-9]))?'
         info = lxc.info(container)
 
@@ -170,6 +174,7 @@ def edit(container=None):
         form['swlimit'] = request.form['swlimit']
         form['cpus'] = request.form['cpus']
         form['shares'] = request.form['cpushares']
+        form['bucket'] = request.form['bucket']
         try:
             form['autostart'] = request.form['autostart']
         except KeyError:
@@ -248,12 +253,17 @@ def edit(container=None):
             lwp.push_config_value('lxc.start.auto', 1 if form['autostart'] else 0, container=container)
             flash(u'Autostart saved for %s' % container, 'success')
 
+        if form['bucket'] != cfg['bucket']:
+            g.db.execute("INSERT INTO machine(machine_name, bucket_token) VALUES (?, ?)", [container, form['bucket']])
+            g.db.commit()
+            flash(u'Bucket config for %s saved!' % container, 'success')
+
     info = lxc.info(container)
     status = info['state']
     pid = info['pid']
 
     infos = {'status': status, 'pid': pid, 'memusg': lwp.memory_usage(container)}
-    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=lwp.get_container_settings(container), host_memory=host_memory, storage_repos=storage_repos)
+    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos)
 
 
 @app.route('/settings/lxc-net', methods=['POST', 'GET'])
