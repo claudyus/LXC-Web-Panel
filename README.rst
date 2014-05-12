@@ -16,7 +16,7 @@ You can also use the old script from ``tools/``
 
 ::
 
-$ wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O - | sudo bash
+ $ wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O - | sudo bash
 
 Configuration
 -------------
@@ -32,9 +32,10 @@ To add SSL Support add to global section of lwp.conf this entries:
 
 ::
 
-ssl = True
-pkey = mykey.key
-cert = mykey.cert
+ ssl = True
+ pkey = mykey.key
+ cert = mykey.cert
+
 
 Where mykey.key and mykey.cert are the key and the certificate generated previously for example by the command:
 
