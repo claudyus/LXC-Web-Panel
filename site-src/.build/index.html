@@ -6,7 +6,7 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <meta name="google-site-verification" content="FIXME" />
+        <meta name="google-site-verification" content="B1FzZc3CJZBOYCAv5w3sW5PIuX59l43HFSDFAjX2nqc" />
 
         <link rel="stylesheet" href="static/css/bootstrap.css">
         <link rel="stylesheet" href="static/css/gh-fork-ribbon.css">
@@ -68,12 +68,11 @@ $ wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O
 <div class="section" id="ssl-configuration">
 <h2>SSL configuration</h2>
 <p>To add SSL Support add to global section of lwp.conf this entries:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">&lt;string&gt;</tt>, line 35)</p>
-Literal block expected; none found.</div>
-<p>ssl = True
+<pre class="literal-block">
+ssl = True
 pkey = mykey.key
-cert = mykey.cert</p>
+cert = mykey.cert
+</pre>
 <p>Where mykey.key and mykey.cert are the key and the certificate generated previously for example by the command:</p>
 <pre class="literal-block">
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mykey.cert
