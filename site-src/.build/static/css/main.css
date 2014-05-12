@@ -12,8 +12,8 @@
 	margin: 3px 0 0 10px;
 }
 .contributor img {
-	width: 70px;
-	height: 70px;
+	width: 60px;
+	height: 60px;
 }
 .contributor commits {
 	margin-left: 15px;
@@ -23,6 +23,6 @@
 }
 
 .star {
-	height: 60px;
+	height: 50px;
 	margin: 0 0 3px 20px;
 }
