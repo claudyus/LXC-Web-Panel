@@ -4,3 +4,6 @@
 # Local database
 lwp.db
 lwp.conf
+
+#debian package
+build/*
