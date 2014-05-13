@@ -42,6 +42,15 @@ try:
         SSL = False
 except ConfigParser.NoOptionError:
     SSL = False
+    print "- SSL feature disabled"
+
+try:
+    USE_BUCKET = bool(config.get('global', 'bucket'))
+    BUCKET_HOST = config.get('bucket', 'bucket_host')
+    BUCKET_PORT = config.get('bucket', 'bucket_port')
+except:
+    USE_BUCKET = False
+    print "- Bucket feature disabled"
 
 try:
     AUTH = config.get('global', 'auth')
@@ -104,6 +113,14 @@ def if_logged_in(function=render_template, f_args=('login.html', )):
     return decorator
 
 
+def get_bucket_token(container):
+    query = query_db("SELECT bucket_token FROM machine WHERE machine_name=?", [container], one=True)
+    if query is None:
+        return ""
+    else:
+        return query['bucket_token']
+
+
 @app.route('/')
 @app.route('/home')
 @if_logged_in()
@@ -122,8 +139,8 @@ def home():
                 'name': container,
                 'memusg': lwp.memory_usage(container),
                 'settings': lwp.get_container_settings(container),
-                'ipv4': lxc.get_ipv4(container)
-
+                'ipv4': lxc.get_ipv4(container),
+                'bucket': get_bucket_token(container)
             })
         containers_all.append({
             'status': status.lower(),
@@ -151,10 +168,8 @@ def edit(container=None):
     host_memory = lwp.host_memory_usage()
     cfg = lwp.get_container_settings(container)
     # read config also from databases
-    cfg['bucket'] = query_db("SELECT bucket_token FROM machine WHERE machine_name=?", [container], one=True)['bucket_token']
-    if cfg['bucket'] is None:
-        cfg['bucket'] = ""
-    print cfg
+    cfg['bucket'] = get_bucket_token(container)
+
     if request.method == 'POST':
         ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(/(3[0-2]|[12]?[0-9]))?'
         info = lxc.info(container)
@@ -494,6 +509,8 @@ def action():
                 flash(u'System will now restart!', 'success')
             except:
                 flash(u'System error!', 'error')
+        elif action == 'push':
+            pass
     try:
         if request.args['from'] == 'edit':
             return redirect('../%s/edit' % name)
@@ -648,6 +665,7 @@ def backup_container():
     if request.method == 'POST':
         container = request.form['orig']
         sr_type = request.form['dest']
+        push = request.form['push']
         for sr in storage_repos:
             if sr_type in sr:
                 sr_path = sr[1]
@@ -658,7 +676,10 @@ def backup_container():
         out = None
 
         try:
-            out = lxc.backup(container=container, sr_type=sr_type, destination=sr_path)
+            backup_file = lxc.backup(container=container, sr_type=sr_type, destination=sr_path)
+            bucket_token = get_bucket_token(container)
+            if push and bucket_token and USE_BUCKET:
+                    os.system('curl http://{}:{}/{} -F file=@{}'.format(BUCKET_HOST, BUCKET_PORT, bucket_token, backup_file))
         except lxc.ContainerDoesntExists:
             flash(u'The Container %s does not exist !' % container, 'error')
         except lxc.DirectoryDoesntExists:
@@ -666,6 +687,8 @@ def backup_container():
         except lxc.NFSDirectoryNotMounted:
             flash(u'NFS repository "%s" not mounted !' % sr_path, 'error')
         except subprocess.CalledProcessError:
+            flash(u'Error during transfert !', 'error')
+        except:
             flash(u'Error during transfert !', 'error')
 
         if out == 0:
