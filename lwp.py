@@ -45,9 +45,9 @@ except ConfigParser.NoOptionError:
     print "- SSL feature disabled"
 
 try:
-    USE_BUCKET = bool(config.get('global', 'bucket'))
-    BUCKET_HOST = config.get('bucket', 'bucket_host')
-    BUCKET_PORT = config.get('bucket', 'bucket_port')
+    USE_BUCKET = bool(config.get('global', 'buckets'))
+    BUCKET_HOST = config.get('buckets', 'buckets_host')
+    BUCKET_PORT = config.get('buckets', 'buckets_port')
 except:
     USE_BUCKET = False
     print "- Bucket feature disabled"

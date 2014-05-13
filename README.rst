@@ -49,6 +49,23 @@ LDAP configuration
 To enable ldap auth you should set ``auth`` to ``ldap`` than configure all options inside ldap section.
 See lwp.example.conf for references.
 
+File-bucket configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To enable `file bucket <http://claudyus.github.io/file-bucket/>`_ integration for the backup routine you shoul set to ``true`` the ``buckets`` key inside the global section of configuation file.
+Than add a section ``buckets`` like this:
+
+::
+
+ [global]
+ .
+ .
+ buckets = True
+
+ [buckets]
+ buckets_host = remote_lan_ip
+ buckets_port = 1234
+
 
 Info
 ----
