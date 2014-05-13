@@ -37,8 +37,7 @@
     
 
 <div class="container">
-	<i class="glyphicon glyphicon-cloud-download"></i> <a href="https://github.com/claudyus/LXC-Web-Panel/archive/master.zip">Download source code</a>
-	<h2>Download debian package</h2>
+	<h2><i class="glyphicon glyphicon-download"></i> Download debian package</h2>
 	<table class="table">
 		<thead>
 			<tr>
@@ -49,6 +48,10 @@
 		<tbody id="debian">
 		</tbody>
 	</table>
+  <h2><i class="glyphicon glyphicon-tags"></i> Download tagged version source</h2>
+  <div>
+    <ul id="tagged"></ul>
+  </div>
 </div>
 
     <div class="github-fork-ribbon-wrapper right">
@@ -69,6 +72,15 @@
             for (var i = data.length - 1; i >= 0; i--) {
               var file = data[i];
               $('#debian').append('<tr><td><a href="' + file.file + '">' + file.file + '</a></td><td>' + file.md5 + '</td></tr>')
+            }
+          }
+        });
+        $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/tags',
+        {
+          success: function (data, status) {
+            for (var i = 0; i <= data.length; i++) {
+              var dati = data[i];
+              $('#tagged').append('<li>Download <a href="' + dati.zipball_url + '">LXC-Web-Panel ' + dati.name + '</a> source</li>')
             }
           }
         });
