@@ -14,9 +14,20 @@
 		<tbody id="debian">
 		</tbody>
 	</table>
-  <h2><i class="glyphicon glyphicon-tags"></i> Download tagged version source</h2>
-  <div>
-    <ul id="tagged"></ul>
+
+  <div class="col-lg-7">
+    <h2><i class="glyphicon glyphicon-tags"></i> Download tagged version source</h2>
+    <div>
+      <ul id="tagged"></ul>
+    </div>
+  </div>
+  
+  <div class="col-lg-5">
+      <h2>Languages information</h2>
+    <div id="langs">
+      <canvas id="langs" width="200" height="200"></canvas>
+      <ul></ul>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -41,6 +52,17 @@
             }
           }
         });
+        $.get('https://api.github.com/repos/claudyus/LXC-Web-Panel/languages',
+          function (data, status) {
+            var ctx = $("#langs canvas").get(0).getContext("2d");
+            data_graph = []
+            for(var k in data) {
+              col_lang = '#'+(Math.random()*0xFFFFFF<<0).toString(16)
+              data_graph.push({value: data[k], color: col_lang })
+              $("#langs ul").append('<li><strong>' + k + '</strong></li>')
+            }
+            new Chart(ctx).Doughnut(data_graph, {animation : true, animationSteps: 100})
+          });
     });
   </script>
 {% endblock %}
