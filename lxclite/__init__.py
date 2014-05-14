@@ -249,6 +249,8 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
     Backup container with tar to a storage repository (SR). E.g: localy or with nfs
     If SR is localy then the path is /var/lxc-backup/
     otherwise if SR is NFS type then we just check if the SR is mounted in host side in /mnt/lxc-backup
+
+    Returns path/filename of the backup instances
     '''
     prefix = time.strftime("%Y-%m-%d__%H-%m.tar.gz")
     filename = '{}/{}-{}'.format(destination, container, prefix)
@@ -267,9 +269,9 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
         was_running = True
         freeze(container)
 
-    create_backup = _run('tar czf {} -C /var/lib/lxc {}'.format(filename, container))
+    _run('tar czf {} -C /var/lib/lxc {}'.format(filename, container))
 
     if was_running is True:
         unfreeze(container)
 
-    return create_backup
+    return filename

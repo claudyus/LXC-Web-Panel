@@ -26,11 +26,16 @@
 					</select>
 				</div>
 				<p><strong>Beware:</strong> container will be freezed if in 'running' state.</p>
-			</div>
+				<p><strong>Note:</strong> Push option use <a href="http://claudyus.github.io/file-bucket/">file-bucket</a> to backup instances remotely.</p>
+
+  		</div>
 		</div>
 
 		<div class="modal-footer">
 			<div class="buttons-modal-footer">
+				<div class="switch pull-left" data-on-label="<small>Push</small>" data-off-label="<small>No push</small>" data-on="success" data-off="primary">
+					<input type="checkbox" name="push" value="False" />
+				</div>
 				<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
 				<button type="submit" class="btn btn-primary modalbutton">Backup</button>
 			</div>

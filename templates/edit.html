@@ -117,6 +117,15 @@
 				</div>
 			</div>
 
+			<hr>
+			<div class="control-group">
+				<label class="control-label" for="bucket">Bucket token</label>
+				<div class="controls">
+					<input pattern="[a-zA-Z0-9_/\-]{32}" type="text" id="bucket" name="bucket" value="{{ settings.bucket }}">
+					<span class="help-inline"><small>md5 like token of the backup bucket</small></span>
+				</div>
+			</div>
+
 			<div class="control-group">
 				<div class="controls">
 					<button class="btn btn-primary btn-success" name="submit" value="apply"><i class="icon-ok icon-white"></i> Apply</button>
