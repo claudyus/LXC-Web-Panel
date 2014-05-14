@@ -3,7 +3,7 @@ LXC-Web-Panel
 
 This is a fork of the original LXC-Web-Panel from https://github.com/lxc-webpanel/LXC-Web-Panel with a lot of improvements and bug fix for LXC 1.0+.
 
-If you use this fork please ensure to use the latest lxc version from ppa. The code was tested on Ubuntu 12.04 and 14.04.
+If you use this fork please ensure to use the latest lxc version from repo/ppa. The code was tested on Ubuntu 12.04 and 14.04.
 
 On ubuntu 12.04 you should install LXC from this ppa: https://launchpad.net/~ubuntu-lxc/+archive/daily
 

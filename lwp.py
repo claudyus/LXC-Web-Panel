@@ -710,7 +710,7 @@ def login():
             return redirect(current_url)
 
         flash(u'Invalid username or password!', 'error')
-    return render_template('login.html')
+    return render_template('login.html', auth=AUTH)
 
 
 @app.route('/logout')

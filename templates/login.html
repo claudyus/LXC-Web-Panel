@@ -20,6 +20,9 @@
         <input id="inputPassword" type="password" placeholder="Password" name="password" required>
       </div>
     </div>
+    {% if auth == 'ldap' %}
+      <p class="text-warning">Note: This system is using LDAP authentication.</p>
+    {% endif %}
     <div class="control-group">
       <div class="controls">
         <input id="inputURL" type="hidden" name="url" value="{{ request.path }}">
