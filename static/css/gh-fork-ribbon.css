@@ -26,6 +26,12 @@
   pointer-events: auto;
 }
 
+@media screen and (max-width: 768px) {
+  .github-fork-ribbon {
+    display: none;
+  }
+}
+
 .github-fork-ribbon a,
 .github-fork-ribbon a:hover {
   /* Set the font */
