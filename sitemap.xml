@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
     <url>
-        <loc>/README.html</loc>
+        <loc>README.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>/contact.html</loc>
+        <loc>about.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>/download.html</loc>
+        <loc>download.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>/index.html</loc>
+        <loc>changelog.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>/CHANGELOG.html</loc>
+        <loc>contact.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>/changelog.html</loc>
+        <loc>CHANGELOG.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>/about.html</loc>
+        <loc>index.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
