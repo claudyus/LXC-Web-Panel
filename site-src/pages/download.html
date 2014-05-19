@@ -59,7 +59,7 @@
             for(var k in data) {
               col_lang = '#'+(Math.random()*0xFFFFFF<<0).toString(16)
               data_graph.push({value: data[k], color: col_lang })
-              $("#langs ul").append('<li><strong>' + k + '</strong> - ' + data[k] + ' LOC</li>')
+              $("#langs ul").append('<li><strong>' + k + '</strong> - ' + data[k] + ' BOC</li>')
             }
             new Chart(ctx).Doughnut(data_graph, {animation : true, animationSteps: 100})
           });
