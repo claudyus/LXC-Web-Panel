@@ -713,14 +713,12 @@ def login():
                 l.set_option(ldap.OPT_REFERRALS, 0)
                 l.protocol_version = 3
                 l.simple_bind(LDAP_BIND_DN, LDAP_PASS)
-                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=user)(sAMAccountName=' + request_username + '))', [])
-                # print q
-                common_name = q[0][1]['displayName'][0]
-                l.bind_s('cn=' + common_name + ',' + LDAP_BASE, request_passwd, ldap.AUTH_SIMPLE)
-                #set the parameters for user
+                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=user)(sAMAccountName=' + request_username + '))', [])[0]
+                l.bind_s(q[0], request_passwd, ldap.AUTH_SIMPLE)
+                #set the parameters for user by ldap objectClass
                 user = {}
-                user['username'] = q[0][1]['sAMAccountName'][0].decode('utf8')
-                user['name'] = common_name.decode('utf8')
+                user['username'] = q[1]['sAMAccountName'][0].decode('utf8')
+                user['name'] = q[1]['displayName'][0].decode('utf8')
                 user['su'] = 'Yes'   # on ldap all user are admin
             except Exception, e:
                 print str(e)
