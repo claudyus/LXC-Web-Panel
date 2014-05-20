@@ -12,6 +12,9 @@
 			</tr>
 		</thead>
 		<tbody id="debian">
+      {% for file in released_files%}
+        <tr><td><a href="{{ file.file }}">{{ file.file }}</a></td><td>{{ file.md5 }}</td></tr>
+      {% endfor %}
 		</tbody>
 	</table>
 
@@ -34,15 +37,6 @@
 {% block script %}
   <script>
     $( document ).ready(function() {
-      $.ajax('static/md5sum.json',
-        {
-          success: function (data, status) {
-            for (var i = data.length - 1; i >= 0; i--) {
-              var file = data[i];
-              $('#debian').append('<tr><td><a href="' + file.file + '">' + file.file + '</a></td><td>' + file.md5 + '</td></tr>')
-            }
-          }
-        });
         $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/tags',
         {
           success: function (data, status) {
