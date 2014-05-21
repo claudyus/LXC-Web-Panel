@@ -218,9 +218,11 @@ def check_version():
     '''
     returns latest LWP version (dict with current and latest)
     '''
-    latest = float(urllib2.urlopen('http://lxc-webpanel.github.com/version').read())
-    return {'current': subprocess.check_output('git describe --tags', shell=True),
-            'latest': latest}
+    try:
+        version = subprocess.check_output('git describe --tags', shell=True)
+    except:
+        version = open('version').read()[0:-1]
+    return {'current': version}
 
 
 def get_net_settings():

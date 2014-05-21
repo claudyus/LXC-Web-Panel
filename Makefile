@@ -4,6 +4,7 @@ debian: Makefile lwp.py
 	mkdir -p build/etc/lwp
 	mkdir -p build/srv/lwp
 	# copy files
+	git describe --tags > build/srv/lwp/version
 	cp -r lwp/ lxclite/ static/ templates/ lwp.py lwp.db CHANGELOG build/srv/lwp/
 	cp lwp.example.conf build/etc/lwp/
 	cp -r debian/files/* build/
