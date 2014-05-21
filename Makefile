@@ -21,5 +21,9 @@ debian: Makefile lwp.py
 	cd build && ar rc lwp.deb debian-binary control.tar.gz data.tar.gz && cd ..
 	mv build/lwp.deb gh-pages/lwp_`git describe --tags`.deb
 
-site: debian
+clone:
+	test -d gh-pages || git clone git@github.com:claudyus/LXC-Web-Panel.git gh-pages
+	cd gh-pages; git checkout origin/gh-pages -b gh-pages || exit 0
+
+site: clone debian
 	make -C gh-pages/
