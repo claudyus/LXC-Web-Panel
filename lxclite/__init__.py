@@ -115,7 +115,7 @@ def info(container):
     if state == 'STOPPED':
         pid = "0"
     else:
-        pid = output[0].split()[1]
+        pid = output[2].split()[1]
 
     return {'state': state,
             'pid': pid}
