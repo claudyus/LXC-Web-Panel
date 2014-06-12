@@ -1,2 +1,3 @@
 site-src/.build/*
 *.pyc
+changelog.csv

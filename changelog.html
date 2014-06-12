@@ -37,128 +37,359 @@
     
 
 <div class="container">
-	<pre>
-		0.5 / 2014-05-14
-================
-
-  feat: notify the user if ldap auth is used
-  doc: update README and conf example
-  fix: README typo
-  fixup: moer code on push bucket
-  feat: initial develop for file-bucket integration
-  Merge branch 'debian'
-  debian: fix lwp initscript add prerm script
-  fix: lwp example use database inside /srv/lwp by default
-  fix: some details for debian package, postinst doesn't work...
-  fix Readme syntax
-  integrate gh-pages, package build, README to rst format
-  debian: add debian package
-  fix: lint the code of lxclite class
-  feat: allow override of debug option from command-line
-  fix: lint the code with flake8 rules
-  fixup: avoid to display flash message when autostart is unchanged
-  fix: markdown with love...
-  fix autostart problem, partially resolve issues #3
-  Readme: add ssl config info, cleanup
-  feat: move config file to /etc/lwp, remove update script, explain config option, deprecate install script
-  fix: decode utf8 name from ldap server
-  Initial support for zfs backing store.  Fixes #55
-  Hostname will now be printed
-  Added 14.04 to supported_dists
-  Document the new configuration process
-  feat: implement LDAP based auth as backend
-  Code cleanup
-  feat: display clone and backup buttons inside container edit page
-  feat: dynamically load contributors from github API
-  refactor: move css on separate file, prettify css
-
-0.4 / 2014-04-14
-================
-
-  feat(backup): omit /var/lib/lxc prefix during backup, don't use ':' inside filename
-  Update Readme.md with remove info
-  Show container name in confirmation dialog when destroying a container.
-  Show memory limit (if set) beside memory usage in overview page.
-  Add .editorconfig
-  feat: retrieve project version using git describe
-  rework: use logge_in decorator for backup_container()
-  fix: avoid exception during backup if container was stopped
-
-
-0.3 / 2014-04-10
-================
-
-  delete compiled/ignored file
-  fix lxc-clone for lxc v1.0
-  fix lxc-info output parse
-  Just some info on README, clone this repo during installation
-  fix syntax after merge
-  Merge remote-tracking branch 'xbddc/master'
-  Merge remote-tracking branch 'tonnydourado/dev'
-  Revert "Get IP addres directly from running container instead of config file"
-  Merge remote-tracking branch 'rasmuskr/master'
-  Merge remote-tracking branch 'nevelis/aptimize'
-  Adding runtime files to gitignore
-  Adding install and update scripts and updateing urls to point to this reposetory
-  Merge branch 'master' of git://github.com/jureqq/LXC-Web-Panel
-  added gitignore file
-  Freezing container before backup and unfreeze after
-  Using Tar and Gzip for backup Append date and time to the backup archive file name
-  merge ssl and backup changes in lwp.conf
-  fix merge
-  Merge branch 'lwp-backup' of https://github.com/vaytess/LXC-Web-Panel
-  Merge branch 'ssl' of https://github.com/remixtj/LXC-Web-Panel
-  Get IP addres directly from running container instead of config file
-  * fix platform info. * exclude file from containers list
-  Merge pull request #51 from orgoj/patch-1
-  Update __init__.py
-  Adding .gitignore
-  Display IPv4 addresses for containers using DHCP
-  Added Ubuntu 13.10 to supported distributions
-  Use correct variable for extra arguments
-  Don't include files in container listing
-  Merge pull request #44 from gweis/master
-  make lxc web panel deployable behind reverse proxy by using url_for for all url’s in templates
-  fixing lxc-info
-  code refactoring within lxc_net() action
-  fixing bug of 'internal server error (error 500)' when clicking to Networking link (sidebar nav) when the host is not ubuntu
-  add backup_container() action in lwp.py and modal_backup.html view to templates/includes/
-  add some params to lwp.config and add a backup() method in lxclite module
-  newline missing
-  Added SSL Support to lwp panel
-  write container's ip back to config to speed up the load time of dashboard
-  container can only be destroyed in stopped stage.
-  detect container's ip address automatically when not specified in config file.
-  Fixing argument name in if_logged_in decorator
-  Ignoring the config file.
-  Some refactoring on the lxc_net function.
-  Added .gitignore file
-  Added @if_logged_in decorator, plus some minor style changes
-  Merge pull request #13 from 4lexx/master
-  allow IP address in CIDR notation
-
-0.2 / 2013-04-30
-================
-
-+ Instant push memory and CPU options to cgroup values
-+ Added partition option in the config file, you can choose which partition you want to monitor in the overview
-+ If there is no container, the panel will display the modal "Create CT"
-+ Added clone CT feature
-+ Added "start at boot" button
-+ Added support for multiple key/value (only for lxc.cgroup.devices.deny and lxc.cgroup.devices.allow) in container's config file (with ConfigParser)
-+ Added support for templates option (Create CT)
-
-* Now, in the sidebar, links are highlighted for containers edit pages
-* Added modal to confirm the deletion of a user
-  * Can't delete a user if he is the only one
-  * Can't delete a admin user if there is no other admin user
-* Splited modals files
-* Now, simple users can't edit/create/destroy CTs and they can't reboot the host.
-* Allowed '-' in rootfs path (thanks to mkobel)
-* Changed regexp for hostname
-* Fixed checkconfig if kernel headers are not installed
-
-	</pre>
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/fcc88f0">fcc88f0</a> fix: pid assignment from lxc-info</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/784192c">784192c</a> save version in debian package, read it</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/397e78d">397e78d</a> delete gh-pages as submodules</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/a793202">a793202</a> fix: ldap use the correct user base from search query</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/70d9bf2">70d9bf2</a> rework: remove useless html from buckets branch</li>
+		
+	
+		
+			<h4>tag 0.5 - 2014-05-14</h4>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/cb20947">cb20947</a> feat: notify the user if ldap auth is used</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/fa02fd3">fa02fd3</a> doc: update README and conf example</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/8ab01e6">8ab01e6</a> fix: README typo</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/294e9ce">294e9ce</a> fixup: moer code on push bucket</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/9f5c432">9f5c432</a> feat: initial develop for file-bucket integration</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/60d2a10">60d2a10</a> debian: fix lwp initscript add prerm script</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/400411c">400411c</a> fix: lwp example use database inside /srv/lwp by default</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/b4237be">b4237be</a> fix: some details for debian package, postinst doesn&#39;t work...</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/ad42dba">ad42dba</a> fix Readme syntax</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/d51a332">d51a332</a> integrate gh-pages, package build, README to rst format</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/e3dabcc">e3dabcc</a> debian: add debian package</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/5f3d293">5f3d293</a> fix: lint the code of lxclite class</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/c3f5ae4">c3f5ae4</a> feat: allow override of debug option from command-line</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/5f9592c">5f9592c</a> fix: lint the code with flake8 rules</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/ec0514c">ec0514c</a> fixup: avoid to display flash message when autostart is unchanged</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/3b32f68">3b32f68</a> fix: markdown with love...</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/e888269">e888269</a> fix autostart problem, partially resolve issues #3</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/3f60407">3f60407</a> Readme: add ssl config info, cleanup</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/362b5bd">362b5bd</a> feat: move config file to /etc/lwp, remove update script, explain config option, deprecate install script</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/8efef38">8efef38</a> fix: decode utf8 name from ldap server</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/f660c39">f660c39</a> Initial support for zfs backing store.  Fixes #55</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/5029d11">5029d11</a> Hostname will now be printed</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/6b0d8ca">6b0d8ca</a> Added 14.04 to supported_dists</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/a8f34bd">a8f34bd</a> Document the new configuration process</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/2dd1fd5">2dd1fd5</a> feat: implement LDAP based auth as backend</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/cc9d6cb">cc9d6cb</a> Code cleanup</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/b6e35a1">b6e35a1</a> feat: display clone and backup buttons inside container edit page</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/e8dd29f">e8dd29f</a> feat: dynamically load contributors from github API</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/8bd1af5">8bd1af5</a> refactor: move css on separate file, prettify css</li>
+		
+	
+		
+			<h4>tag 0.4 - 2014-04-14</h4>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/0dcea8f">0dcea8f</a> feat(backup): omit /var/lib/lxc prefix during backup, don&#39;t use &#39;:&#39; inside filename</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/97561f3">97561f3</a> Update Readme.md with remove info</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/321d4d7">321d4d7</a> Show container name in confirmation dialog when destroying a container.</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/877e2ba">877e2ba</a> Show memory limit (if set) beside memory usage in overview page.</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/2b9f1c6">2b9f1c6</a> Add .editorconfig</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/5178f45">5178f45</a> feat: retrieve project version using git describe</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/37c32eb">37c32eb</a> rework: use logge_in decorator for backup_container()</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/681a119">681a119</a> fix: avoid exception during backup if container was stopped</li>
+		
+	
+		
+			<h4>tag 0.3 - 2014-04-10</h4>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/2a4b1ed">2a4b1ed</a> delete compiled/ignored file</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/016e923">016e923</a> fix lxc-clone for lxc v1.0</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/a7755f9">a7755f9</a> fix lxc-info output parse</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/61435fa">61435fa</a> Just some info on README, clone this repo during installation</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/7187973">7187973</a> fix syntax after merge</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/ca41582">ca41582</a> Revert &quot;Get IP addres directly from running container instead of config file&quot;</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/d57ab66">d57ab66</a> Adding runtime files to gitignore</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/29fe0ee">29fe0ee</a> Adding install and update scripts and updateing urls to point to this reposetory</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/00564aa">00564aa</a> added gitignore file</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/8f1690a">8f1690a</a> Freezing container before backup and unfreeze after</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/6df08d3">6df08d3</a> Using Tar and Gzip for backup Append date and time to the backup archive file name</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/10fee1d">10fee1d</a> merge ssl and backup changes in lwp.conf</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/ff37bf9">ff37bf9</a> fix merge</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/775d435">775d435</a> Get IP addres directly from running container instead of config file</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/9d3266e">9d3266e</a> * fix platform info. * exclude file from containers list</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/3c459e1">3c459e1</a> Update __init__.py</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/5dc1798">5dc1798</a> Adding .gitignore</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/f5c01b3">f5c01b3</a> Display IPv4 addresses for containers using DHCP</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/051f53b">051f53b</a> Added Ubuntu 13.10 to supported distributions</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/97542c8">97542c8</a> Use correct variable for extra arguments</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/dc9fa7c">dc9fa7c</a> Don&#39;t include files in container listing</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/86a7f4c">86a7f4c</a> make lxc web panel deployable behind reverse proxy by using url_for for all url’s in templates</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/d5e4a55">d5e4a55</a> fixing lxc-info</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/5fd7d0a">5fd7d0a</a> code refactoring within lxc_net() action</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/b91a0f4">b91a0f4</a> fixing bug of &#39;internal server error (error 500)&#39; when clicking to Networking link (sidebar nav) when the host is not ubuntu</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/03fbb07">03fbb07</a> add backup_container() action in lwp.py and modal_backup.html view to templates/includes/</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/1018932">1018932</a> add some params to lwp.config and add a backup() method in lxclite module</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/57bdcb4">57bdcb4</a> newline missing</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/7fb864e">7fb864e</a> Added SSL Support to lwp panel</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/e3d585a">e3d585a</a> write container&#39;s ip back to config to speed up the load time of dashboard</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/8c86407">8c86407</a> container can only be destroyed in stopped stage.</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/9d79d75">9d79d75</a> detect container&#39;s ip address automatically when not specified in config file.</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/d584461">d584461</a> Fixing argument name in if_logged_in decorator</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/b39182b">b39182b</a> Ignoring the config file.</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/e4043ee">e4043ee</a> Some refactoring on the lxc_net function.</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/b93f90c">b93f90c</a> Added .gitignore file</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/c47e418">c47e418</a> Added @if_logged_in decorator, plus some minor style changes</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/9e4a6f8">9e4a6f8</a> allow IP address in CIDR notation</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/9fb32ed">9fb32ed</a> Release 0.2</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/904d369">904d369</a> lxc-create fix (dz0ny)</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/0d0ac6e">0d0ac6e</a> Fix issue</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/9611434">9611434</a> Create README.md</li>
+		
+	
+		
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/472dd67">472dd67</a> First commit version 0.1</li>
+		
+	
 </div>
 
 

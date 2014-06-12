@@ -6,7 +6,7 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>about.html</loc>
+        <loc>contact.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
@@ -16,22 +16,17 @@
         <priority>1.0</priority>
     </url>
     <url>
+        <loc>index.html</loc>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
         <loc>changelog.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>contact.html</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>CHANGELOG.html</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>index.html</loc>
+        <loc>about.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>

@@ -3,9 +3,13 @@
 {% block body %}
 
 <div class="container">
-	<pre>
-		{% include 'CHANGELOG.html' %}
-	</pre>
+	{% for line in CHANGELOG %}
+		{% if line.is_tag == True %}
+			<h4>{{ line.string}} - {{ line.date }}</h4>
+		{% else %}
+			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/{{ line.hash }}">{{ line.hash }}</a> {{ line.string }}</li>
+		{% endif %}
+	{% endfor %}
 </div>
 
 {% endblock %}

@@ -1,12 +1,22 @@
 #coding:utf-8
 
 import os
+import csv
+
 md5 = open(os.getcwd() + '/../md5sum', 'r')
 arr = []
 for line in md5:
     parts = line.split()
     dic = {'file': parts[1], 'md5': parts[0]}
     arr.append(dic)
+
+with open(os.getcwd() + '/../changelog.csv', 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=';')
+    #  0     1    2
+    # date;hash;string
+    changelog = []
+    for row in csvreader:
+        changelog.append({'date': row[0].split(" ")[0], 'hash': row[1], 'string': row[2], 'is_tag': row[2].find("tag ") != -1})
 
 
 def preBuildPage(page, context, data):
@@ -20,7 +30,8 @@ def preBuildPage(page, context, data):
     extra = {
         "CURRENT_PAGE": page,
         # Add your own dynamic context elements here!
-        "released_files": arr
+        "released_files": arr,
+        "CHANGELOG": changelog
     }
 
     context.update(extra)
