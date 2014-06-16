@@ -1,0 +1,91 @@
+{
+    "num_stargazers": 13,
+    "stargazers": {
+        "nemesisdesign": {
+            "login": "nemesisdesign",
+            "url": "https://api.github.com/users/nemesisdesign"
+        },
+        "mjmaisey": {
+            "login": "mjmaisey",
+            "url": "https://api.github.com/users/mjmaisey"
+        },
+        "mortn": {
+            "login": "mortn",
+            "url": "https://api.github.com/users/mortn"
+        },
+        "alexkn": {
+            "login": "alexkn",
+            "url": "https://api.github.com/users/alexkn"
+        },
+        "rodion-rad": {
+            "login": "rodion-rad",
+            "url": "https://api.github.com/users/rodion-rad"
+        },
+        "timbutler": {
+            "login": "timbutler",
+            "url": "https://api.github.com/users/timbutler"
+        },
+        "robvdl": {
+            "login": "robvdl",
+            "url": "https://api.github.com/users/robvdl"
+        },
+        "kyxap1": {
+            "login": "kyxap1",
+            "url": "https://api.github.com/users/kyxap1"
+        },
+        "emibcn": {
+            "login": "emibcn",
+            "url": "https://api.github.com/users/emibcn"
+        },
+        "eiiches": {
+            "login": "eiiches",
+            "url": "https://api.github.com/users/eiiches"
+        },
+        "lanrat": {
+            "login": "lanrat",
+            "url": "https://api.github.com/users/lanrat"
+        },
+        "evil5hadow": {
+            "login": "evil5hadow",
+            "url": "https://api.github.com/users/evil5hadow"
+        },
+        "samtayuk": {
+            "login": "samtayuk",
+            "url": "https://api.github.com/users/samtayuk"
+        }
+    },
+    "geocodes": {
+        "Rome, Italy": {
+            "latitude": 41.8723889,
+            "longitude": 12.48018019999995
+        },
+        "Germany, Bautzen": {
+            "latitude": 51.18229299999999,
+            "longitude": 14.423774900000012
+        },
+        "Brisbane, Australia": {
+            "latitude": -27.4710107,
+            "longitude": 153.02344889999995
+        },
+        "New Zealand": {
+            "latitude": -40.900557,
+            "longitude": 174.88597100000004
+        },
+        "Simferopol": {
+            "latitude": 44.952117,
+            "longitude": 34.10241700000006
+        },
+        "Tsukuba, Ibaraki": {
+            "latitude": 36.0834857,
+            "longitude": 140.0766423
+        },
+        "San Diego": {
+            "latitude": 32.715738,
+            "longitude": -117.16108380000003
+        },
+        "Manchester, UK": {
+            "latitude": 53.479324,
+            "longitude": -2.248485100000039
+        }
+    }
+}

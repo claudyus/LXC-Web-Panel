@@ -21,6 +21,7 @@
   <div class="col-lg-7">
     <h2><i class="glyphicon glyphicon-tags"></i> Download tagged version source</h2>
     <div>
+    {# js hook #}
       <ul id="tagged"></ul>
     </div>
   </div>
@@ -28,21 +29,30 @@
   <div class="col-lg-5">
       <h2>Languages information</h2>
     <div id="langs">
+    {# js hook #}
       <canvas id="langs" width="200" height="200"></canvas>
       <ul></ul>
     </div>
   </div>
+  
+  <div class="col-lg-12">
+    <h2>Stargazers map</h2>
+    {# js hook #}
+    <div id="star-map" style="height: 400px"></div>
+  </div>
 </div>
 {% endblock %}
 {% block script %}
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCug2hIgGhPK1RR8YoAY3dd88rf3OwANuc&sensor=false&libraries=visualization"></script>
+  <script src="static/js/vendor/red-dwarf.js"></script>
   <script>
     $( document ).ready(function() {
         $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/tags',
         {
           success: function (data, status) {
-            for (var i = 0; i <= data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
               var dati = data[i];
-              $('#tagged').append('<li>Download <a href="' + dati.zipball_url + '">LXC-Web-Panel ' + dati.name + '</a> source</li>')
+              $('#tagged').append('<li>Download <a href="' + dati.tarball_url + '">LXC-Web-Panel ' + dati.name + '</a> source</li>')
             }
           }
         });
@@ -57,6 +67,17 @@
             }
             new Chart(ctx).Doughnut(data_graph, {animation : true, animationSteps: 100})
           });
+
+        var stars = new RedDwarf({
+          user: 'claudyus',
+          repository: 'LXC-Web-Panel',
+          map_id: 'star-map',
+          cache_location: 'static/stars-cache.json'
+        });
+
+        //console.log(stars.toJSON());
+
     });
+   
   </script>
 {% endblock %}
