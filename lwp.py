@@ -820,6 +820,69 @@ def check_session_limit():
         else:
             session['last_activity'] = now
 
+
+#####################################
+#   API implementation
+#####################################
+
+
+@app.route('/api/v1/containers')
+def get_containers():
+    '''
+    Returns lxc containers on the current machine and brief status information.
+    '''
+    listx = lxc.listx()
+    return jsonify(listx)
+
+
+@app.route('/api/v1/container/<name>')
+def get_container(name):
+    return jsonify(lxc.info(name))
+
+
+@app.route('/api/v1/container/<name>', methods=['POST'])
+def post_container(name):
+    print request
+    print request.data
+    #status = request.data.get('status')
+
+    # if status == "stop":
+    #     lxc.stop(name)
+    #     return "ok", 200
+    # elif status == "start":
+    #     lxc.start(name)
+    #     return "ok", 200
+    # elif status == "freeze":
+    #     lxc.freeze(name)
+    #     return "ok", 200
+    # else:
+    #     return jsonify(error="Bad request"), 400
+    return "ok", 200
+
+
+@app.route('/api/v1/container/', methods=['PUT'])
+def add_container(name):
+    pass
+
+
+@app.route('/api/v1/container/<name>', methods=['DELETE'])
+def delete_container(name):
+    try:
+        lxc.destroy(name)
+        return jsonify(status="ok"), 200
+    except lxc.ContainerDoesntExists:
+        return jsonify(error="Container doesn' t exists"), 400
+
+
+
+## TODO
+#POST /api/v1/container/<name>
+#PUT /api/v1/container/
+#DELETE /api/v1/container/<name>
+#POST /api/v1/token
+#DELETE /api/v1/token/<private-token>
+
+
 if __name__ == '__main__':
     # override debug configuration from command line
     app.debug = True if '--debug' in sys.argv[1:] else DEBUG
