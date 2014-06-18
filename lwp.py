@@ -842,27 +842,57 @@ def get_container(name):
 
 @app.route('/api/v1/container/<name>', methods=['POST'])
 def post_container(name):
-    print request
-    print request.data
-    #status = request.data.get('status')
+    data = request.get_json(force=True)
+    if data is None:
+        return jsonify(status="error", error="Bad request"), 400
 
-    # if status == "stop":
-    #     lxc.stop(name)
-    #     return "ok", 200
-    # elif status == "start":
-    #     lxc.start(name)
-    #     return "ok", 200
-    # elif status == "freeze":
-    #     lxc.freeze(name)
-    #     return "ok", 200
-    # else:
-    #     return jsonify(error="Bad request"), 400
-    return "ok", 200
+    status = data['action']
+    try:
+        if status == "stop":
+            lxc.stop(name)
+            return jsonify(status="ok"), 200
+        elif status == "start":
+            lxc.start(name)
+            return jsonify(status="ok"), 200
+        elif status == "freeze":
+            lxc.freeze(name)
+            return jsonify(status="ok"), 200
+ 
+        return jsonify(status="error", error="Bad request"), 400
+    except lxc.ContainerDoesntExists:
+        return jsonify(status="error", error="Container doesn' t exists"), 409
 
 
 @app.route('/api/v1/container/', methods=['PUT'])
-def add_container(name):
-    pass
+def add_container():
+    data = request.get_json(force=True)
+    if data is None:
+        return jsonify(status="error", error="Bad request"), 400
+
+    if (bool('template' not in data) != bool('clone' not in data)) | bool('name' not in data):
+        return jsonify(status="error", error="Bad request"), 400
+
+    print data
+    if 'template' in data:
+        # we want a new container
+        if 'store' not in data:
+            data.update(store=None)
+        if 'xargs' not in data:
+            data.update(xargs=None)
+
+        try:
+            lxc.create(data.name, data.template, data.store, data.xargs)
+        except lxc.ContainerAlreadyExists:
+            return jsonify(status="error", error="Container yet exists"), 409
+    else:
+        #we want to clone a container
+        try:
+            lxc.clone(data.clone, data.name)
+        except lxc.ContainerAlreadyExists:
+            return jsonify(status="error", error="Container yet exists"), 409
+        except:
+            abort(500)
+    return jsonify(status="ok"), 200
 
 
 @app.route('/api/v1/container/<name>', methods=['DELETE'])
@@ -871,18 +901,11 @@ def delete_container(name):
         lxc.destroy(name)
         return jsonify(status="ok"), 200
     except lxc.ContainerDoesntExists:
-        return jsonify(error="Container doesn' t exists"), 400
+        return jsonify(status="error", error="Container doesn' t exists"), 400
 
-
-
-## TODO
-#POST /api/v1/container/<name>
-#PUT /api/v1/container/
-#DELETE /api/v1/container/<name>
+#TODO
 #POST /api/v1/token
 #DELETE /api/v1/token/<private-token>
-
-
 if __name__ == '__main__':
     # override debug configuration from command line
     app.debug = True if '--debug' in sys.argv[1:] else DEBUG

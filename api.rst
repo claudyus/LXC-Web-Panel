@@ -33,7 +33,9 @@ Returns full information on the ``name`` container.
 
 Update a container status.
 This api accept the following parameters in body request:
-	- status: the new container statusm possible status are start, stop, freeze
+	- action: the new container statusm possible status are start, stop, freeze
+
+This api returns ```400``` if missed or mispelled json format, ```409``` if container *name* doesn't exist
 
 ::
 
@@ -45,6 +47,7 @@ This api accept the following parameters in body request:
   - template: the lxc template (mandatory if clone is not present)
   - clone: the name of lxc container to clone (mandatory if template is not present)
   - store: the appropriate backing store system (optional)
+  - xargs: optional xargs to be passed to lxc-create
 
 
 ::
