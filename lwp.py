@@ -434,6 +434,38 @@ def lwp_users():
     return render_template('users.html', containers=lxc.ls(), users=users, nb_users=nb_users, su_users=su_users)
 
 
+@app.route('/lwp/tokens', methods=['POST', 'GET'])
+@if_logged_in()
+def lwp_tokens():
+    '''
+    returns api tokens info and get posts request: can show/delete or add token in page.
+    this function uses sqlite3, require admin privilege
+    '''
+    if session['su'] != 'Yes':
+        return abort(403)
+
+    if request.method == 'POST':
+        if request.form['action'] == 'add':
+            # we want to add a new token
+            token = request.form['token']
+            description = request.form['description']
+            username = session['username']  # we should save the username due to ldap option
+            g.db.execute("INSERT INTO api_tokens (username, token, description) VALUES(?, ?, ?)", [username, token, description])
+            g.db.commit()
+            flash(u'Token %s successfully added!' % token, 'success')
+
+
+    if request.args.get('action') == 'del':
+        token = request.args['token']
+        g.db.execute("DELETE FROM api_tokens WHERE token=?", [token])
+        g.db.commit()
+        flash(u'Token %s successfully deleted!' % token, 'success')
+
+
+    tokens = query_db("SELECT description, token, username FROM api_tokens ORDER BY token DESC")
+    return render_template('tokens.html', tokens=tokens)
+
+
 @app.route('/checkconfig')
 @if_logged_in()
 def checkconfig():
