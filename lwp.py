@@ -826,7 +826,26 @@ def check_session_limit():
 #####################################
 
 
+def api_auth():
+    '''
+    api decorator to verify if a token is valid
+    '''
+    def decorator(handler):
+        def new_handler(*args, **kwargs):
+            token = request.args.get('private_token')
+            result = query_db('select * from api_tokens where token=?', [token], one=True)
+            if result is not None:
+                #token exists, access granted
+                return handler(*args, **kwargs)
+            else:
+                abort(401)
+        new_handler.func_name = handler.func_name
+        return new_handler
+    return decorator
+
+
 @app.route('/api/v1/containers')
+@api_auth()
 def get_containers():
     '''
     Returns lxc containers on the current machine and brief status information.
@@ -836,11 +855,13 @@ def get_containers():
 
 
 @app.route('/api/v1/container/<name>')
+@api_auth()
 def get_container(name):
     return jsonify(lxc.info(name))
 
 
 @app.route('/api/v1/container/<name>', methods=['POST'])
+@api_auth()
 def post_container(name):
     data = request.get_json(force=True)
     if data is None:
@@ -864,6 +885,7 @@ def post_container(name):
 
 
 @app.route('/api/v1/container/', methods=['PUT'])
+@api_auth()
 def add_container():
     data = request.get_json(force=True)
     if data is None:
@@ -896,6 +918,7 @@ def add_container():
 
 
 @app.route('/api/v1/container/<name>', methods=['DELETE'])
+@api_auth()
 def delete_container(name):
     try:
         lxc.destroy(name)
