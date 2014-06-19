@@ -926,9 +926,29 @@ def delete_container(name):
     except lxc.ContainerDoesntExists:
         return jsonify(status="error", error="Container doesn' t exists"), 400
 
-#TODO
-#POST /api/v1/token
-#DELETE /api/v1/token/<private-token>
+
+@app.route('/api/v1/token/', methods=['POST'])
+@api_auth()
+def add_token():
+    data = request.get_json(force=True)
+    if data is None or 'token' not in data:
+        return jsonify(status="error", error="Bad request"), 400
+
+    if 'description' not in data:
+        data.update(description="no description")
+    g.db.execute('insert into api_tokens(description, token) values(?, ?)', [data['description'], data['token']])
+    g.db.commit()
+    return jsonify(status="ok"), 200
+
+
+@app.route('/api/v1/token/<token>', methods=['DELETE'])
+@api_auth()
+def delete_token(token):
+    g.db.execute('delete from api_tokens where token=?', [token])
+    g.db.commit()
+    return jsonify(status="ok"), 200
+
+
 if __name__ == '__main__':
     # override debug configuration from command line
     app.debug = True if '--debug' in sys.argv[1:] else DEBUG
