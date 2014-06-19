@@ -13,6 +13,7 @@ import os
 import ConfigParser
 import socket
 import sys
+import json
 
 # configuration
 config = ConfigParser.SafeConfigParser()
@@ -852,8 +853,8 @@ def get_containers():
     '''
     Returns lxc containers on the current machine and brief status information.
     '''
-    listx = lxc.listx()
-    return jsonify(listx)
+    list_container = lxc.list_status()
+    return json.dumps(list_container)
 
 
 @app.route('/api/v1/container/<name>')
