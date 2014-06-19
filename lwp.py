@@ -833,12 +833,14 @@ def api_auth():
     def decorator(handler):
         def new_handler(*args, **kwargs):
             token = request.args.get('private_token')
+            if token is None:
+                token = request.headers['Private-Token']
             result = query_db('select * from api_tokens where token=?', [token], one=True)
             if result is not None:
                 #token exists, access granted
                 return handler(*args, **kwargs)
             else:
-                abort(401)
+                return jsonify(status="error", error="Unauthorized"), 401
         new_handler.func_name = handler.func_name
         return new_handler
     return decorator
