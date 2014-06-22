@@ -63,6 +63,9 @@ try:
         LDAP_BASE = config.get('ldap', 'base')
         LDAP_BIND_DN = config.get('ldap', 'bind_dn')
         LDAP_PASS = config.get('ldap', 'password')
+        ID_MAPPING = config.get('ldap','id_mapping')
+        DISPLAY_MAPPING = config.get('ldap','display_mapping')
+        OBJECT_CLASS = config.get('ldap','object_class')
 except NameError as err:
     print ' ! Revert to DB authentication ' + err
     AUTH = 'database'
@@ -746,12 +749,12 @@ def login():
                 l.set_option(ldap.OPT_REFERRALS, 0)
                 l.protocol_version = 3
                 l.simple_bind(LDAP_BIND_DN, LDAP_PASS)
-                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=user)(sAMAccountName=' + request_username + '))', [])[0]
+                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=' + OBJECT_CLASS + ')(' + ID_MAPPING + '=' + request_username + '))', [])[0]
                 l.bind_s(q[0], request_passwd, ldap.AUTH_SIMPLE)
                 #set the parameters for user by ldap objectClass
                 user = {}
-                user['username'] = q[1]['sAMAccountName'][0].decode('utf8')
-                user['name'] = q[1]['displayName'][0].decode('utf8')
+                user['username'] = q[1][ID_MAPPING][0].decode('utf8')
+                user['name'] = q[1][DISPLAY_MAPPING][0].decode('utf8')
                 user['su'] = 'Yes'   # on ldap all user are admin
             except Exception, e:
                 print str(e)
