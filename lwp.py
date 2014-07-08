@@ -13,6 +13,7 @@ import os
 import ConfigParser
 import socket
 import sys
+import json
 
 # configuration
 config = ConfigParser.SafeConfigParser()
@@ -433,6 +434,38 @@ def lwp_users():
     return render_template('users.html', containers=lxc.ls(), users=users, nb_users=nb_users, su_users=su_users)
 
 
+@app.route('/lwp/tokens', methods=['POST', 'GET'])
+@if_logged_in()
+def lwp_tokens():
+    '''
+    returns api tokens info and get posts request: can show/delete or add token in page.
+    this function uses sqlite3, require admin privilege
+    '''
+    if session['su'] != 'Yes':
+        return abort(403)
+
+    if request.method == 'POST':
+        if request.form['action'] == 'add':
+            # we want to add a new token
+            token = request.form['token']
+            description = request.form['description']
+            username = session['username']  # we should save the username due to ldap option
+            g.db.execute("INSERT INTO api_tokens (username, token, description) VALUES(?, ?, ?)", [username, token, description])
+            g.db.commit()
+            flash(u'Token %s successfully added!' % token, 'success')
+
+
+    if request.args.get('action') == 'del':
+        token = request.args['token']
+        g.db.execute("DELETE FROM api_tokens WHERE token=?", [token])
+        g.db.commit()
+        flash(u'Token %s successfully deleted!' % token, 'success')
+
+
+    tokens = query_db("SELECT description, token, username FROM api_tokens ORDER BY token DESC")
+    return render_template('tokens.html', tokens=tokens)
+
+
 @app.route('/checkconfig')
 @if_logged_in()
 def checkconfig():
@@ -819,6 +852,137 @@ def check_session_limit():
             logout()
         else:
             session['last_activity'] = now
+
+
+#####################################
+#   API implementation
+#####################################
+
+
+def api_auth():
+    '''
+    api decorator to verify if a token is valid
+    '''
+    def decorator(handler):
+        def new_handler(*args, **kwargs):
+            token = request.args.get('private_token')
+            if token is None:
+                token = request.headers['Private-Token']
+            result = query_db('select * from api_tokens where token=?', [token], one=True)
+            if result is not None:
+                #token exists, access granted
+                return handler(*args, **kwargs)
+            else:
+                return jsonify(status="error", error="Unauthorized"), 401
+        new_handler.func_name = handler.func_name
+        return new_handler
+    return decorator
+
+
+@app.route('/api/v1/containers')
+@api_auth()
+def get_containers():
+    '''
+    Returns lxc containers on the current machine and brief status information.
+    '''
+    list_container = lxc.list_status()
+    return json.dumps(list_container)
+
+
+@app.route('/api/v1/container/<name>')
+@api_auth()
+def get_container(name):
+    return jsonify(lxc.info(name))
+
+
+@app.route('/api/v1/container/<name>', methods=['POST'])
+@api_auth()
+def post_container(name):
+    data = request.get_json(force=True)
+    if data is None:
+        return jsonify(status="error", error="Bad request"), 400
+
+    status = data['action']
+    try:
+        if status == "stop":
+            lxc.stop(name)
+            return jsonify(status="ok"), 200
+        elif status == "start":
+            lxc.start(name)
+            return jsonify(status="ok"), 200
+        elif status == "freeze":
+            lxc.freeze(name)
+            return jsonify(status="ok"), 200
+ 
+        return jsonify(status="error", error="Bad request"), 400
+    except lxc.ContainerDoesntExists:
+        return jsonify(status="error", error="Container doesn' t exists"), 409
+
+
+@app.route('/api/v1/container/', methods=['PUT'])
+@api_auth()
+def add_container():
+    data = request.get_json(force=True)
+    if data is None:
+        return jsonify(status="error", error="Bad request"), 400
+
+    if (bool('template' not in data) != bool('clone' not in data)) | bool('name' not in data):
+        return jsonify(status="error", error="Bad request"), 400
+
+    print data
+    if 'template' in data:
+        # we want a new container
+        if 'store' not in data:
+            data.update(store=None)
+        if 'xargs' not in data:
+            data.update(xargs=None)
+
+        try:
+            lxc.create(data.name, data.template, data.store, data.xargs)
+        except lxc.ContainerAlreadyExists:
+            return jsonify(status="error", error="Container yet exists"), 409
+    else:
+        #we want to clone a container
+        try:
+            lxc.clone(data.clone, data.name)
+        except lxc.ContainerAlreadyExists:
+            return jsonify(status="error", error="Container yet exists"), 409
+        except:
+            abort(500)
+    return jsonify(status="ok"), 200
+
+
+@app.route('/api/v1/container/<name>', methods=['DELETE'])
+@api_auth()
+def delete_container(name):
+    try:
+        lxc.destroy(name)
+        return jsonify(status="ok"), 200
+    except lxc.ContainerDoesntExists:
+        return jsonify(status="error", error="Container doesn' t exists"), 400
+
+
+@app.route('/api/v1/token/', methods=['POST'])
+@api_auth()
+def add_token():
+    data = request.get_json(force=True)
+    if data is None or 'token' not in data:
+        return jsonify(status="error", error="Bad request"), 400
+
+    if 'description' not in data:
+        data.update(description="no description")
+    g.db.execute('insert into api_tokens(description, token) values(?, ?)', [data['description'], data['token']])
+    g.db.commit()
+    return jsonify(status="ok"), 200
+
+
+@app.route('/api/v1/token/<token>', methods=['DELETE'])
+@api_auth()
+def delete_token(token):
+    g.db.execute('delete from api_tokens where token=?', [token])
+    g.db.commit()
+    return jsonify(status="ok"), 200
+
 
 if __name__ == '__main__':
     # override debug configuration from command line

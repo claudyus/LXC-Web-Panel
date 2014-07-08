@@ -157,6 +157,19 @@ def listx():
             'STOPPED': stopped}
 
 
+def list_status():
+    '''
+    List all containers with status (Running, Frozen or Stopped) in a dict
+    '''
+    containers = []
+
+    for container in ls():
+        state = info(container)['state']
+        containers.append(dict(container=container, state=state.lower()))
+
+    return containers
+
+
 def running():
     return listx()['RUNNING']
 
