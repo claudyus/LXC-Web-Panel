@@ -109,17 +109,11 @@ def info(container):
 
     output = _run('lxc-info -qn {}'.format(container), output=True).splitlines()
     
-    # on lxc 1.0 lxc-info output has been shifted
-    state = output[1].split()[1]
+    state = {'pid': 0}
+    for val in output:
+        state[val.split(':')[0].lower()] = val.split(':')[1].strip()
 
-    if state == 'STOPPED':
-        pid = "0"
-    else:
-        pid = output[2].split()[1]
-
-    return {'state': state,
-            'pid': pid}
-
+    return state
 
 def ls():
     '''
