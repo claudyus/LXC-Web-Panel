@@ -1,3 +1,25 @@
+0.6 / 2014-07-08
+================
+
+  fix: parse all values of lxc-info
+  Update README and specify dependencies version
+  fix: parse all values of lxc-info
+  Update README and specify dependencies version
+  frontend: add a view to manage the api token, table api_token modified
+  fixup: api GET containers return a more useful information
+  fixup; return json error if 401, use header to auth
+  api: implement management token apis, new table api_tokens(user_id int, description varchar(30), token varchar(50) not null)
+  api: working auth api decorator
+  api: more code draft
+  api: code draft
+  api: update api draft, remove X- prefix due to RFC6648
+  api: spec draft
+  fix: pid assignment from lxc-info
+  save version in debian package, read it
+  delete gh-pages as submodules
+  fix: ldap use the correct user base from search query
+  rework: remove useless html from buckets branch
+
 0.5 / 2014-05-14
 ================
 
