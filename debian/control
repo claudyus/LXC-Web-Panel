@@ -5,7 +5,7 @@ Architecture: amd64
 Section: net
 Maintainer: Claudio Mignanti <c.mignanti@gmail.com>
 Installed-Size: SIZE
-Depends: lxc, python-flask, python-ldap
+Depends: lxc (>= 1.0), python-flask (>= 0.10), python-ldap
 Priority: optional
 Description: LXC Web Panel improved
  Built DATE

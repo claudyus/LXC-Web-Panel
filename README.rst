@@ -5,7 +5,9 @@ This is a fork of the original LXC-Web-Panel from https://github.com/lxc-webpane
 
 If you use this fork please ensure to use the latest lxc version from repo/ppa. The code was tested on Ubuntu 12.04 and 14.04.
 
-On ubuntu 12.04 you should install LXC from this ppa: https://launchpad.net/~ubuntu-lxc/+archive/daily
+On ubuntu 12.04 you should install:
+  - LXC from this ppa: https://launchpad.net/~ubuntu-lxc/+archive/daily
+  - python-flask from ppa: https://launchpad.net/~chris-lea/+archive/python-flask
 
 Installation
 ------------
