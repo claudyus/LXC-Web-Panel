@@ -26,3 +26,7 @@
 	height: 50px;
 	margin: 0 0 3px 20px;
 }
+
+.item img {
+	height: 300px !important;
+}
