@@ -1,28 +1,29 @@
 <p>This is a fork of the original LXC-Web-Panel from <a class="reference external" href="https://github.com/lxc-webpanel/LXC-Web-Panel">https://github.com/lxc-webpanel/LXC-Web-Panel</a> with a lot of improvements and bug fix for LXC 1.0+.</p>
-<p>If you use this fork please ensure to use the latest lxc version from repo/ppa. The code was tested on Ubuntu 12.04 and 14.04.</p>
-<dl class="docutils">
-<dt>On ubuntu 12.04 you should install:</dt>
-<dd><ul class="first last simple">
+<p>This version of lwp is featuring backup capability, RestAPI interface, LDAP support other that the necessary fixes to work with latest lxc version.</p>
+<p>If you use this fork please ensure to use al least lxc 1.0.4. The code was tested on Ubuntu 12.04 and 14.04.</p>
+<p>On ubuntu 12.04 you should install:</p>
+<blockquote>
+<ul class="simple">
 <li>LXC from this ppa: <a class="reference external" href="https://launchpad.net/~ubuntu-lxc/+archive/daily">https://launchpad.net/~ubuntu-lxc/+archive/daily</a></li>
 <li>python-flask from ppa: <a class="reference external" href="https://launchpad.net/~chris-lea/+archive/python-flask">https://launchpad.net/~chris-lea/+archive/python-flask</a></li>
 </ul>
-</dd>
-</dl>
+</blockquote>
 <div class="section" id="installation">
 <h1>Installation</h1>
-<p>You can download latest debian packages from <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/">http://claudyus.github.io/LXC-Web-Panel/</a></p>
-<p>You can also use the old script from <tt class="docutils literal">tools/</tt></p>
+<p>You can download latest debian packages from <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/download.html">http://claudyus.github.io/LXC-Web-Panel/download.html</a> than install it:</p>
 <pre class="literal-block">
-$ wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O - | sudo bash
+$ sudo dpkg -i lwp_VERSION.deb
+$ sudo apt-get install -f # install lwp dependencies
 </pre>
 </div>
 <div class="section" id="configuration">
 <h1>Configuration</h1>
 <ol class="arabic simple">
-<li>Copy lwp.example.conf as /etc/lwp/lwp.conf</li>
+<li>Copy /etc/lwp/lwp.example.conf to /etc/lwp/lwp.conf</li>
 <li>edit it</li>
-<li>restart lwp service <tt class="docutils literal">service lwp restart</tt></li>
+<li>start lwp service <tt class="docutils literal"># service lwp start</tt></li>
 </ol>
+<p>Your lwp panel is not at <a class="reference external" href="http://locahost:5000/">http://locahost:5000/</a></p>
 <div class="section" id="ssl-configuration">
 <h2>SSL configuration</h2>
 <p>To add SSL Support add to global section of lwp.conf this entries:</p>
@@ -38,7 +39,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mykey
 </div>
 <div class="section" id="ldap-configuration">
 <h2>LDAP configuration</h2>
-<p>To enable ldap auth you should set <tt class="docutils literal">auth</tt> to <tt class="docutils literal">ldap</tt> than configure all options inside ldap section.
+<p>To enable ldap auth you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">ldap</tt> inside your config file than configure all options inside ldap section.
 See lwp.example.conf for references.</p>
 </div>
 <div class="section" id="file-bucket-configuration">
@@ -59,6 +60,10 @@ buckets_port = 1234
 </div>
 <div class="section" id="info">
 <h1>Info</h1>
-<p>This repo contains a lot of mixup from various forks, see <a class="reference external" href="https://github.com/claudyus/LXC-Web-Panel/network">https://github.com/claudyus/LXC-Web-Panel/network</a> for details.</p>
+<p>This repo contains a lot of mixup from various forks, I like to thanks all contributors to this project.</p>
+</div>
+<div class="section" id="license">
+<h1>LICENSE</h1>
+<p>This work is released under MIT License</p>
 </div>
 

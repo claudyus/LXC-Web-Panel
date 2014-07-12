@@ -1,0 +1,63 @@
+<p>Since version 0.6 LXC-Web-Panel support a set of RestAPI described in this documentation.</p>
+<p>All APIs requires authentication. You need to pass a <tt class="docutils literal">private_token</tt> parameter by url or header. If passed as header, the header name must be &quot;private-token&quot;.</p>
+<p>For example:</p>
+<pre class="literal-block">
+curl http://host:5000/api/v1/containers?private_token=d41d8cd98f00b204e9800998ecf8427e
+or
+curl --header &quot;private-token: d41d8cd98f00b204e9800998ecf8427e&quot; http://host:5000/api/v1/containers
+</pre>
+<div class="section" id="api-list-and-description">
+<h1>API list and description</h1>
+<pre class="literal-block">
+GET /api/v1/containers
+</pre>
+<p>Returns all lxc containers on the current machine and brief status information.</p>
+<pre class="literal-block">
+GET /api/v1/container/&lt;name&gt;
+</pre>
+<p>Returns full information about the <tt class="docutils literal">name</tt> container.</p>
+<pre class="literal-block">
+POST /api/v1/container/&lt;name&gt;
+</pre>
+<p>Update a container status.
+This api accept the following parameters in body request:</p>
+<blockquote>
+<ul class="simple">
+<li>action: the new container status, possible status are start, stop and freeze</li>
+</ul>
+</blockquote>
+<p>This api returns <tt class="docutils literal">`400`</tt> if missed or mispelled json format, <tt class="docutils literal">`409`</tt> if container <em>name</em> doesn't exist</p>
+<pre class="literal-block">
+PUT /api/v1/container/
+</pre>
+<p>Create or clone a lxc container.
+This api accept the following parameters in body request:</p>
+<blockquote>
+<ul class="simple">
+<li>name: the name container (mandatory)</li>
+<li>template: the lxc template (mandatory if clone is not present)</li>
+<li>clone: the name of lxc container to clone (mandatory if template is not present)</li>
+<li>store: the appropriate backing store system (optional)</li>
+<li>xargs: optional xargs to be passed to lxc-create</li>
+</ul>
+</blockquote>
+<pre class="literal-block">
+DELETE /api/v1/container/&lt;name&gt;
+</pre>
+<p>Delete the <tt class="docutils literal">name</tt> container.</p>
+<pre class="literal-block">
+POST /api/v1/token
+</pre>
+<p>Add a new access token for the api
+This api accept the following parameters in body request:</p>
+<blockquote>
+<ul class="simple">
+<li>token: the new token to add (mandatory)</li>
+<li>description: an optional token description</li>
+</ul>
+</blockquote>
+<pre class="literal-block">
+DELETE /api/v1/token/&lt;private-token&gt;
+</pre>
+<p>Revoke the given <tt class="docutils literal"><span class="pre">private-token</span></tt></p>
+</div>
