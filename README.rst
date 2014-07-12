@@ -3,29 +3,34 @@ LXC-Web-Panel
 
 This is a fork of the original LXC-Web-Panel from https://github.com/lxc-webpanel/LXC-Web-Panel with a lot of improvements and bug fix for LXC 1.0+.
 
-If you use this fork please ensure to use the latest lxc version from repo/ppa. The code was tested on Ubuntu 12.04 and 14.04.
+This version of lwp is featuring backup capability, RestAPI interface, LDAP support other that the necessary fixes to work with latest lxc version.
+
+If you use this fork please ensure to use al least lxc 1.0.4. The code was tested on Ubuntu 12.04 and 14.04.
 
 On ubuntu 12.04 you should install:
+
   - LXC from this ppa: https://launchpad.net/~ubuntu-lxc/+archive/daily
   - python-flask from ppa: https://launchpad.net/~chris-lea/+archive/python-flask
 
 Installation
 ------------
 
-You can download latest debian packages from http://claudyus.github.io/LXC-Web-Panel/
-
-You can also use the old script from ``tools/``
+You can download latest debian packages from http://claudyus.github.io/LXC-Web-Panel/download.html than install it:
 
 ::
 
- $ wget https://raw2.github.com/claudyus/LXC-Web-Panel/master/tools/install.sh -O - | sudo bash
+  $ sudo dpkg -i lwp_VERSION.deb
+  $ sudo apt-get install -f # install lwp dependencies
+
 
 Configuration
 -------------
 
-1. Copy lwp.example.conf as /etc/lwp/lwp.conf
+1. Copy /etc/lwp/lwp.example.conf to /etc/lwp/lwp.conf
 2. edit it
-3. restart lwp service ``service lwp restart``
+3. start lwp service ``# service lwp start``
+
+Your lwp panel is not at http://locahost:5000/
 
 SSL configuration
 ^^^^^^^^^^^^^^^^^
@@ -48,7 +53,7 @@ Where mykey.key and mykey.cert are the key and the certificate generated previou
 LDAP configuration
 ^^^^^^^^^^^^^^^^^^
 
-To enable ldap auth you should set ``auth`` to ``ldap`` than configure all options inside ldap section.
+To enable ldap auth you should set ``auth`` type to ``ldap`` inside your config file than configure all options inside ldap section.
 See lwp.example.conf for references.
 
 File-bucket configuration
@@ -72,4 +77,8 @@ Than add a section ``buckets`` like this:
 Info
 ----
 
-This repo contains a lot of mixup from various forks, see https://github.com/claudyus/LXC-Web-Panel/network for details.
+This repo contains a lot of mixup from various forks, I like to thanks all contributors to this project.
+
+LICENSE
+-------
+This work is released under MIT License
