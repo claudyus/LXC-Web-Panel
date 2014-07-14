@@ -7,8 +7,8 @@
 		<strong>Reboot this system now ?</strong>
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
-		<a class="btn btn-primary btn-danger" href="{{ url_for('action', name='host', action='reboot', token=session.token) }}"><i class="icon-repeat icon-white"></i> Reboot</a>
+		<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		<a class="btn btn-default btn btn-default-primary btn btn-default-danger" href="{{ url_for('action', name='host', action='reboot', token=session.token) }}"><i class="glyphicon glyphicon-repeat glyphicon glyphicon-white"></i> Reboot</a>
 	</div>
 </div>
 
@@ -20,22 +20,22 @@
 		</div>
 		<div class="modal-body">
 			<div class="control-group">
-				<div class="controls input-prepend">
-					<span class="add-on"><i class="icon-folder-open"></i></span>
+				<div class="controls input-group">
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></col-md->
 					<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Name" name="name">
-					<span class="add-on" style="margin-left:30px;"><i class="icon-download-alt"></i></span>
+					<col-md- class="input-group-addon" style="margin-left:30px;"><i class="glyphicon glyphicon-download-alt"></i></col-md->
 					<select id="selectTemplate" name="template">
 						{% for template in templates %}<option value="{{ template }}" {% if template == 'ubuntu' %}selected{% endif %}>{{ template }}</option>{% endfor %}
 					</select>
 				</div>
 			</div>
-			<button id ="advancedbutton" class="btn btn-small">Advanced options</button>
+			<button id ="advancedbutton" class="btn btn-default btn btn-default-small">Advanced options</button>
 			<div id="advanceddiv" class="hide">
 				<br />
 				<div class="control-group">
-					<div class="controls input-prepend">
+					<div class="controls input-group">
 						<label class="control-label" for="BackingStore">Backing store*</label>
-						<span class="add-on"><i class="icon-hdd"></i></span>
+						<col-md- class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></col-md->
 						<select id="BackingStore" name="backingstore">
 								<option value="default" selected>Default</option>
 								<option value="directory">Directory</option>
@@ -43,12 +43,12 @@
 								<option value="zfs">ZFS</option>
 						</select>
 					</div>
-					<span class="help-inline"><small>*By default it is 'none', which is a simple directory tree under /var/lib/lxc/&lt;name&gt;/rootfs</small></span>
+					<col-md- class="help-inline"><small>*By default it is 'none', which is a simple directory tree under /var/lib/lxc/&lt;name&gt;/rootfs</small></col-md->
 				</div>
 				<div class="control-group hide" id="directory">
 					<label class="control-label" for="inputDirectory">Directory</label>
-					<div class="controls input-prepend">
-						<span class="add-on"><i class="icon-folder-close"></i></span>
+					<div class="controls input-group">
+						<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></col-md->
 						<input type="text" id="inputDirectory" name="dir" placeholder="Directory">
 					</div>
 				</div>
@@ -74,8 +74,8 @@
 		</div>
 		<div class="modal-footer">
 			<div class="buttons-modal-footer">
-				<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button type="submit" class="btn btn-primary btn-success modalbutton"><i class="icon-plus-sign icon-white"></i> Create</button>
+				<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button type="submit" class="btn btn-default btn btn-default-primary btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
 			</div>
 			<div class="loader-modal-footer hide">
 				<div class="progress progress-striped active">
@@ -97,8 +97,8 @@
 	</div>
 	<div class="modal-footer">
 		<div class="buttons-modal-footer">
-			<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
-			<a class="btn btn-primary btn-danger destroy-link modalbutton" href=""><i class="icon-trash icon-white"></i> Destroy</a>
+			<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<a class="btn btn-default btn btn-default-primary btn btn-default-danger destroy-link modalbutton" href=""><i class="glyphicon glyphicon-trash glyphicon glyphicon-white"></i> Destroy</a>
 		</div>
 		<div class="progress progress-striped active hide loader-modal-footer">
 			<div class="bar" style="width: 100%;"></div>
@@ -114,20 +114,20 @@
 		</div>
 		<div class="modal-body">
 			<div class="control-group">
-				<div class="controls input-prepend">
-					<span class="add-on"><i class="icon-user"></i></span>
+				<div class="controls input-group">
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-user"></i></col-md->
 					<input type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
 
-					<span class="add-on" style="margin-left:30px;"><i class="icon-user"></i></span>
+					<col-md- class="input-group-addon" style="margin-left:30px;"><i class="glyphicon glyphicon-user"></i></col-md->
 					<input type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
 				</div>
 			</div>
 			<div class="control-group">
-				<div class="controls input-prepend">
-					<span class="add-on"><i class="icon-lock"></i></span>
+				<div class="controls input-group">
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></col-md->
 					<input type="password" name="password1" id="password1" placeholder="Password *" required>
 
-					<span class="add-on" style="margin-left:30px;"><i class="icon-lock"></i></span>
+					<col-md- class="input-group-addon" style="margin-left:30px;"><i class="glyphicon glyphicon-lock"></i></col-md->
 					<input type="password" name="password2" placeholder="Re-type *" required>
 				</div>
 			</div>
@@ -135,8 +135,8 @@
 		<div class="modal-footer">
 			<div class="buttons-modal-footer">
 				<input type="hidden" name="newUser" value="True">
-				<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button type="submit" class="btn btn-primary btn-success modalbutton"><i class="icon-plus-sign icon-white"></i> Create</button>
+				<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button type="submit" class="btn btn-default btn btn-default-primary btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
 			</div>
 		</div>
 	</form>

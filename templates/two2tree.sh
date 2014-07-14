@@ -8,12 +8,12 @@ fi
 
 sed -i 's/container-fluid/container/g' $1
 sed -i 's/row-fluid/row/g' $1
-sed -i 's/span/col-md-/g' $1
+sed -i 's/\(class=.*\)span/\1col-md-/g' $1
 sed -i 's/offset/col-md-offset-/g' $1
 sed -i 's/brand/navbar-brand/g' $1
 sed -i 's/navbar nav/nav navbar-nav/g' $1
 sed -i 's/hero-unit/jumbotron/g' $1
-sed -i 's/icon-/glyphicon glyphicon-/g' $1
+sed -i 's/\(class=.*\)icon-/\1glyphicon glyphicon-/g' $1
 sed -i 's/btn/btn btn-default/g' $1
 sed -i 's/btn-mini/btn-xs/g' $1
 sed -i 's/btn-small/btn-sm/g' $1

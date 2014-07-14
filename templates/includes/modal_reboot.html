@@ -7,7 +7,7 @@
 		<strong>Reboot this system now ?</strong>
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
-		<a class="btn btn-danger" href="{{ url_for('action', name='host', action='reboot', token=session.token) }}"><i class="icon-off icon-white"></i> Reboot</a>
+		<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		<a class="btn btn-default btn btn-default-danger" href="{{ url_for('action', name='host', action='reboot', token=session.token) }}"><i class="glyphicon glyphicon-off glyphicon glyphicon-white"></i> Reboot</a>
 	</div>
 </div>

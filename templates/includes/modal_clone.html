@@ -6,8 +6,8 @@
 		</div>
 		<div class="modal-body">
 			<div class="control-group">
-				<div class="controls input-prepend">
-					<span class="add-on"><i class="icon-download-alt"></i></span>
+				<div class="controls input-group">
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></col-md->
 					<select id="selectContainer" name="orig">
 						{% for c in containers %}
 							{% if c == container %}
@@ -19,8 +19,8 @@
 					</select>
 				</div>
 
-				<div class="controls input-prepend pull-right" style="margin-top: -40px;">
-					<span class="add-on"><i class="icon-folder-open"></i></span>
+				<div class="controls input-group pull-right" style="margin-top: -40px;">
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></col-md->
 					<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Clone name" name="name">
 				</div>
 
@@ -32,8 +32,8 @@
 				<div class="switch pull-left" data-on-label="<small>Snapshot</small>" data-off-label="<small>&nbsp;&nbsp;&nbsp;Classic&nbsp;&nbsp;&nbsp;</small>" data-on="success" data-off="primary">
 					<input type="checkbox" name="snapshot" value="True" />
 				</div>
-				<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button type="submit" class="btn btn-inverse modalbutton">Clone</button>
+				<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button type="submit" class="btn btn-default btn btn-default-inverse modalbutton">Clone</button>
 			</div>
 			<div class="loader-modal-footer hide">
 				<div class="progress progress-striped active">

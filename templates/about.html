@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}About{% endblock %}
 {% block content %}
-<div class="span9">
+<div class="col-md-9">
 	{{ super() }}
 	<h2>LXC Web Panel <small class="muted">Version : {{ version.current }}</small></h2>
 	<br />
@@ -47,7 +47,7 @@
 							var author = data[i].author;
 							$('#contributors').append('<div class="contributor"><img src=' + author.avatar_url + '/>' +
 								'<strong><a href="' + author.html_url + '">' + author.login + '</a></strong>' +
-								'<commits><i class="icon-plus-sign"></i>' + data[i].total + '</commits></div>');
+								'<commits><i class="glyphicon glyphicon-plus-sign"></i>' + data[i].total + '</commits></div>');
 						}
 					}
 				});
