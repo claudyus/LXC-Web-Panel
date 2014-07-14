@@ -1,0 +1,19 @@
+{
+  "name": "LXC-Web-Panel",
+  "version": "0.6",
+  "homepage": "https://github.com/claudyus/LXC-Web-Panel",
+  "authors": [
+    "Claudio Mignanti <c.mignanti@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}

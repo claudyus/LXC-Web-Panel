@@ -26,5 +26,9 @@ clone:
 	test -d gh-pages || git clone git@github.com:claudyus/LXC-Web-Panel.git gh-pages
 	cd gh-pages; git checkout origin/gh-pages -b gh-pages || exit 0
 
-site: clone debian
+site: bower clone debian
 	make -C gh-pages/
+
+bower:
+	bower --version || sudo npm install -g bower
+	bower install

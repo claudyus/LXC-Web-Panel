@@ -7,10 +7,8 @@
 		<meta name="description" content="">
 		<meta name="author" content="Antoine Tanzilli, Elie Deloumeau-Prigent">
 
-		<link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
-		<link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='bower/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
 
-		<link href="{{ url_for('static', filename='css/bootstrapSwitch.css') }}" rel="stylesheet">
 		<link href="{{ url_for('static', filename='css/site.css') }}" rel="stylesheet">
 
 		<!--[if lt IE 9]>
@@ -62,10 +60,8 @@
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script> var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/jqBootstrapValidation.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/html5slider.js') }}"></script>
+		<script src="{{ url_for('static', filename='bower/jquery/dist/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='bower/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 		<script>
 				$(function() {
 						$(".alert").not('.dont-hide').alert().delay(5000).slideUp();
