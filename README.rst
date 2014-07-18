@@ -76,11 +76,38 @@ Than add a section ``buckets`` like this:
  buckets_port = 1234
 
 
-Info
-----
+Hacking LWP
+-----------
 
-This repo contains a lot of mixup from various forks, I like to thanks all contributors to this project.
+To develop lwp you need some extra tools.
+
+You should install nodejs and bower to benefit from the bower package manager, you should also ensure to have lwp.conf somewhere in /etc/lwp or local direcotry and you should ensure that lwp.db exist in the configured path.
+
+You can also rebuild gh-pages using ``make site`` but this require Cactus v3 and some other pyhton libs.
+
+Here some shell tips:
+
+::
+
+  $ git clone this repo
+  $ sudo apt-get install nodejs npm
+  $ sudo npm install -g bower
+  $ bower install #download bower packages
+  Configure lwp in /etc/lwp/lwp.conf and check path for lwp.db
+  $ sudo ./lwp.py --debug
+
+If you want to rebuild gh-pages
+
+::
+
+  $ sudo pip install git+https://github.com/koenbok/Cactus.git@v3
+  $ make site #rebuild gh-pages and debian package
+  $ cd gh-pages && make serve # visit localhost:8000 for gh-pages
+
+Before start to coding please check that you editor support editorconfig (http://editorconfig.org/).
+
 
 LICENSE
 -------
+
 This work is released under MIT License
