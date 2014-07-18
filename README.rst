@@ -15,12 +15,14 @@ On ubuntu 12.04 you should install:
 Installation
 ------------
 
-You can download latest debian packages from http://claudyus.github.io/LXC-Web-Panel/download.html than install it:
+You can download latest debian packages from http://claudyus.github.io/LXC-Web-Panel/download.html or, better, you can also use the lwp debian repo:
 
 ::
 
-  $ sudo dpkg -i lwp_VERSION.deb
-  $ sudo apt-get install -f # install lwp dependencies
+  $ wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
+  $ echo "deb http://claudyus.github.io/LXC-Web-Panel/ ./" | sudo tee /etc/apt/sources.list.d/lwp.list
+  $ sudo apt-get update
+  $ sudo apt-get install lwp
 
 
 Configuration
