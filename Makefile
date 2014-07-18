@@ -21,6 +21,7 @@ debian: Makefile lwp.py
 	tar cvzf build/control.tar.gz -C build control postinst
 	cd build && ar rc lwp.deb debian-binary control.tar.gz data.tar.gz && cd ..
 	mv build/lwp.deb gh-pages/lwp_`git describe --tags`.deb
+	dpkg-sig -k 0DFD7CBB --sign builder gh-pages/lwp_`git describe --tags`.deb
 
 clone:
 	test -d gh-pages || git clone git@github.com:claudyus/LXC-Web-Panel.git gh-pages
