@@ -7,7 +7,7 @@
 		{% for user in users %}
 			<div class="accordion-group">
 				<div class="accordion-heading">
-					<a type="button" class="btn btn-default btn btn-default-danger delete btn btn-default-mini pull-right{% if (su_users.num < 2 and user.su == 'Yes') or nb_users.num <= 1 %} disabled{% endif %}" data-userid="{{ user.id }}" data-username="{{ user.username }}" style="margin: 7px 7px 0 0;"><i class="glyphicon glyphicon-trash glyphicon glyphicon-white"></i> Delete</a>
+					<a type="button" class="btn btn-danger btn-xs pull-right{% if (su_users.num < 2 and user.su == 'Yes') or nb_users.num <= 1 %} disabled{% endif %}" data-userid="{{ user.id }}" data-username="{{ user.username }}" style="margin: 7px 7px 0 0;"><i class="glyphicon glyphicon-trash glyphicon glyphicon-white"></i> Delete</a>
 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ user.username }}">
 					  {% if user.name %}{{ user.name }} ({{ user.username }}){% else %}{{ user.username }}{% endif %}
 					</a>
@@ -36,7 +36,7 @@
 	</div>
 </div>
 <div class="col-md-2">
-	<a class="btn btn-default btn btn-default-success btn btn-default-block" data-toggle="modal" data-target="#newUser"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> New user</a>
+	<a class="btn btn-success" data-toggle="modal" data-target="#newUser"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> New user</a>
 </div>
 {% include "includes/modal_new_user.html" %}
 {% if nb_users.num > 1 %}{% include "includes/modal_delete.html" %}{% endif %}
