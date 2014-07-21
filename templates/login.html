@@ -6,24 +6,24 @@
   <form action="{{ url_for('login') }}" method="POST" class="form-signin">
     <fieldset>
     <legend>LXC Web Panel</legend>
-    <div class="control-group">
+    <div class="form-group">
       <label class="control-label" for="inputUsername">Username</label>
-      <div class="controls input-group">
-        <col-md- class="input-group-addon"><i class="glyphicon glyphicon-user"></i></col-md->
-        <input id="inputUsername" type="text" placeholder="Username" name="username" autofocus required>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+        <input class="form-control" id="inputUsername" type="text" placeholder="Username" name="username" autofocus required>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <label class="control-label" for="inputPassword">Password</label>
-     <div class="controls input-group">
-        <col-md- class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></col-md->
-        <input id="inputPassword" type="password" placeholder="Password" name="password" required>
+     <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+        <input class="form-control" id="inputPassword" type="password" placeholder="Password" name="password" required>
       </div>
     </div>
     {% if auth == 'ldap' %}
       <p class="text-warning">Note: This system is using LDAP authentication.</p>
     {% endif %}
-    <div class="control-group">
+    <div class="form-group">
       <div class="controls">
         <input id="inputURL" type="hidden" name="url" value="{{ request.path }}">
         <input type="submit" class="btn btn-default" value="Log in"/>

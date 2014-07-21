@@ -1,5 +1,4 @@
-<div class="col-md-3">
-	<div class="well sidebar-nav">
+<div class="well col-md-3 sidebar">
 		<ul class="nav nav-list">
 			<li class="nav-header">General</li>
 			<li{% if request.path=="/" or request.path=="/home" %} class="active"{% endif %}><a href="{{ url_for('home') }}" id="home-btn btn-default"><i class="glyphicon glyphicon-home"></i> Overview<i class="glyphicon glyphicon-refresh hide" id="home-load" style="float:right;margin-top:3px;"></i></a></li>
@@ -23,5 +22,4 @@
 			{% endif %}
 			<li{% if request.path=="/about" %} class="active"{% endif %}><a href="{{ url_for('about') }}"><i class="glyphicon glyphicon-info-sign"></i> About</a></li>
 		</ul>
-	</div>
 </div>

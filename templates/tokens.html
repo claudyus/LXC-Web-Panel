@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Token management{% endblock %}
+{% block title %}Token Management{% endblock %}
 {% block content %}
 <div class="col-md-7">
 	{{ super() }}
@@ -27,10 +27,10 @@
 
 	<form class="form-inline" action="{{ url_for('lwp_tokens') }}" method="post">
 	  <input type="text" id="token" name="token" class="input-medium" placeholder="token">
-	  <button id="generate" class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i></button>
+	  <button id="generate" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>
 	  <input type="text" name="description" class="input-large" placeholder="desciption">
 	  <input type="hidden" name="action" value="add">
-	  <button type="submit" class="btn btn-default btn btn-default-success">Add token</button>
+	  <button type="submit" class="btn btn-success btn-sm">Add token</button>
 	</form>
 
 </div>

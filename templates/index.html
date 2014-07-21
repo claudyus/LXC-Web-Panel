@@ -1,46 +1,54 @@
-{% set td = {'running':'success','frozen':'info','stopped':'important'} %}
-{% set tr = {'running':'success','frozen':'info','stopped':'error'} %}
+{% set td = {'running':'success','frozen':'info','stopped':'danger'} %}
+{% set tr = {'running':'success','frozen':'info','stopped':'danger'} %}
 {% set disabled = {'running':'success','frozen':'info','stopped':'important'} %}
 {% extends "layout.html" %}
 {% block title %}Overview{% endblock %}
 {% block content %}
 <div class="col-md-9">
 	{{ super() }}
-	{% if session.su == 'Yes' %}
-		<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-default btn btn-default-small btn btn-default-danger" data-toggle="modal" data-target="#reboot"><i class="glyphicon glyphicon-off glyphicon glyphicon-white"></i> Reboot</a></p>
-		{% if containers != [] %}
-			<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-default btn btn-default-small btn btn-default-inverse" data-toggle="modal" data-target="#cloneCT"> <i class="glyphicon glyphicon-repeat glyphicon glyphicon-white"></i> Clone <abbr title="Container">CT</abbr></a></p>
-			{% if storage_repos %}
-				<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-default btn btn-default-small btn btn-default-primary" data-toggle="modal" data-target="#backupCT"> <i class="glyphicon glyphicon-hdd glyphicon glyphicon-white"></i> Backup <abbr title="Container">CT</abbr></a></p>
-			{% endif %}
-		{% endif %}
-		<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-default btn btn-default-small btn btn-default-success" data-toggle="modal" data-target="#createCT"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create <abbr title="Container">CT</abbr></a></p>
-	{% endif %}
-
 	<div class="jumbotron">
 		{% if dist == 'Unknown' %}<div class="alert alert-error">LXC Web Panel is optimized for Ubuntu 12.10 !</div>{% endif %}
 		<div class="row">
-			<div class="col-md-3" style="margin-left:20px;">
-				<h3 style="position: relative; width: 500px;">{{ dist }} ({{ host }})</h3>
-				<p>CPU usage : <col-md- id="cpu-usage" class="hide"></col-md-></p>
-				<div class="progress" style="width:250px;">
-					<div class="bar" id="cpu-usage-bar" style="width:0%;"></div>
+			<div class="col-md-12">
+				<h2 style="position: relative;">{{ dist }} ({{ host }})</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6" style="margin-top:10px;">
+				<p>CPU usage: <span id="cpu-usage" class="hide"></span></p>
+				<div class="progress">
+					<div class="progress-bar" id="cpu-usage-bar" style="width:0%;"></div>
 				</div>
-				<p>Memory usage : <col-md- id="memory-usage" class="hide"></col-md-></p>
-				<div class="progress" style="width:250px;">
-					<div class="bar" id="memory-usage-bar" style="width: 0%;"></div>
+				<p>Memory usage: <span id="memory-usage" class="hide"></span></p>
+				<div class="progress">
+					<div class="progress-bar" id="memory-usage-bar" style="width: 0%;"></div>
 					<abbr title="Cached memory"><div class="bar bar-success" id="memory-cache-usage-bar" style="width: 0%;"></div></abbr>
 				</div>
 			</div>
-			<div class="col-md-3" style="margin-top:29px; margin-left:20px;">
-				<p>Disk usage : <col-md- id="disk-usage" class="hide"></col-md-></p>
-				<div class="progress" style="width:250px;">
-					<div class="bar" id="disk-usage-bar" style="width: 0%;"></div>
+			<div class="col-md-6" style="margin-top:10px;">
+				<p>Disk usage: <span id="disk-usage" class="hide"></span></p>
+				<div class="progress">
+					<div class="progress-bar" id="disk-usage-bar" style="width: 0%;"></div>
 				</div>
-				<p>Uptime : <col-md- id="uptime" class="hide"></col-md-></p>
+				<p>Uptime: <span id="uptime" class="hide"></span></p>
 			</div>
 		</div>
-		<a href="http://lxc-webpanel.github.io/" target="_blank"><col-md- class="label label-info hide" id="version" style="position:relative; float:right; bottom:0; margin:-20px -23px 0 0;"><i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i> New version is out ! (<col-md- id="vernumber"></col-md->)</col-md-></a>
+		<div class="row">
+			<div class="col-md-12">
+				{% if session.su == 'Yes' %}
+					<p class="pull-right" style="margin:10px 10px 0 0;"><button class="btn btn-danger" data-toggle="modal" data-target="#reboot"><i class="glyphicon glyphicon-off glyphicon glyphicon-white"></i> Reboot</button></p>
+					{% if containers != [] %}
+						<p class="pull-right" style="margin:10px 10px 0 0;"><button class="btn btn-warning" data-toggle="modal" data-target="#cloneCT"> <i class="glyphicon glyphicon-repeat glyphicon glyphicon-white"></i> Clone <abbr title="Container">CT</abbr></button></p>
+						{% if storage_repos %}
+							<p class="pull-right" style="margin:10px 10px 0 0;"><button class="btn btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="glyphicon glyphicon-hdd glyphicon glyphicon-white"></i> Backup <abbr title="Container">CT</abbr></button></p>
+						{% endif %}
+					{% endif %}
+					<p class="pull-right" style="margin:10px 10px 0 0;"><button class="btn btn-success" data-toggle="modal" data-target="#createCT"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create <abbr title="Container">CT</abbr></button></p>
+				{% endif %}
+			</div>
+		</div>
+
+		<a href="http://lxc-webpanel.github.io/" target="_blank"><span class="label label-info hide" id="version" style="position:relative; float:right; bottom:0; margin:-20px -23px 0 0;"><i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i> New version is out ! (<span id="vernumber"></span>)</span></a>
 	</div>
 	<table class="table table-bordered">
 		<thead>
@@ -57,18 +65,18 @@
 			<tbody>
 				{% for container in status.containers %}
 					<tr class="{{ tr[status.status] }}">
-						{% if loop.first %}<td rowcol-md-="{{ status.containers|count }}"><col-md- class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</col-md-></td>{% endif %}
+						{% if loop.first %}<td rowspan="{{ status.containers|count }}"><span class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</span></td>{% endif %}
 						<td><a href="{{ url_for('edit',container=container.name) }}" title="Click to edit {{container.name}}">{{container.name}}</a></td>
 						<td>{{container.settings.utsname}}</td>
 						<td>{% if container.settings.flags == 'up' %}{% if container.settings.ipv4 != '' %}{{container.settings.ipv4}}{% else %}{% if container.ipv4 %}{{ container.ipv4 }}{% else %}Undefined{% endif %}{% endif %}{% elif container.settings.flags == 'down' %}Link Down{% endif %}</td>
 						<td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
 						<td>
-							<div class="btn btn-default-toolbar" style="margin:8px 0;">
-								<div class="btn btn-default-group">
+							<div class="btn-toolbar" style="margin:8px 0;">
+								<div class="btn-group">
 									{% set start_action = {'stopped':'start','frozen':'unfreeze'} %}
-									<a class="btn btn-default btn btn-default-small{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('action', name=container.name, action=start_action[status.status], token=session.token) }}"{% endif %}><i class="glyphicon glyphicon-play"></i> Start</a>
-									<a class="btn btn-default btn btn-default-small{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('action', name=container.name, action='stop', token=session.token) }}"{% endif %}><i class="glyphicon glyphicon-stop"></i> Stop</a>
-									<a class="btn btn-default btn btn-default-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' %} href="{{ url_for('action', name=container.name, action='freeze', token=session.token) }}"{% endif %}><i class="glyphicon glyphicon-pause"></i> Freeze</a>
+									<a class="btn btn-default btn-sm{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('action', name=container.name, action=start_action[status.status], token=session.token) }}"{% endif %} role="button"><i class="glyphicon glyphicon-play"></i> Start</a>
+									<a class="btn btn-default btn-sm{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('action', name=container.name, action='stop', token=session.token) }}"{% endif %} role="button"><i class="glyphicon glyphicon-stop"></i> Stop</a>
+									<a class="btn btn-default btn-sm{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' %} href="{{ url_for('action', name=container.name, action='freeze', token=session.token) }}"{% endif %} role="button"><i class="glyphicon glyphicon-pause"></i> Freeze</a>
 								</div>
 								{% if session.su == 'Yes' and status.status == 'stopped' %}<a class="pull-right close destroy" data-container-name="{{container.name}}" style="margin-top:4px;"><i class="glyphicon glyphicon-remove-sign"></i></a>{% endif %}
 							</div>
@@ -94,7 +102,7 @@
 
 {% macro memory_color(value) -%}{% if value != 0 %}{% if 0 <= value <= 511 %}success{% elif 512 <= value < 980 %}warning{% else %}important{% endif %}{% endif %}{%- endmacro %}
 {% macro render_memory_wrapper(value, limit) -%}
-	{% if value != 0 %}<col-md- class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</col-md->{% endif %}
+	{% if value != 0 %}<span class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</span>{% endif %}
 {%- endmacro %}
 
 {% block script %}
@@ -138,7 +146,7 @@
 						} else {
 							el.text(data[i].memusg + " / " + data[i].settings.memlimit + ' MB');
 						}
-						el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg));
+						el[0].className = el[0].className.replace(/label\-(success|warning|danger)/g,'label-'+memory_color(data[i].memusg));
 					}
 				});
 			}
@@ -150,7 +158,7 @@
 					else if ('512' <= value && value < '1024')
 						return 'warning';
 					else
-						return 'important';
+						return 'warning';
 			}
 
 			function check_version(){
