@@ -21,7 +21,7 @@
 				<label class="control-label col-md-2" for="inputBridge">Bridge name</label>
 				<div class="col-md-10">
 					<input pattern="[a-zA-Z0-9_-]+" type="text" id="inputBridge" name="bridge" value="{{ cfg.bridge }}"{% if running != [] %} disabled{% endif %}>
-					<col-md- class="help-inline"><small>(e.g lxcbr0)</small></col-md->
+					<span class="help-inline"><small>(e.g lxcbr0)</small></span>
 				</div>
 			</div>
 
@@ -29,7 +29,7 @@
 				<label class="control-label col-md-2" for="inputGateway">IP Address</label>
 				<div class="col-md-10">
 					<input pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" type="text" id="inputGateway" name="address" value="{{ cfg.address }}"{% if running != [] %} disabled{% endif %}>
-					<col-md- class="help-inline"><small>(e.g 10.0.3.1)</small></col-md->
+					<span class="help-inline"><small>(e.g 10.0.3.1)</small></span>
 				</div>
 			</div>
 
@@ -37,7 +37,7 @@
 				<label class="control-label col-md-2" for="inputNetmask">Netmask</label>
 				<div class="col-md-10">
 					<input pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" type="text" id="inputNetmask" name="netmask" value="{{ cfg.netmask }}"{% if running != [] %} disabled{% endif %}>
-					<col-md- class="help-inline"><small>(e.g 255.255.255.0)</small></col-md->
+					<span class="help-inline"><small>(e.g 255.255.255.0)</small></span>
 				</div>
 			</div>
 
@@ -45,7 +45,7 @@
 				<label class="control-label col-md-2" for="inputNetwork">Network</label>
 				<div class="col-md-10">
 					<input pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/\d{1,2}|)" type="text" id="inputNetwork" name="network" value="{{ cfg.network }}"{% if running != [] %} disabled{% endif %}>
-					<col-md- class="help-inline"><small>(e.g 10.0.3.0/24)</small></col-md->
+					<span class="help-inline"><small>(e.g 10.0.3.0/24)</small></span>
 				</div>
 			</div>
 
@@ -53,7 +53,7 @@
 				<label class="control-label col-md-2" for="inputDHCPRange">DHCP Range</label>
 				<div class="col-md-10">
 					<input pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\,(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" type="text" id="inputDHCPRange" name="range" value="{{ cfg.range }}"{% if running != [] %} disabled{% endif %}>
-					<col-md- class="help-inline"><small>(e.g 10.0.3.2,10.0.3.254)</small></col-md->
+					<span class="help-inline"><small>(e.g 10.0.3.2,10.0.3.254)</small></span>
 				</div>
 			</div>
 
@@ -61,7 +61,7 @@
 				<label class="control-label col-md-2" for="inputDHCPMax">DHCP Max</label>
 				<div class="col-md-10">
 					<input pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" type="text" id="inputDHCPMax" name="max" value="{{ cfg.max }}"{% if running != [] %} disabled{% endif %}>
-					<col-md- class="help-inline"><small>(e.g 253)</small></col-md->
+					<span class="help-inline"><small>(e.g 253)</small></span>
 				</div>
 			</div>
 		</div>

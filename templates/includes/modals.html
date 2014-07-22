@@ -21,9 +21,9 @@
 		<div class="modal-body">
 			<div class="control-group">
 				<div class="controls input-group">
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></span>
 					<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Name" name="name">
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></span>
 					<select id="selectTemplate" name="template">
 						{% for template in templates %}<option value="{{ template }}" {% if template == 'ubuntu' %}selected{% endif %}>{{ template }}</option>{% endfor %}
 					</select>
@@ -35,7 +35,7 @@
 				<div class="control-group">
 					<div class="controls input-group">
 						<label class="control-label" for="BackingStore">Backing store*</label>
-						<col-md- class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></col-md->
+						<span class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></span>
 						<select id="BackingStore" name="backingstore">
 								<option value="default" selected>Default</option>
 								<option value="directory">Directory</option>
@@ -43,12 +43,12 @@
 								<option value="zfs">ZFS</option>
 						</select>
 					</div>
-					<col-md- class="help-inline"><small>*By default it is 'none', which is a simple directory tree under /var/lib/lxc/&lt;name&gt;/rootfs</small></col-md->
+					<span class="help-inline"><small>*By default it is 'none', which is a simple directory tree under /var/lib/lxc/&lt;name&gt;/rootfs</small></span>
 				</div>
 				<div class="control-group hide" id="directory">
 					<label class="control-label" for="inputDirectory">Directory</label>
 					<div class="controls input-group">
-						<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></col-md->
+						<span class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></span>
 						<input type="text" id="inputDirectory" name="dir" placeholder="Directory">
 					</div>
 				</div>
@@ -115,19 +115,19 @@
 		<div class="modal-body">
 			<div class="control-group">
 				<div class="controls input-group">
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-user"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 					<input type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
 
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-user"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 					<input type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls input-group">
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 					<input type="password" name="password1" id="password1" placeholder="Password *" required>
 
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 					<input type="password" name="password2" placeholder="Re-type *" required>
 				</div>
 			</div>

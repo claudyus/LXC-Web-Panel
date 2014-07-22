@@ -7,7 +7,7 @@
 		<div class="modal-body">
 			<div class="control-group">
 				<div class="controls input-group">
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></span>
 					<select id="selectContainer" name="orig">
 						{% for c in containers %}
 							{% if c == container %}
@@ -20,7 +20,7 @@
 				</div>
 
 				<div class="controls input-group pull-right">
-					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></col-md->
+					<span class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></span>
 					<select id="selectSR" name="dest">
 						{% for sr in storage_repos %}<option value="{{ sr[0] }}">{{sr[0]}}</li>{% endfor %}
 					</select>
