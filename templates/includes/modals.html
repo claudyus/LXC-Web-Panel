@@ -13,7 +13,9 @@
 </div>
 
 <div id="createCT" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="createCTLabel" aria-hidden="true">
-	<form method="post" action="{{ url_for('create_container') }}">
+		<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="post" action="{{ url_for('create_container') }}">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="createCTLabel">Create container</h3>
@@ -85,6 +87,8 @@
 			</div>
 		</div>
 	</form>
+		</div>
+	</div>
 </div>
 
 <div id="destroy" class="modal hide fade" role="dialog" aria-labelledby="destroyLabel" aria-hidden="true">
@@ -107,7 +111,9 @@
 </div>
 
 <div id="newUser" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newUserLabel" aria-hidden="true">
-	<form action="{{ url_for('lwp_users') }}" method="post" id="newUser">
+		<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="{{ url_for('lwp_users') }}" method="post" id="newUser">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="newUserLabel">New user</h3>
@@ -140,4 +146,6 @@
 			</div>
 		</div>
 	</form>
+		</div>
+	</div>
 </div>

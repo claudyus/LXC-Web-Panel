@@ -1,5 +1,7 @@
 <div id="newUser" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newUserLabel" aria-hidden="true">
-	<form action="{{ url_for('lwp_users') }}" method="post" id="newUser">
+		<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="{{ url_for('lwp_users') }}" method="post" id="newUser">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="newUserLabel">New user</h3>
@@ -32,4 +34,6 @@
 			</div>
 		</div>
 	</form>
+		</div>
+	</div>
 </div>
