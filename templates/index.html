@@ -15,35 +15,35 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<p>CPU usage: <span id="cpu-usage" class="hide"></span></p>
+				<p>CPU usage: <span id="cpu-usage"></span></p>
 					<div class="progress">
 						<div class="progress-bar" id="cpu-usage-bar"></div>
 					</div>
-					<p>Memory usage: <span id="memory-usage" class="hide"></span></p>
+					<p>Memory usage: <span id="memory-usage"></span></p>
 					<div class="progress">
 						<div class="progress-bar" id="memory-usage-bar"></div>
 						<abbr title="Cached memory"><div class="bar bar-success" id="memory-cache-usage-bar"></div></abbr>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<p>Disk usage: <span id="disk-usage" class="hide"></span></p>
+				<p>Disk usage: <span id="disk-usage"></span></p>
 					<div class="progress">
 						<div class="progress-bar" id="disk-usage-bar"></div>
 					</div>
-					<p>Uptime: <span id="uptime" class="hide"></span></p>
+					<p>Uptime: <span id="uptime"></span></p>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-12 pull-right">
 					{% if session.su == 'Yes' %}
-					<p class="pull-right"><button class="btn btn-danger" data-toggle="modal" data-target="#reboot"><i class="glyphicon glyphicon-off glyphicon glyphicon-white"></i> Reboot</button></p>
-					{% if containers != [] %}
-					<p class="pull-right"><button class="btn btn-warning" data-toggle="modal" data-target="#cloneCT"> <i class="glyphicon glyphicon-repeat glyphicon glyphicon-white"></i> Clone <abbr title="Container">CT</abbr></button></p>
-					{% if storage_repos %}
-					<p class="pull-right"><button class="btn btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="glyphicon glyphicon-hdd glyphicon glyphicon-white"></i> Backup <abbr title="Container">CT</abbr></button></p>
-					{% endif %}
-					{% endif %}
-					<p class="pull-right"><button class="btn btn-success" data-toggle="modal" data-target="#createCT"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create <abbr title="Container">CT</abbr></button></p>
+						<span><button class="btn btn-success" data-toggle="modal" data-target="#createCT"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create <abbr title="Container">CT</abbr></button></span>
+						{% if containers != [] %}
+							<span><button class="btn btn-warning" data-toggle="modal" data-target="#cloneCT"> <i class="glyphicon glyphicon-repeat glyphicon glyphicon-white"></i> Clone <abbr title="Container">CT</abbr></button></span>
+							{% if storage_repos %}
+								<span><button class="btn btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="glyphicon glyphicon-hdd glyphicon glyphicon-white"></i> Backup <abbr title="Container">CT</abbr></button></span>
+							{% endif %}
+						{% endif %}
+						<span><button class="btn btn-danger" data-toggle="modal" data-target="#reboot"><i class="glyphicon glyphicon-off glyphicon glyphicon-white"></i> Reboot</button></span>
 					{% endif %}
 				</div>
 			</div>
@@ -189,7 +189,7 @@
 				refresh();
 				check_version();
 				{% if session.su == 'Yes' and containers == [] %}$('#createCT').modal('show'){% endif %}
-				window.setInterval('refresh()', 15000);
+				window.setInterval('refresh()', 10000);
 			});
 
 			{% if session.su == 'Yes' %}$(document).ready(function(){
