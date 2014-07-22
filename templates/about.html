@@ -38,19 +38,19 @@
 
 {% endblock %}
 {% block script %}
-	<script>
-		$( document ).ready(function() {
-			$.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stats/contributors',
-				{
-					success: function (data, status) {
-						for (var i = data.length - 1; i > 0; i--) {
-							var author = data[i].author;
-							$('#contributors').append('<div class="contributor"><img src=' + author.avatar_url + '/>' +
-								'<strong><a href="' + author.html_url + '">' + author.login + '</a></strong>' +
-								'<commits><i class="glyphicon glyphicon-plus-sign"></i>' + data[i].total + '</commits></div>');
-						}
-					}
-				});
+<script>
+	$( document ).ready(function() {
+		$.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stats/contributors',
+		{
+			success: function (data, status) {
+				for (var i = data.length - 1; i > 0; i--) {
+					var author = data[i].author;
+					$('#contributors').append('<div class="contributor"><img src=' + author.avatar_url + '/>' +
+						'<strong><a href="' + author.html_url + '">' + author.login + '</a></strong>' +
+						'<commits><i class="glyphicon glyphicon-plus-sign"></i>' + data[i].total + '</commits></div>');
+				}
+			}
 		});
-	</script>
+	});
+</script>
 {% endblock %}

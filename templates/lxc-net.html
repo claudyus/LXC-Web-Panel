@@ -15,7 +15,7 @@
 		
 		{% if running != [] %}<h4 class="text-error">Please, stop all containers before restart lxc-net.</h4><br />{% endif %}
 
-	
+		
 		<div class="lxc-net">			
 			<div class="form-group">
 				<label class="control-label col-md-2" for="inputBridge">Bridge name</label>
@@ -76,27 +76,27 @@
 </div>
 {% endblock %}
 {% block script %}
-	<script src="{{ url_for('static', filename='js/bootstrapSwitch.js') }}"></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var networking = $(".lxc-net");
-			var inputText = $("input[type='text']");
+<script src="{{ url_for('static', filename='js/bootstrapSwitch.js') }}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var networking = $(".lxc-net");
+		var inputText = $("input[type='text']");
 
-			if ('{{cfg.use}}' == 'false') {
-				inputText.attr('disabled', 'disabled');
-				networking.fadeTo(0, 0.4);
+		if ('{{cfg.use}}' == 'false') {
+			inputText.attr('disabled', 'disabled');
+			networking.fadeTo(0, 0.4);
+		}
+
+		$(".switch-networking").on('switch-change', function(e, data){
+			if(data.value){
+				inputText.removeAttr('disabled');
+				networking.fadeTo(400, 1);
 			}
-
-			$(".switch-networking").on('switch-change', function(e, data){
-				if(data.value){
-					inputText.removeAttr('disabled');
-					networking.fadeTo(400, 1);
-				}
-				else{
-					inputText.attr('disabled', 'disabled');
-					networking.fadeTo(400, 0.4);
-				}
-			});
+			else{
+				inputText.attr('disabled', 'disabled');
+				networking.fadeTo(400, 0.4);
+			}
 		});
-	</script>
+	});
+</script>
 {% endblock %}

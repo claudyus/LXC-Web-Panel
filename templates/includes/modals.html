@@ -13,80 +13,80 @@
 </div>
 
 <div id="createCT" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="createCTLabel" aria-hidden="true">
-		<div class="modal-dialog">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<form method="post" action="{{ url_for('create_container') }}">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="createCTLabel">Create container</h3>
-		</div>
-		<div class="modal-body">
-			<div class="control-group">
-				<div class="controls input-group">
-					<span class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></span>
-					<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Name" name="name">
-					<span class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></span>
-					<select id="selectTemplate" name="template">
-						{% for template in templates %}<option value="{{ template }}" {% if template == 'ubuntu' %}selected{% endif %}>{{ template }}</option>{% endfor %}
-					</select>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="createCTLabel">Create container</h3>
 				</div>
-			</div>
-			<button id ="advancedbutton" class="btn btn-default btn btn-default-small">Advanced options</button>
-			<div id="advanceddiv" class="hide">
-				<br />
-				<div class="control-group">
-					<div class="controls input-group">
-						<label class="control-label" for="BackingStore">Backing store*</label>
-						<span class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></span>
-						<select id="BackingStore" name="backingstore">
-								<option value="default" selected>Default</option>
-								<option value="directory">Directory</option>
-								<option value="lvm">LVM</option>
-								<option value="zfs">ZFS</option>
-						</select>
+				<div class="modal-body">
+					<div class="control-group">
+						<div class="controls input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></span>
+							<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Name" name="name">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></span>
+							<select id="selectTemplate" name="template">
+								{% for template in templates %}<option value="{{ template }}" {% if template == 'ubuntu' %}selected{% endif %}>{{ template }}</option>{% endfor %}
+							</select>
+						</div>
 					</div>
-					<span class="help-inline"><small>*By default it is 'none', which is a simple directory tree under /var/lib/lxc/&lt;name&gt;/rootfs</small></span>
-				</div>
-				<div class="control-group hide" id="directory">
-					<label class="control-label" for="inputDirectory">Directory</label>
-					<div class="controls input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></span>
-						<input type="text" id="inputDirectory" name="dir" placeholder="Directory">
+					<button id ="advancedbutton" class="btn btn-default btn btn-default-small">Advanced options</button>
+					<div id="advanceddiv" class="hide">
+						<br />
+						<div class="control-group">
+							<div class="controls input-group">
+								<label class="control-label" for="BackingStore">Backing store*</label>
+								<span class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></span>
+								<select id="BackingStore" name="backingstore">
+									<option value="default" selected>Default</option>
+									<option value="directory">Directory</option>
+									<option value="lvm">LVM</option>
+									<option value="zfs">ZFS</option>
+								</select>
+							</div>
+							<span class="help-inline"><small>*By default it is 'none', which is a simple directory tree under /var/lib/lxc/&lt;name&gt;/rootfs</small></span>
+						</div>
+						<div class="control-group hide" id="directory">
+							<label class="control-label" for="inputDirectory">Directory</label>
+							<div class="controls input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></span>
+								<input type="text" id="inputDirectory" name="dir" placeholder="Directory">
+							</div>
+						</div>
+						<div class="control-group hide" id="lvm">
+							<div class="controls">
+								<label class="control-label" for="inputLV">LV Name</label>
+								<input type="text" id="inputLV" name="lvname" placeholder="LV Name">
+								<label class="control-label" for="inputVG">VG Name</label>
+								<input type="text" id="inputVG" name="vgname" placeholder="VG Name">
+								<label class="control-label" for="inputFS">File system</label>
+								<input type="text" id="inputFS" name="fstype" placeholder="ext4">
+								<label class="control-label" for="inputFSSize">Size</label>
+								<input type="text" id="inputFSSize" name="fssize" placeholder="500M">
+							</div>
+						</div>
+						<div class="control-group hide" id="zfs">
+							<div class="controls">
+								<label class="control-label" for="zpoolname">zpool Name</label>
+								<input type="text" id="inputZFS" name="zpoolname" placeholder="lxc"> 
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="control-group hide" id="lvm">
-					<div class="controls">
-						<label class="control-label" for="inputLV">LV Name</label>
-						<input type="text" id="inputLV" name="lvname" placeholder="LV Name">
-						<label class="control-label" for="inputVG">VG Name</label>
-						<input type="text" id="inputVG" name="vgname" placeholder="VG Name">
-						<label class="control-label" for="inputFS">File system</label>
-						<input type="text" id="inputFS" name="fstype" placeholder="ext4">
-						<label class="control-label" for="inputFSSize">Size</label>
-						<input type="text" id="inputFSSize" name="fssize" placeholder="500M">
+				<div class="modal-footer">
+					<div class="buttons-modal-footer">
+						<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button type="submit" class="btn btn-default btn btn-default-primary btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
+					</div>
+					<div class="loader-modal-footer hide">
+						<div class="progress progress-striped active">
+							<div class="bar"></div>
+						</div>
+						<p class="text-center">This may take few minutes...</p>
 					</div>
 				</div>
-				<div class="control-group hide" id="zfs">
-					<div class="controls">
-						<label class="control-label" for="zpoolname">zpool Name</label>
-						<input type="text" id="inputZFS" name="zpoolname" placeholder="lxc"> 
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<div class="buttons-modal-footer">
-				<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button type="submit" class="btn btn-default btn btn-default-primary btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
-			</div>
-			<div class="loader-modal-footer hide">
-				<div class="progress progress-striped active">
-					<div class="bar"></div>
-				</div>
-				<p class="text-center">This may take few minutes...</p>
-			</div>
-		</div>
-	</form>
+			</form>
 		</div>
 	</div>
 </div>
@@ -111,41 +111,41 @@
 </div>
 
 <div id="newUser" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newUserLabel" aria-hidden="true">
-		<div class="modal-dialog">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<form action="{{ url_for('lwp_users') }}" method="post" id="newUser">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="newUserLabel">New user</h3>
-		</div>
-		<div class="modal-body">
-			<div class="control-group">
-				<div class="controls input-group">
-					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-					<input type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
-
-					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-					<input type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="newUserLabel">New user</h3>
 				</div>
-			</div>
-			<div class="control-group">
-				<div class="controls input-group">
-					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-					<input type="password" name="password1" id="password1" placeholder="Password *" required>
+				<div class="modal-body">
+					<div class="control-group">
+						<div class="controls input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
 
-					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-					<input type="password" name="password2" placeholder="Re-type *" required>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+							<input type="password" name="password1" id="password1" placeholder="Password *" required>
+
+							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+							<input type="password" name="password2" placeholder="Re-type *" required>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<div class="buttons-modal-footer">
-				<input type="hidden" name="newUser" value="True">
-				<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button type="submit" class="btn btn-default btn btn-default-primary btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
-			</div>
-		</div>
-	</form>
+				<div class="modal-footer">
+					<div class="buttons-modal-footer">
+						<input type="hidden" name="newUser" value="True">
+						<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button type="submit" class="btn btn-default btn btn-default-primary btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

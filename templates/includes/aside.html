@@ -1,25 +1,25 @@
 <div class="well col-md-3 sidebar">
-		<ul class="nav nav-list">
-			<li class="nav-header">General</li>
-			<li{% if request.path=="/" or request.path=="/home" %} class="active"{% endif %}><a href="{{ url_for('home') }}" id="home-btn btn-default"><i class="glyphicon glyphicon-home"></i> Overview<i class="glyphicon glyphicon-refresh hide" id="home-load"></i></a></li>
-		</ul>
-		{% if containers != [] %}<ul class="nav nav-list">
-			<li class="nav-header">Containers</li>
-			{% for c in containers %}
-				<li{% if request.path=='/'+ c +'/edit' %} class="active"{% endif %}><a href="{{ url_for('edit',container=c) }}"><i class="glyphicon glyphicon-hdd"></i> {{c}}</a></li>
-			{% endfor %}
-		</ul>{% endif %}
-		{% if session.su == 'Yes' %}<ul class="nav nav-list">
-			<li class="nav-header">LXC Settings</li>
-			<li{% if request.path=="/settings/lxc-net" %} class="active"{% endif %}><a href="{{ url_for('lxc_net') }}"><i class="glyphicon glyphicon-globe"></i> Networking</a></li>
-			<li{% if request.path=="/lwp/tokens" %} class="active"{% endif %}><a href="{{ url_for('lwp_tokens') }}"><i class="glyphicon glyphicon-lock"></i> API tokens</a></li>
-			<li{% if request.path=="/checkconfig" %} class="active"{% endif %}><a href="{{ url_for('checkconfig') }}"><i class="glyphicon glyphicon-check"></i> Check config</a></li>
-		</ul>{% endif %}
-		<ul class="nav nav-list">
-			<li class="nav-header">LXC Web Panel</li>
-			{% if session.su == 'Yes' and auth != 'ldap' %}
-				<li{% if request.path=="/lwp/users" %} class="active"{% endif %}><a href="{{ url_for('lwp_users') }}"><i class="glyphicon glyphicon-user"></i> Users</a></li>
-			{% endif %}
-			<li{% if request.path=="/about" %} class="active"{% endif %}><a href="{{ url_for('about') }}"><i class="glyphicon glyphicon-info-sign"></i> About</a></li>
-		</ul>
+	<ul class="nav nav-list">
+		<li class="nav-header">General</li>
+		<li{% if request.path=="/" or request.path=="/home" %} class="active"{% endif %}><a href="{{ url_for('home') }}" id="home-btn btn-default"><i class="glyphicon glyphicon-home"></i> Overview<i class="glyphicon glyphicon-refresh hide" id="home-load"></i></a></li>
+	</ul>
+	{% if containers != [] %}<ul class="nav nav-list">
+	<li class="nav-header">Containers</li>
+	{% for c in containers %}
+	<li{% if request.path=='/'+ c +'/edit' %} class="active"{% endif %}><a href="{{ url_for('edit',container=c) }}"><i class="glyphicon glyphicon-hdd"></i> {{c}}</a></li>
+	{% endfor %}
+</ul>{% endif %}
+{% if session.su == 'Yes' %}<ul class="nav nav-list">
+<li class="nav-header">LXC Settings</li>
+<li{% if request.path=="/settings/lxc-net" %} class="active"{% endif %}><a href="{{ url_for('lxc_net') }}"><i class="glyphicon glyphicon-globe"></i> Networking</a></li>
+<li{% if request.path=="/lwp/tokens" %} class="active"{% endif %}><a href="{{ url_for('lwp_tokens') }}"><i class="glyphicon glyphicon-lock"></i> API tokens</a></li>
+<li{% if request.path=="/checkconfig" %} class="active"{% endif %}><a href="{{ url_for('checkconfig') }}"><i class="glyphicon glyphicon-check"></i> Check config</a></li>
+</ul>{% endif %}
+<ul class="nav nav-list">
+	<li class="nav-header">LXC Web Panel</li>
+	{% if session.su == 'Yes' and auth != 'ldap' %}
+	<li{% if request.path=="/lwp/users" %} class="active"{% endif %}><a href="{{ url_for('lwp_users') }}"><i class="glyphicon glyphicon-user"></i> Users</a></li>
+	{% endif %}
+	<li{% if request.path=="/about" %} class="active"{% endif %}><a href="{{ url_for('about') }}"><i class="glyphicon glyphicon-info-sign"></i> About</a></li>
+</ul>
 </div>
