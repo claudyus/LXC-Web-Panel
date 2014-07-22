@@ -1,7 +1,7 @@
 <div class="well col-md-3 sidebar">
 		<ul class="nav nav-list">
 			<li class="nav-header">General</li>
-			<li{% if request.path=="/" or request.path=="/home" %} class="active"{% endif %}><a href="{{ url_for('home') }}" id="home-btn btn-default"><i class="glyphicon glyphicon-home"></i> Overview<i class="glyphicon glyphicon-refresh hide" id="home-load" style="float:right;margin-top:3px;"></i></a></li>
+			<li{% if request.path=="/" or request.path=="/home" %} class="active"{% endif %}><a href="{{ url_for('home') }}" id="home-btn btn-default"><i class="glyphicon glyphicon-home"></i> Overview<i class="glyphicon glyphicon-refresh hide" id="home-load"></i></a></li>
 		</ul>
 		{% if containers != [] %}<ul class="nav nav-list">
 			<li class="nav-header">Containers</li>

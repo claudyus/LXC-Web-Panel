@@ -6,7 +6,7 @@
 	<form id="config" class="form-horizontal" action="{{ url_for('lxc_net') }}" method="post">
 		<h3 class="head head-networking">LXC Network</h3>
 		<div class="form-group switch-networking">
-			<div class="col-md-2" style="margin-left: 10px;">
+			<div class="col-md-2">
 				<div class="switch" data-on-label="<i class='glyphicon glyphicon-ok glyphicon glyphicon-white'></i>" data-off-label="<i class='glyphicon glyphicon-remove glyphicon glyphicon-white'></i>" data-on="success" data-off="danger">
 					<input type="checkbox" name="use" value="true" {% if cfg.use == 'true' %}checked{% endif %}{% if running != [] %} disabled{% endif %} />
 				</div>

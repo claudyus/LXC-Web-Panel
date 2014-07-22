@@ -13,7 +13,7 @@
 </div>
 
 <div id="createCT" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="createCTLabel" aria-hidden="true">
-	<form method="post" action="{{ url_for('create_container') }}" style="margin:0;">
+	<form method="post" action="{{ url_for('create_container') }}">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="createCTLabel">Create container</h3>
@@ -23,7 +23,7 @@
 				<div class="controls input-group">
 					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></col-md->
 					<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Name" name="name">
-					<col-md- class="input-group-addon" style="margin-left:30px;"><i class="glyphicon glyphicon-download-alt"></i></col-md->
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-download-alt"></i></col-md->
 					<select id="selectTemplate" name="template">
 						{% for template in templates %}<option value="{{ template }}" {% if template == 'ubuntu' %}selected{% endif %}>{{ template }}</option>{% endfor %}
 					</select>
@@ -79,7 +79,7 @@
 			</div>
 			<div class="loader-modal-footer hide">
 				<div class="progress progress-striped active">
-					<div class="bar" style="width: 100%;"></div>
+					<div class="bar"></div>
 				</div>
 				<p class="text-center">This may take few minutes...</p>
 			</div>
@@ -101,7 +101,7 @@
 			<a class="btn btn-default btn btn-default-primary btn btn-default-danger destroy-link modalbutton" href=""><i class="glyphicon glyphicon-trash glyphicon glyphicon-white"></i> Destroy</a>
 		</div>
 		<div class="progress progress-striped active hide loader-modal-footer">
-			<div class="bar" style="width: 100%;"></div>
+			<div class="bar"></div>
 		</div>
 	</div>
 </div>
@@ -118,7 +118,7 @@
 					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-user"></i></col-md->
 					<input type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
 
-					<col-md- class="input-group-addon" style="margin-left:30px;"><i class="glyphicon glyphicon-user"></i></col-md->
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-user"></i></col-md->
 					<input type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
 				</div>
 			</div>
@@ -127,7 +127,7 @@
 					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></col-md->
 					<input type="password" name="password1" id="password1" placeholder="Password *" required>
 
-					<col-md- class="input-group-addon" style="margin-left:30px;"><i class="glyphicon glyphicon-lock"></i></col-md->
+					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></col-md->
 					<input type="password" name="password2" placeholder="Re-type *" required>
 				</div>
 			</div>

@@ -4,7 +4,7 @@
 	<div class="col-md-6">
 		{{ super() }}
 		<h3 class="head">{{ container|capitalize }}</small>
-			<div class="btn-group" data-toggle="buttons-radio" style="float:right;">
+			<div class="btn-group" data-toggle="buttons-radio">
 				<div class="btn-group">
 				{% set start_action = {'STOPPED':'start','FROZEN':'unfreeze'} %}
 					<a class="btn btn-default btn-sm{% if infos['status'] == 'RUNNING' %} disabled{% endif %}" {% if infos['status'] == 'STOPPED' or infos['status'] == 'FROZEN' %}href="{{ url_for('action', name=container, action=start_action[infos['status']], token=session.token, from='edit') }}"{% endif %}><i class="glyphicon glyphicon-play"></i> Start</a>
@@ -147,7 +147,7 @@
 			<li><strong>Arch :</strong> {{ settings.arch }}</li>
 			<li><button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#cloneCT"> <i class="glyphicon glyphicon-repeat glyphicon glyphicon-white"></i> Clone <abbr title="Container">CT</abbr></a></li>
 			{% if storage_repos %}
-				<li style="padding-top: 10px;"><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#backupCT"> <i class="glyphicon glyphicon-hdd glyphicon glyphicon-white"></i> Backup <abbr title="Container">CT</abbr></a></li>
+				<li><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#backupCT"> <i class="glyphicon glyphicon-hdd glyphicon glyphicon-white"></i> Backup <abbr title="Container">CT</abbr></a></li>
 			{% endif %}
 		</ul>
 	</div>

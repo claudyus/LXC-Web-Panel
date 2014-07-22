@@ -1,5 +1,5 @@
 <div id="cloneCT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cloneCTLabel" aria-hidden="true">
-	<form method="post" action="{{ url_for('clone_container') }}" style="margin:0;">
+	<form method="post" action="{{ url_for('clone_container') }}">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="cloneCTLabel">Clone container</h3>
@@ -19,7 +19,7 @@
 					</select>
 				</div>
 
-				<div class="controls input-group pull-right" style="margin-top: -40px;">
+				<div class="controls input-group pull-right">
 					<col-md- class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></col-md->
 					<input id="inputName" type="text" pattern="(?!^containers$)[a-zA-Z0-9_-]+" placeholder="Clone name" name="name">
 				</div>
@@ -37,7 +37,7 @@
 			</div>
 			<div class="loader-modal-footer hide">
 				<div class="progress progress-striped active">
-					<div class="bar" style="width: 100%;"></div>
+					<div class="bar"></div>
 				</div>
 			</div>
 		</div>

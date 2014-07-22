@@ -1,7 +1,7 @@
 <div id="createCT" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createCTLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form method="post" action="{{ url_for('create_container') }}" style="margin:0;">
+			<form method="post" action="{{ url_for('create_container') }}">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;<span class="sr-only">Close</span></button>
 					<h3 id="createCTLabel">Create container</h3>
@@ -78,7 +78,7 @@
 					</div>
 					<div class="loader-modal-footer hide">
 						<div class="progress progress-striped active">
-							<div class="bar" style="width: 100%;"></div>
+							<div class="bar"></div>
 						</div>
 						<p class="text-center">This could take a while...</p>
 					</div>
