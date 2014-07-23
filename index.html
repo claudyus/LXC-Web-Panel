@@ -61,10 +61,12 @@
 </blockquote>
 <div class="section" id="installation">
 <h1>Installation</h1>
-<p>You can download latest debian packages from <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/download.html">http://claudyus.github.io/LXC-Web-Panel/download.html</a> than install it:</p>
+<p>You can download latest debian packages from <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/download.html">http://claudyus.github.io/LXC-Web-Panel/download.html</a> or, better, you can also use the lwp debian repo:</p>
 <pre class="literal-block">
-$ sudo dpkg -i lwp_VERSION.deb
-$ sudo apt-get install -f # install lwp dependencies
+$ wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
+$ echo &quot;deb http://claudyus.github.io/LXC-Web-Panel/ ./&quot; | sudo tee /etc/apt/sources.list.d/lwp.list
+$ sudo apt-get update
+$ sudo apt-get install lwp
 </pre>
 </div>
 <div class="section" id="configuration">
