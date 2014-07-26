@@ -34,7 +34,8 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12 pull-right">
+				<div class="col-md-12">
+				<div class="pull-right">
 					{% if session.su == 'Yes' %}
 						<span><button class="btn btn-success" data-toggle="modal" data-target="#createCT"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create <abbr title="Container">CT</abbr></button></span>
 						{% if containers != [] %}
@@ -46,6 +47,7 @@
 						<span><button class="btn btn-danger" data-toggle="modal" data-target="#reboot"><i class="glyphicon glyphicon-off glyphicon glyphicon-white"></i> Reboot</button></span>
 					{% endif %}
 				</div>
+			</div>
 			</div>
 
 			<a href="http://lxc-webpanel.github.io/" target="_blank"><span class="label label-info hide" id="version"><i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i> New version is out ! (<span id="vernumber"></span>)</span></a>
