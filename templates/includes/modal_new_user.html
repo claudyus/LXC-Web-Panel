@@ -7,30 +7,28 @@
 					<h3 id="newUserLabel">New user</h3>
 				</div>
 				<div class="modal-body">
-					<div class="control-group">
-						<div class="controls input-group">
+					<div class="form-group">
+						<div class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							<input type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
-
+							<input class="form-control" type="text" placeholder="Username (Login) *" pattern="[a-zA-Z0-9]{3,32}" name="username" required>
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							<input type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
+							<input class="form-control" type="text" name="name" pattern="[a-z A-Z0-9]{3,32}" placeholder="Name">
 						</div>
 					</div>
-					<div class="control-group">
-						<div class="controls input-group">
+					<div class="form-group">
+						<div class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-							<input type="password" name="password1" id="password1" placeholder="Password *" required>
-
+							<input class="form-control" type="password" name="password1" id="password1" placeholder="Password *" required>
 							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-							<input type="password" name="password2" placeholder="Re-type *" required>
+							<input class="form-control" type="password" name="password2" placeholder="Re-type *" required>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="buttons-modal-footer">
 						<input type="hidden" name="newUser" value="True">
-						<button class="btn btn-default btn btn-default-small" data-dismiss="modal" aria-hidden="true">Close</button>
-						<button type="submit" class="btn btn-default btn btn-default-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button type="submit" class="btn btn-success modalbutton"><i class="glyphicon glyphicon-plus-sign glyphicon glyphicon-white"></i> Create</button>
 					</div>
 				</div>
 			</form>
