@@ -1,29 +1,15 @@
 <div class="col-md-3 sidebar">
   <div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-            General
-          </a>
-        </h4>
-      </div>
-      <div id="collapseOne" class="panel-collapse collapse">
-        <div class="panel-body">
-          <a href="{{ url_for('home') }}" id="home-btn btn-default"><i class="glyphicon glyphicon-home"></i> Overview<i class="glyphicon glyphicon-refresh hide" id="home-load"></i></a>
-        </div>
-      </div>
-    </div>
     {% if containers != [] %}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          <a data-toggle="collapse" data-parent="#accordion" href="#containers">
             Containers
           </a>
         </h4>
       </div>
-      <div id="collapseTwo" class="panel-collapse collapse">
+      <div id="containers" class="panel-collapse collapse">
         <div class="panel-body">
           {% for c in containers %}
           <ul class="nav nav-list">
@@ -37,12 +23,12 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+            <a data-toggle="collapse" data-parent="#accordion" href="#lxcsettings">
               LXC Settings
             </a>
           </h4>
         </div>
-        <div id="collapseThree" class="panel-collapse collapse">
+        <div id="lxcsettings" class="panel-collapse collapse">
           <div class="panel-body">
             <ul class="nav nav-list">
               <li{% if request.path=="/settings/lxc-net" %} class="active"{% endif %}><a href="{{ url_for('lxc_net') }}"><i class="glyphicon glyphicon-globe"></i> Networking</a></li>
@@ -56,12 +42,12 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+            <a data-toggle="collapse" data-parent="#accordion" href="#lxcwebpanel">
               LXC Web Panel
             </a>
           </h4>
         </div>
-        <div id="collapseFour" class="panel-collapse collapse">
+        <div id="lxcwebpanel" class="panel-collapse collapse">
           <div class="panel-body">
               <ul class="nav nav-list">
                 {% if session.su == 'Yes' and auth != 'ldap' %}
