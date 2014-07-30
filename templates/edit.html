@@ -3,8 +3,8 @@
 {% block content %}
 <div class="col-md-6">
 	{{ super() }}
-	<h3 class="head">{{ container|capitalize }}</small>
-		<div class="btn-group" data-toggle="buttons-radio">
+	<h3 class="head">{{ container }}</small>
+		<div class="btn-group pull-right" data-toggle="buttons-radio">
 			<div class="btn-group">
 				{% set start_action = {'STOPPED':'start','FROZEN':'unfreeze'} %}
 				<a class="btn btn-default btn-sm{% if infos['status'] == 'RUNNING' %} disabled{% endif %}" {% if infos['status'] == 'STOPPED' or infos['status'] == 'FROZEN' %}href="{{ url_for('action', name=container, action=start_action[infos['status']], token=session.token, from='edit') }}"{% endif %}><i class="glyphicon glyphicon-play"></i> Start</a>
@@ -43,7 +43,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div id="network"{% if settings.flags != 'up' %} class="hide"{% endif %}>
 			<div class="form-group">
 				<label class="control-label col-md-3" for="inputType">Network type</label>
@@ -79,7 +79,7 @@
 		<div class="form-group form-inline">
 			<label class="control-label col-md-3" for="sliderMemlimit">Memory limit *</label>
 			<div class="col-md-9">
-				<input class="fix-height" pattern="[0-9]+" type="range" id="sliderMemlimit" name="memlimit" min="16" max="{{ host_memory.total }}" step="2" value="{% if settings.memlimit %}{{ settings.memlimit }}{% else %}{{ host_memory.total }}{% endif %}" onChange="updateMemInput('inputMemlimit', this.value, {{ host_memory.total }});">		
+				<input class="fix-height" pattern="[0-9]+" type="range" id="sliderMemlimit" name="memlimit" min="16" max="{{ host_memory.total }}" step="2" value="{% if settings.memlimit %}{{ settings.memlimit }}{% else %}{{ host_memory.total }}{% endif %}" onChange="updateMemInput('inputMemlimit', this.value, {{ host_memory.total }});">
 				<input pattern="[0-9]+" class="input-mini{% if not settings.memlimit %} hide{% endif %}" id="inputMemlimit" type="number" min="16" step="2" max="{{ host_memory.total }}" value="{% if settings.memlimit %}{{ settings.memlimit }}{% endif %}" onChange="updateMemSlider('sliderMemlimit', this.value);"><span class="help-inline fix-height">{% if settings.memlimit %}MB{% else %}Unlimited{% endif %}</span>
 			</div>
 		</div>
