@@ -1,8 +1,8 @@
-lwp         srv
-lxclite     srv
-static      srv
-templates   srv
-CHANGELOG   srv
-lwp.db      srv
-lwp.py      srv
-version     srv
+lwp         srv/lwp
+lxclite     srv/lwp
+static      srv/lwp
+templates   srv/lwp
+CHANGELOG   srv/lwp
+lwp.db      srv/lwp
+lwp.py      srv/lwp
+version     srv/lwp
