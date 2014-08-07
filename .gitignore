@@ -5,6 +5,12 @@
 lwp.db
 lwp.conf
 
-#debian package
-build/*
+# Debian packaging
+debian/*debhelper*
+debian/*substvars
+debian/files
+debian/lwp
+debian/changelog
+
+# Github pages
 gh-pages/*

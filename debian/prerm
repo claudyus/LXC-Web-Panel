@@ -1,8 +1,0 @@
-#!/bin/sh
-set -e
-
-find /srv/lwp -name *.pyc -exec {} \;1
-
-/etc/init.d/lwp stop
-rm /etc/init.d/lwp
-update-rc.d lwp remove

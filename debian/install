@@ -1,0 +1,8 @@
+lwp         srv
+lxclite     srv
+static      srv
+templates   srv
+CHANGELOG   srv
+lwp.db      srv
+lwp.py      srv
+version     srv
