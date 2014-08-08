@@ -52,8 +52,8 @@ def debian():
     version = get_version_from_debian_changelog()
     package = '../lwp_{}_all.deb'.format(version)
 
-    # finally, copy (or move?) package into gh-pages dir
-    local('cp {} gh-pages/'.format(package))
+    # finally, move package into gh-pages dir
+    local('mv {} gh-pages/'.format(package))
 
 
 @task
@@ -62,7 +62,7 @@ def clone():
         local('git clone git@github.com:claudyus/LXC-Web-Panel.git gh-pages')
 
     with lcd('gh-pages'):
-        local('git checkout origin/gh-pages -b gh-pages')
+        local('git checkout origin/gh-pages -b gh-pages || true')
 
 
 @task
