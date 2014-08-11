@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-chmod +x /etc/init.d/lwp
-update-rc.d lwp defaults
-/etc/init.d/lwp start

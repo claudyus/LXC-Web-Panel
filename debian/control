@@ -1,11 +1,14 @@
-Package: lwp
-Version: VERSION
-Vcs-Git: https://github.com/claudyus/LXC-Web-Panel.git
-Architecture: amd64
+Source: lwp
 Section: net
+Priority: extra
 Maintainer: Claudio Mignanti <c.mignanti@gmail.com>
-Installed-Size: SIZE
-Depends: lxc (>= 1.0), python-flask (>= 0.10), python-ldap
-Priority: optional
+Build-Depends: debhelper (>=9), python
+X-Python-Version: >= 2.7, << 3.0
+Vcs-Git: https://github.com/claudyus/LXC-Web-Panel.git
+Standards-Version: 3.9.5
+
+Package: lwp
+Architecture: all
+Depends: ${misc:Depends}, lxc (>= 1.0), python-flask (>= 0.10), python-ldap
 Description: LXC Web Panel improved
- Built DATE
+ Built ${misc:buildDate}
