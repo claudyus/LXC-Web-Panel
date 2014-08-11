@@ -29,7 +29,12 @@ except:
         print ' * cannot read config files. Exit!'
         sys.exit(1)
 
-SECRET_KEY = '\xb13\xb6\xfb+Z\xe8\xd1n\x80\x9c\xe7KM\x1c\xc1\xa7\xf8\xbeY\x9a\xfa<.'
+try:
+    SECRET_KEY = config.get('global', 'secret_key')
+except:
+    print ' * Missing secret_key in your config file, your session will not survive server reboot'
+    import random
+    SECRET_KEY = ''.join(random.choice('abcdefghilmnopqrstuvzjxw1234567890') for _ in range(15))
 
 DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
