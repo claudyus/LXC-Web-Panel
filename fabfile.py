@@ -48,12 +48,12 @@ def debian():
     #dpkg-sig -k 0DFD7CBB --sign builder gh-pages/lwp_`git describe --tags`.deb
     local('dpkg-buildpackage -us -uc -b')
 
-    # dpkgb-buildpackage places debs one folder above
+    # dpkg-buildpackage places debs one folder above
     version = get_version_from_debian_changelog()
     package = '../lwp_{}_all.deb'.format(version)
 
-    # finally, copy (or move?) package into gh-pages dir
-    local('cp {} gh-pages/'.format(package))
+    # finally, move package into gh-pages dir
+    local('mv {} gh-pages/'.format(package))
 
 
 @task
@@ -62,11 +62,11 @@ def clone():
         local('git clone git@github.com:claudyus/LXC-Web-Panel.git gh-pages')
 
     with lcd('gh-pages'):
-        local('git checkout origin/gh-pages -b gh-pages')
+        local('git checkout origin/gh-pages -b gh-pages || true')
 
 
 @task
 def site():
     clone()
-    debian();
+    debian()
     local('make -C gh-pages/')
