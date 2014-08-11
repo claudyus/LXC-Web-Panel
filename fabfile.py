@@ -39,21 +39,30 @@ def get_version_from_debian_changelog():
     return local('dpkg-parsechangelog --show-field Version', capture=True)
 
 
+def get_deb_architecture():
+    """
+    Returns the deb architecture of the local system, e.g. amd64, i386, arm
+    """
+    return local('dpkg --print-architecture', capture=True)
+
+
 @task(alias='deb')
 def debian():
     # the debian changelog is not stored on GIT and rebuilt each time
     generate_debian_changelog()
-
-    # TODO: original Makefile would also sign the package
-    #dpkg-sig -k 0DFD7CBB --sign builder gh-pages/lwp_`git describe --tags`.deb
-    local('dpkg-buildpackage -us -uc -b')
+    version = get_version_from_debian_changelog()
+    package = 'lwp_{}_all.deb'.format(version)
+    changes = 'lwp_{}_{}.changes'.format(version, get_deb_architecture())
 
     # dpkg-buildpackage places debs one folder above
-    version = get_version_from_debian_changelog()
-    package = '../lwp_{}_all.deb'.format(version)
+    local('dpkg-buildpackage -us -uc -b')
 
-    # finally, move package into gh-pages dir
-    local('mv {} gh-pages/'.format(package))
+    # move package into gh-pages dir and sign package
+    local('mv ../{} gh-pages/'.format(package))
+    local('dpkg-sig -k 0DFD7CBB --sign builder gh-pages/lwp_{}_all.deb'.format(version))
+
+    # don't really need the .changes file
+    local('rm ../' + changes)
 
 
 @task
