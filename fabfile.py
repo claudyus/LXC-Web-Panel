@@ -43,17 +43,17 @@ def get_version_from_debian_changelog():
 def debian():
     # the debian changelog is not stored on GIT and rebuilt each time
     generate_debian_changelog()
-
-    # TODO: original Makefile would also sign the package
-    #dpkg-sig -k 0DFD7CBB --sign builder gh-pages/lwp_`git describe --tags`.deb
     local('dpkg-buildpackage -us -uc -b')
 
     # dpkgb-buildpackage places debs one folder above
     version = get_version_from_debian_changelog()
-    package = '../lwp_{}_all.deb'.format(version)
+    package = 'lwp_{}_all.deb'.format(version)
 
     # finally, move package into gh-pages dir
-    local('mv {} gh-pages/'.format(package))
+    local('mv ../{} gh-pages/'.format(package))
+    local('rm ../lwp_*.changes')
+    if (os.environ['USER'] == 'claudyus'):
+        local('dpkg-sig -k 0DFD7CBB --sign builder gh-pages/{}'.format(package))
 
 
 @task
