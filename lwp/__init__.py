@@ -1,13 +1,13 @@
-import sys
-sys.path.append('../')
-from lxclite import exists, stopped
-import subprocess
+from __future__ import absolute_import
+
 import os
-import platform
-import time
-import urllib2
-import ConfigParser
 import re
+import time
+import platform
+import subprocess
+import ConfigParser
+
+from lwp.lxclite import exists, stopped
 
 
 class CalledProcessError(Exception):
@@ -15,6 +15,10 @@ class CalledProcessError(Exception):
 
 
 class LxcConfigFileNotComplete(Exception):
+    pass
+
+
+class ContainerNotExists(Exception):
     pass
 
 cgroup = {}

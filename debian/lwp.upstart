@@ -8,6 +8,4 @@ respawn limit 10 5
 setuid root
 setgid root
 
-chdir /srv/lwp
-
-exec /usr/bin/python lwp.py
+exec lwp
