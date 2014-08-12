@@ -129,19 +129,20 @@ def host_cpu_percent():
     """
     returns CPU usage in percent
     """
-    f = open('/proc/stat', 'r')
-    line = f.readlines()[0]
+    with open('/proc/stat', 'r') as f:
+        line = f.readlines()[0]
+
     data = line.split()
     previdle = float(data[4])
     prevtotal = float(data[1]) + float(data[2]) + float(data[3]) + float(data[4])
-    f.close()
     time.sleep(0.1)
-    f = open('/proc/stat', 'r')
-    line = f.readlines()[0]
+
+    with open('/proc/stat', 'r') as f:
+        line = f.readlines()[0]
+
     data = line.split()
     idle = float(data[4])
     total = float(data[1]) + float(data[2]) + float(data[3]) + float(data[4])
-    f.close()
     intervaltotal = total - prevtotal
     percent = 100 * (intervaltotal - (idle - previdle)) / intervaltotal
     return str('%.1f' % percent)
@@ -170,12 +171,11 @@ def host_uptime():
             {'day': days,
             'time': '%d:%02d' % (hours,minutes)}
     """
-    f = open('/proc/uptime')
-    uptime = int(f.readlines()[0].split('.')[0])
+    with open('/proc/uptime') as f:
+        uptime = int(f.readlines()[0].split('.')[0])
     minutes = uptime / 60 % 60
     hours = uptime / 60 / 60 % 24
     days = uptime / 60 / 60 / 24
-    f.close()
     return {'day': days,
             'time': '%d:%02d' % (hours, minutes)}
 
@@ -339,9 +339,9 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
 
         del_section(filename=filename)
 
-        load = open(filename, 'r')
-        read = load.readlines()
-        load.close()
+        with open(filename, 'r') as load:
+            read = load.readlines()
+
         i = 0
         while i < len(read):
             if ' = ' in read[i]:
@@ -352,9 +352,8 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
                 else:
                     read[i] = '%s=\"%s\"\n' % (split[0].upper(), split[1])
             i += 1
-        load = open(filename, 'w')
-        load.writelines(read)
-        load.close()
+        with open(filename, 'w') as load:
+            load.writelines(read)
 
 
 def push_config_value(key, value, container=None):
@@ -371,9 +370,8 @@ def push_config_value(key, value, container=None):
             values = []
             i = 0
 
-            load = open(filename, 'r')
-            read = load.readlines()
-            load.close()
+            with open(filename, 'r') as load:
+                read = load.readlines()
 
             while i < len(read):
                 if not read[i].startswith('#') and re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow', read[i]):
