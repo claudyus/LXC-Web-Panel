@@ -83,7 +83,7 @@ def memory_usage(name):
         out = subprocess.check_output(cmd, shell=True).splitlines()
     except subprocess.CalledProcessError:
         return 0
-    return int(out[0]) / 1024 / 1024
+    return int(int(out[0]) / 1024 / 1024)
 
 
 def host_memory_usage():
@@ -134,7 +134,7 @@ def host_cpu_percent():
     idle = float(data[4])
     total = float(data[1]) + float(data[2]) + float(data[3]) + float(data[4])
     intervaltotal = total - prevtotal
-    percent = 100 * (intervaltotal - (idle - previdle)) / intervaltotal
+    percent = int(100 * (intervaltotal - (idle - previdle)) / intervaltotal)
     return str('%.1f' % percent)
 
 
@@ -163,9 +163,9 @@ def host_uptime():
     """
     with open('/proc/uptime') as f:
         uptime = int(f.readlines()[0].split('.')[0])
-    minutes = uptime / 60 % 60
-    hours = uptime / 60 / 60 % 24
-    days = uptime / 60 / 60 / 24
+    minutes = int(uptime / 60) % 60
+    hours = int(uptime / 60 / 60) % 24
+    days = int(uptime / 60 / 60 / 24)
     return {'day': days,
             'time': '%d:%02d' % (hours, minutes)}
 
@@ -176,11 +176,11 @@ def check_ubuntu():
     """
     dist = '%s %s' % (platform.linux_distribution()[0], platform.linux_distribution()[1])
 
-    supported_dists = [ 'Ubuntu 12.04',
-                        'Ubuntu 12.10',
-                        'Ubuntu 13.04',
-                        'Ubuntu 13.10',
-                        'Ubuntu 14.04']
+    supported_dists = ['Ubuntu 12.04',
+                       'Ubuntu 12.10',
+                       'Ubuntu 13.04',
+                       'Ubuntu 13.10',
+                       'Ubuntu 14.04']
 
     if dist in supported_dists:
         return dist
