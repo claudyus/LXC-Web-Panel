@@ -1,4 +1,4 @@
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import, print_function, division
 
 import os
 import re
@@ -104,21 +104,20 @@ def host_memory_usage():
                     'used': int(used/1024),
                     'total': int(total/1024)}
     """
-    out = open('/proc/meminfo')
-    for line in out:
-        if 'MemTotal:' == line.split()[0]:
-            split = line.split()
-            total = float(split[1])
-        if 'MemFree:' == line.split()[0]:
-            split = line.split()
-            free = float(split[1])
-        if 'Buffers:' == line.split()[0]:
-            split = line.split()
-            buffers = float(split[1])
-        if 'Cached:' == line.split()[0]:
-            split = line.split()
-            cached = float(split[1])
-    out.close()
+    total, free, buffers, cached = 0, 0, 0, 0
+    with open('/proc/meminfo') as out:
+        for line in out:
+            parts = line.split()
+            key = parts[0]
+            value = parts[1]
+            if key == 'MemTotal:':
+                total = float(value)
+            if key == 'MemFree:':
+                free = float(value)
+            if key == 'Buffers:':
+                buffers = float(value)
+            if key == 'Cached:':
+                cached = float(value)
     used = (total - (free + buffers + cached))
     return {'percent': int((used / total) * 100),
             'percent_cached': int(((cached) / total) * 100),
