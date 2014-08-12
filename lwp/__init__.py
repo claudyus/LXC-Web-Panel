@@ -7,19 +7,9 @@ import platform
 import subprocess
 import ConfigParser
 
+from lwp.exceptions import ContainerNotExists, LxcConfigFileNotComplete
 from lwp.lxclite import exists, stopped
 
-
-class CalledProcessError(Exception):
-    pass
-
-
-class LxcConfigFileNotComplete(Exception):
-    pass
-
-
-class ContainerNotExists(Exception):
-    pass
 
 cgroup = {
     'type': 'lxc.network.type',
@@ -414,5 +404,5 @@ def net_restart():
     try:
         subprocess.check_call(cmd, shell=True)
         return 0
-    except CalledProcessError:
+    except subprocess.CalledProcessError:
         return 1
