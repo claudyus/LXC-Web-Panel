@@ -68,9 +68,9 @@ def del_section(filename=None):
 
 
 def file_exist(filename):
-    '''
+    """
     checks if a given file exist or not
-    '''
+    """
     try:
         with open(filename) as f:
             f.close()
@@ -80,9 +80,9 @@ def file_exist(filename):
 
 
 def memory_usage(name):
-    '''
+    """
     returns memory usage in MB
-    '''
+    """
     if not exists(name):
         raise ContainerNotExists("The container (%s) does not exist!" % name)
     if name in stopped():
@@ -96,13 +96,13 @@ def memory_usage(name):
 
 
 def host_memory_usage():
-    '''
+    """
     returns a dict of host memory usage values
                     {'percent': int((used/total)*100),
                     'percent_cached':int((cached/total)*100),
                     'used': int(used/1024),
                     'total': int(total/1024)}
-    '''
+    """
     out = open('/proc/meminfo')
     for line in out:
         if 'MemTotal:' == line.split()[0]:
@@ -126,9 +126,9 @@ def host_memory_usage():
 
 
 def host_cpu_percent():
-    '''
+    """
     returns CPU usage in percent
-    '''
+    """
     f = open('/proc/stat', 'r')
     line = f.readlines()[0]
     data = line.split()
@@ -148,13 +148,13 @@ def host_cpu_percent():
 
 
 def host_disk_usage(partition=None):
-    '''
+    """
     returns a dict of disk usage values
                     {'total': usage[1],
                     'used': usage[2],
                     'free': usage[3],
                     'percent': usage[4]}
-    '''
+    """
     if not partition:
         partition = '/'
     usage = subprocess.check_output(['df -h %s' % partition], shell=True).split('\n')[1].split()
@@ -165,11 +165,11 @@ def host_disk_usage(partition=None):
 
 
 def host_uptime():
-    '''
+    """
     returns a dict of the system uptime
             {'day': days,
             'time': '%d:%02d' % (hours,minutes)}
-    '''
+    """
     f = open('/proc/uptime')
     uptime = int(f.readlines()[0].split('.')[0])
     minutes = uptime / 60 % 60
@@ -181,9 +181,9 @@ def host_uptime():
 
 
 def check_ubuntu():
-    '''
+    """
     return the System version
-    '''
+    """
     dist = '%s %s' % (platform.linux_distribution()[0], platform.linux_distribution()[1])
 
     supported_dists = [ 'Ubuntu 12.04',
@@ -198,9 +198,9 @@ def check_ubuntu():
 
 
 def get_templates_list():
-    '''
+    """
     returns a sorted lxc templates list
-    '''
+    """
     templates = []
     path = None
 
@@ -217,9 +217,9 @@ def get_templates_list():
 
 
 def check_version():
-    '''
+    """
     returns latest LWP version (dict with current and latest)
-    '''
+    """
     try:
         version = subprocess.check_output('git describe --tags', shell=True)
     except:
@@ -228,9 +228,9 @@ def check_version():
 
 
 def get_net_settings():
-    '''
+    """
     returns a dict of all known settings for LXC networking
-    '''
+    """
     filename = '/etc/default/lxc-net'
     if not file_exist(filename):
         filename = '/etc/default/lxc'
@@ -252,9 +252,9 @@ def get_net_settings():
 
 
 def get_container_settings(name):
-    '''
+    """
     returns a dict of all utils settings for a container
-    '''
+    """
     filename = '/var/lib/lxc/%s/config' % name
     if not file_exist(filename):
         return False
@@ -323,9 +323,9 @@ def get_container_settings(name):
 
 
 def push_net_value(key, value, filename='/etc/default/lxc'):
-    '''
+    """
     replace a var in the lxc-net config file
-    '''
+    """
     if filename:
         config = ConfigParser.RawConfigParser()
         config.readfp(FakeSection(open(filename)))
@@ -358,15 +358,15 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
 
 
 def push_config_value(key, value, container=None):
-    '''
+    """
     replace a var in a container config file
-    '''
+    """
 
     def save_cgroup_devices(filename=None):
-        '''
+        """
         returns multiple values (lxc.cgroup.devices.deny and lxc.cgroup.devices.allow) in a list.
         because ConfigParser cannot make this...
-        '''
+        """
         if filename:
             values = []
             i = 0
@@ -409,9 +409,9 @@ def push_config_value(key, value, container=None):
 
 
 def net_restart():
-    '''
+    """
     restarts LXC networking
-    '''
+    """
     cmd = ['/usr/sbin/service lxc-net restart']
     try:
         subprocess.check_call(cmd, shell=True)

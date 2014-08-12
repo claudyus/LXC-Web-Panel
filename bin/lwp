@@ -82,34 +82,34 @@ app.config.from_object(__name__)
 
 
 def connect_db():
-    '''
+    """
     SQLite3 connect function
-    '''
+    """
     return sqlite3.connect(app.config['DATABASE'])
 
 
 @app.before_request
 def before_request():
-    '''
+    """
     executes functions before all requests
-    '''
+    """
     check_session_limit()
     g.db = connect_db()
 
 
 @app.teardown_request
 def teardown_request(exception):
-    '''
+    """
     executes functions after all requests
-    '''
+    """
     if hasattr(g, 'db'):
         g.db.close()
 
 
 def if_logged_in(function=render_template, f_args=('login.html', )):
-    '''
+    """
     helper decorator to verify if a user is logged
-    '''
+    """
     def decorator(handler):
         def new_handler(*args, **kwargs):
             if 'logged_in' in session:
@@ -133,9 +133,9 @@ def get_bucket_token(container):
 @app.route('/home')
 @if_logged_in()
 def home():
-    '''
+    """
     home page function
-    '''
+    """
     listx = lxc.listx()
     containers_all = []
 
@@ -161,18 +161,18 @@ def home():
 @app.route('/about')
 @if_logged_in()
 def about():
-    '''
+    """
     about page
-    '''
+    """
     return render_template('about.html', containers=lxc.ls(), version=lwp.check_version())
 
 
 @app.route('/<container>/edit', methods=['POST', 'GET'])
 @if_logged_in()
 def edit(container=None):
-    '''
+    """
     edit containers page and actions if form post request
-    '''
+    """
     host_memory = lwp.host_memory_usage()
     cfg = lwp.get_container_settings(container)
     # read config also from databases
@@ -292,9 +292,9 @@ def edit(container=None):
 @app.route('/settings/lxc-net', methods=['POST', 'GET'])
 @if_logged_in()
 def lxc_net():
-    '''
+    """
     lxc-net (/etc/default/lxc) settings page and actions if form post request
-    '''
+    """
     if session['su'] != 'Yes':
         return abort(403)
 
@@ -341,10 +341,10 @@ def lxc_net():
 @app.route('/lwp/users', methods=['POST', 'GET'])
 @if_logged_in()
 def lwp_users():
-    '''
+    """
     returns users and get posts request : can edit or add user in page.
     this funtction uses sqlite3
-    '''
+    """
     if session['su'] != 'Yes':
         return abort(403)
 
@@ -444,10 +444,10 @@ def lwp_users():
 @app.route('/lwp/tokens', methods=['POST', 'GET'])
 @if_logged_in()
 def lwp_tokens():
-    '''
+    """
     returns api tokens info and get posts request: can show/delete or add token in page.
     this function uses sqlite3, require admin privilege
-    '''
+    """
     if session['su'] != 'Yes':
         return abort(403)
 
@@ -476,9 +476,9 @@ def lwp_tokens():
 @app.route('/checkconfig')
 @if_logged_in()
 def checkconfig():
-    '''
+    """
     returns the display of lxc-checkconfig command
-    '''
+    """
     if session['su'] != 'Yes':
         return abort(403)
 
@@ -488,10 +488,10 @@ def checkconfig():
 @app.route('/action', methods=['GET'])
 @if_logged_in()
 def action():
-    '''
+    """
     manage all actions related to containers
     lxc-start, lxc-stop, etc...
-    '''
+    """
     if request.args['token'] == session.get('token'):
         action = request.args['action']
         name = request.args['name']
@@ -563,9 +563,9 @@ def action():
 @app.route('/action/create-container', methods=['GET', 'POST'])
 @if_logged_in()
 def create_container():
-    '''
+    """
     verify all forms to create a container
-    '''
+    """
     if session['su'] != 'Yes':
         return abort(403)
     if request.method == 'POST':
@@ -656,9 +656,9 @@ def create_container():
 @app.route('/action/clone-container', methods=['GET', 'POST'])
 @if_logged_in()
 def clone_container():
-    '''
+    """
     verify all forms to clone a container
-    '''
+    """
     if session['su'] != 'Yes':
         return abort(403)
     if request.method == 'POST':
@@ -699,9 +699,9 @@ def clone_container():
 @app.route('/action/backup-container', methods=['GET', 'POST'])
 @if_logged_in()
 def backup_container():
-    '''
+    """
     Verify the form to backup a container
-    '''
+    """
     if request.method == 'POST':
         container = request.form['orig']
         sr_type = request.form['dest']
@@ -867,9 +867,9 @@ def check_session_limit():
 
 
 def api_auth():
-    '''
+    """
     api decorator to verify if a token is valid
-    '''
+    """
     def decorator(handler):
         def new_handler(*args, **kwargs):
             token = request.args.get('private_token')
@@ -889,9 +889,9 @@ def api_auth():
 @app.route('/api/v1/containers')
 @api_auth()
 def get_containers():
-    '''
+    """
     Returns lxc containers on the current machine and brief status information.
-    '''
+    """
     list_container = lxc.list_status()
     return json.dumps(list_container)
 
