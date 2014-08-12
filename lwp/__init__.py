@@ -192,11 +192,11 @@ def get_templates_list():
     returns a sorted lxc templates list
     """
     templates = []
-    path = None
 
     try:
         path = os.listdir('/usr/share/lxc/templates')
     except OSError:
+        # TODO: if this folder doesn't exist, it will cause a crash
         path = os.listdir('/usr/lib/lxc/templates')
 
     if path:
