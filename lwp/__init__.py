@@ -54,19 +54,17 @@ class FakeSection(object):
             return self.fp.readline()
 
 
-def DelSection(filename=None):
+def del_section(filename=None):
     if filename:
-        load = open(filename, 'r')
-        read = load.readlines()
-        load.close()
+        with open(filename, 'r') as f:
+            read = f.readlines()
         i = 0
         while i < len(read):
             if '[DEFAULT]' in read[i]:
                 del read[i]
                 break
-        load = open(filename, 'w')
-        load.writelines(read)
-        load.close()
+        with open(filename, 'w') as f:
+            f.writelines(read)
 
 
 def file_exist(filename):
@@ -339,7 +337,7 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
         with open(filename, 'wb') as configfile:
             config.write(configfile)
 
-        DelSection(filename=filename)
+        del_section(filename=filename)
 
         load = open(filename, 'r')
         read = load.readlines()
@@ -404,7 +402,7 @@ def push_config_value(key, value, container=None):
         with open(filename, 'wb') as configfile:
             config.write(configfile)
 
-        DelSection(filename=filename)
+        del_section(filename=filename)
 
         with open(filename, "a") as configfile:
             configfile.writelines(save)
