@@ -81,7 +81,7 @@ def memory_usage(name):
     cmd = ['lxc-cgroup -n %s memory.usage_in_bytes' % name]
     try:
         out = subprocess.check_output(cmd, shell=True).splitlines()
-    except:
+    except subprocess.CalledProcessError:
         return 0
     return int(out[0]) / 1024 / 1024
 
@@ -110,7 +110,7 @@ def host_memory_usage():
                 cached = float(value)
     used = (total - (free + buffers + cached))
     return {'percent': int((used / total) * 100),
-            'percent_cached': int(((cached) / total) * 100),
+            'percent_cached': int((cached / total) * 100),
             'used': int(used / 1024),
             'total': int(total / 1024)}
 
@@ -196,7 +196,7 @@ def get_templates_list():
 
     try:
         path = os.listdir('/usr/share/lxc/templates')
-    except:
+    except OSError:
         path = os.listdir('/usr/lib/lxc/templates')
 
     if path:
@@ -212,7 +212,7 @@ def check_version():
     """
     try:
         version = subprocess.check_output('git describe --tags', shell=True)
-    except:
+    except subprocess.CalledProcessError:
         version = open(os.path.join(os.path.dirname(__file__), 'version')).read()[0:-1]
     return {'current': version}
 
@@ -286,7 +286,7 @@ def get_container_settings(name):
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
             push_config_value(cgroup['ipv4'], cfg['ipv4'], name)
-        except:
+        except subprocess.CalledProcessError:
             cfg['ipv4'] = ''
     try:
         cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['memlimit']))
