@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import os
 import re
@@ -21,22 +21,23 @@ class LxcConfigFileNotComplete(Exception):
 class ContainerNotExists(Exception):
     pass
 
-cgroup = {}
-cgroup['type'] = 'lxc.network.type'
-cgroup['link'] = 'lxc.network.link'
-cgroup['flags'] = 'lxc.network.flags'
-cgroup['hwaddr'] = 'lxc.network.hwaddr'
-cgroup['rootfs'] = 'lxc.rootfs'
-cgroup['utsname'] = 'lxc.utsname'
-cgroup['arch'] = 'lxc.arch'
-cgroup['ipv4'] = 'lxc.network.ipv4'
-cgroup['memlimit'] = 'lxc.cgroup.memory.limit_in_bytes'
-cgroup['swlimit'] = 'lxc.cgroup.memory.memsw.limit_in_bytes'
-cgroup['cpus'] = 'lxc.cgroup.cpuset.cpus'
-cgroup['shares'] = 'lxc.cgroup.cpu.shares'
-cgroup['deny'] = 'lxc.cgroup.devices.deny'
-cgroup['allow'] = 'lxc.cgroup.devices.allow'
-cgroup['auto'] = 'lxc.start.auto'
+cgroup = {
+    'type': 'lxc.network.type',
+    'link': 'lxc.network.link',
+    'flags': 'lxc.network.flags',
+    'hwaddr': 'lxc.network.hwaddr',
+    'rootfs': 'lxc.rootfs',
+    'utsname': 'lxc.utsname',
+    'arch': 'lxc.arch',
+    'ipv4': 'lxc.network.ipv4',
+    'memlimit': 'lxc.cgroup.memory.limit_in_bytes',
+    'swlimit': 'lxc.cgroup.memory.memsw.limit_in_bytes',
+    'cpus': 'lxc.cgroup.cpuset.cpus',
+    'shares': 'lxc.cgroup.cpu.shares',
+    'deny': 'lxc.cgroup.devices.deny',
+    'allow': 'lxc.cgroup.devices.allow',
+    'auto': 'lxc.start.auto',
+}
 
 
 class FakeSection(object):

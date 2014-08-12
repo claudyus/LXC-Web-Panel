@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import lwp
 import subprocess
@@ -25,12 +25,12 @@ config = ConfigParser.SafeConfigParser()
 try:
     config.readfp(open('/etc/lwp/lwp.conf'))
 except:
-    print ' * missed /etc/lwp/lwp.conf file'
+    print(' * missed /etc/lwp/lwp.conf file')
     try:
         # fallback on local config file
         config.readfp(open('lwp.conf'))
     except:
-        print ' * cannot read config files. Exit!'
+        print(' * cannot read config files. Exit!')
         sys.exit(1)
 
 SECRET_KEY = '\xb13\xb6\xfb+Z\xe8\xd1n\x80\x9c\xe7KM\x1c\xc1\xa7\xf8\xbeY\x9a\xfa<.'
@@ -47,7 +47,7 @@ try:
         SSL = False
 except ConfigParser.NoOptionError:
     SSL = False
-    print "- SSL feature disabled"
+    print("- SSL feature disabled")
 
 try:
     USE_BUCKET = bool(config.get('global', 'buckets'))
@@ -55,11 +55,11 @@ try:
     BUCKET_PORT = config.get('buckets', 'buckets_port')
 except:
     USE_BUCKET = False
-    print "- Bucket feature disabled"
+    print("- Bucket feature disabled")
 
 try:
     AUTH = config.get('global', 'auth')
-    print ' * Auth type: ' + AUTH
+    print(' * Auth type: ' + AUTH)
     if (AUTH == 'ldap'):
         import ldap
         LDAP_HOST = config.get('ldap', 'host')
@@ -71,7 +71,7 @@ try:
         DISPLAY_MAPPING = config.get('ldap','display_mapping')
         OBJECT_CLASS = config.get('ldap','object_class')
 except NameError as err:
-    print ' ! Revert to DB authentication ' + err
+    print(' ! Revert to DB authentication ' + str(err))
     AUTH = 'database'
 
 storage_repos = config.items('storage_repository')
@@ -761,7 +761,7 @@ def login():
                 user['name'] = q[1][DISPLAY_MAPPING][0].decode('utf8')
                 user['su'] = 'Yes'   # on ldap all user are admin
             except Exception, e:
-                print str(e)
+                print(str(e))
                 user = None
         else:
             request_passwd = hash_passwd(request_passwd)
@@ -936,7 +936,7 @@ def add_container():
     if (bool('template' not in data) != bool('clone' not in data)) | bool('name' not in data):
         return jsonify(status="error", error="Bad request"), 400
 
-    print data
+    print(data)
     if 'template' in data:
         # we want a new container
         if 'store' not in data:
