@@ -20,7 +20,9 @@ setup(
     zip_safe=False,
     install_requires=[
         'flask>=0.10',
-        'python-ldap'
+        'jinja2>=2.7.2',
+        'python-ldap',
+        'PyOpenSSL',
     ],
     scripts=['bin/lwp'],
 )

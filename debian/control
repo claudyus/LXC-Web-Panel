@@ -9,6 +9,6 @@ Standards-Version: 3.9.5
 
 Package: lwp
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, lxc (>= 1.0), python-flask (>= 0.10), python-ldap
+Depends: ${misc:Depends}, ${python:Depends}, lxc (>= 1.0), python-flask (>= 0.10)
 Description: LXC Web Panel improved
  Built ${misc:buildDate}
