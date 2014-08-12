@@ -37,12 +37,30 @@ def _run(cmd, output=False):
         return out
     return subprocess.check_call('{}'.format(cmd), shell=True)  # returns 0 for True
 
-class ContainerAlreadyExists(Exception): pass
-class ContainerDoesntExists(Exception): pass
-class ContainerAlreadyRunning(Exception): pass
-class ContainerNotRunning(Exception): pass
-class DirectoryDoesntExists(Exception): pass
-class NFSDirectoryNotMounted(Exception): pass
+
+# TODO: move to exceptions.py
+class ContainerAlreadyExists(Exception):
+    pass
+
+
+class ContainerDoesntExists(Exception):
+    pass
+
+
+class ContainerAlreadyRunning(Exception):
+    pass
+
+
+class ContainerNotRunning(Exception):
+    pass
+
+
+class DirectoryDoesntExists(Exception):
+    pass
+
+
+class NFSDirectoryNotMounted(Exception):
+    pass
 
 
 def exists(container):
@@ -117,6 +135,7 @@ def info(container):
 
     return state
 
+
 def ls():
     """
     List containers directory
@@ -167,6 +186,7 @@ def list_status():
 
     for container in ls():
         state = info(container)['state']
+        # TODO: figure out why pycharm thinks state is an int
         containers.append(dict(container=container, state=state.lower()))
 
     return containers
