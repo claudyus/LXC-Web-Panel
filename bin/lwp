@@ -547,6 +547,7 @@ def action():
             try:
                 subprocess.check_call('/sbin/shutdown -r now \'%s\'' % msg, shell=True)
                 flash(u'System will now restart!', 'success')
+            # TODO: fix blind exception handling
             except:
                 flash(u'System error!', 'error')
         elif action == 'push':
@@ -557,6 +558,7 @@ def action():
             return redirect('../%s/edit' % name)
         else:
             return redirect(url_for('home'))
+    # TODO: fix blind exception handling
     except:
         return redirect(url_for('home'))
 
