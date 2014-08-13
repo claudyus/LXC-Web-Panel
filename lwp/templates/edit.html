@@ -7,14 +7,14 @@
 			<div class="btn-group" data-toggle="buttons-radio" style="float:right;">
 				<div class="btn-group">
 				{% set start_action = {'STOPPED':'start','FROZEN':'unfreeze'} %}
-					<a class="btn{% if infos['status'] == 'RUNNING' %} disabled{% endif %}" {% if infos['status'] == 'STOPPED' or infos['status'] == 'FROZEN' %}href="{{ url_for('action', name=container, action=start_action[infos['status']], token=session.token, from='edit') }}"{% endif %}><i class="icon-play"></i> Start</a>
-					<a class="btn{% if infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' or infos['status'] == 'FROZEN' %}href="{{ url_for('action', name=container, action='stop', token=session.token, from='edit') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
-					<a class="btn{% if infos['status'] == 'FROZEN' or infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' %}href="{{ url_for('action', name=container, action='freeze', token=session.token, from='edit') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
+					<a class="btn{% if infos['status'] == 'RUNNING' %} disabled{% endif %}" {% if infos['status'] == 'STOPPED' or infos['status'] == 'FROZEN' %}href="{{ url_for('main.action', name=container, action=start_action[infos['status']], token=session.token, from='edit') }}"{% endif %}><i class="icon-play"></i> Start</a>
+					<a class="btn{% if infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' or infos['status'] == 'FROZEN' %}href="{{ url_for('main.action', name=container, action='stop', token=session.token, from='edit') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
+					<a class="btn{% if infos['status'] == 'FROZEN' or infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' %}href="{{ url_for('main.action', name=container, action='freeze', token=session.token, from='edit') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
 				</div>
 			</div>
 		</h3>
 		<br />
-		<form id="config" class="form-horizontal" action="{{ url_for('edit', container=container) }}" method="post">
+		<form id="config" class="form-horizontal" action="{{ url_for('main.edit', container=container) }}" method="post">
 			<div class="control-group">
 				<label class="control-label" for="inputHostname">Hostname</label>
 				<div class="controls">

@@ -75,7 +75,7 @@ def check_session_limit():
         last_activity = session.get('last_activity')
         if last_activity < limit:
             flash(u'Session timed out !', 'info')
-            redirect(url_for('logout'))
+            redirect(url_for('auth.logout'))
         else:
             session['last_activity'] = now
 
