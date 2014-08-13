@@ -4,7 +4,7 @@ import hashlib
 import sqlite3
 import ConfigParser
 
-from flask import session, render_template, g, flash, redirect, url_for
+from flask import session, render_template, g, flash, redirect, url_for, request, jsonify
 
 
 # configuration
@@ -78,3 +78,23 @@ def check_session_limit():
             redirect(url_for('logout'))
         else:
             session['last_activity'] = now
+
+
+def api_auth():
+    """
+    api decorator to verify if a token is valid
+    """
+    def decorator(handler):
+        def new_handler(*args, **kwargs):
+            token = request.args.get('private_token')
+            if token is None:
+                token = request.headers['Private-Token']
+            result = query_db('select * from api_tokens where token=?', [token], one=True)
+            if result is not None:
+                #token exists, access granted
+                return handler(*args, **kwargs)
+            else:
+                return jsonify(status="error", error="Unauthorized"), 401
+        new_handler.func_name = handler.func_name
+        return new_handler
+    return decorator
