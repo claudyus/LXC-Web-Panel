@@ -499,10 +499,11 @@ def action():
     manage all actions related to containers
     lxc-start, lxc-stop, etc...
     """
+    act = request.args['action']
+    name = request.args['name']
+
     # TODO: refactor this method, it's horrible to read
     if request.args['token'] == session.get('token'):
-        act = request.args['action']
-        name = request.args['name']
 
         if act == 'start':
             try:
@@ -562,7 +563,6 @@ def action():
             pass
     try:
         if request.args['from'] == 'edit':
-            # TODO: name might be referenced before assignment
             return redirect('../%s/edit' % name)
         else:
             return redirect(url_for('home'))
