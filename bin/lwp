@@ -499,11 +499,12 @@ def action():
     manage all actions related to containers
     lxc-start, lxc-stop, etc...
     """
+    # TODO: refactor this method, it's horrible to read
     if request.args['token'] == session.get('token'):
-        action = request.args['action']
+        act = request.args['action']
         name = request.args['name']
 
-        if action == 'start':
+        if act == 'start':
             try:
                 if lxc.start(name) == 0:
                     time.sleep(1)  # Fix bug : "the container is randomly not displayed in overview list after a boot"
@@ -512,7 +513,7 @@ def action():
                     flash(u'Unable to start %s!' % name, 'error')
             except lxc.ContainerAlreadyRunning:
                 flash(u'Container %s is already running!' % name, 'error')
-        elif action == 'stop':
+        elif act == 'stop':
             try:
                 if lxc.stop(name) == 0:
                     flash(u'Container %s stopped successfully!' % name, 'success')
@@ -520,7 +521,7 @@ def action():
                     flash(u'Unable to stop %s!' % name, 'error')
             except lxc.ContainerNotRunning:
                 flash(u'Container %s is already stopped!' % name, 'error')
-        elif action == 'freeze':
+        elif act == 'freeze':
             try:
                 if lxc.freeze(name) == 0:
                     flash(u'Container %s frozen successfully!' % name, 'success')
@@ -528,7 +529,7 @@ def action():
                     flash(u'Unable to freeze %s!' % name, 'error')
             except lxc.ContainerNotRunning:
                 flash(u'Container %s not running!' % name, 'error')
-        elif action == 'unfreeze':
+        elif act == 'unfreeze':
             try:
                 if lxc.unfreeze(name) == 0:
                     flash(u'Container %s unfrozen successfully!' % name, 'success')
@@ -536,7 +537,7 @@ def action():
                     flash(u'Unable to unfeeze %s!' % name, 'error')
             except lxc.ContainerNotRunning:
                 flash(u'Container %s not frozen!' % name, 'error')
-        elif action == 'destroy':
+        elif act == 'destroy':
             if session['su'] != 'Yes':
                 return abort(403)
             try:
@@ -546,7 +547,7 @@ def action():
                     flash(u'Unable to destroy %s!' % name, 'error')
             except lxc.ContainerDoesntExists:
                 flash(u'The Container %s does not exists!' % name, 'error')
-        elif action == 'reboot' and name == 'host':
+        elif act == 'reboot' and name == 'host':
             if session['su'] != 'Yes':
                 return abort(403)
             msg = '\v*** LXC Web Panel *** \
@@ -557,7 +558,7 @@ def action():
             # TODO: fix blind exception handling
             except:
                 flash(u'System error!', 'error')
-        elif action == 'push':
+        elif act == 'push':
             pass
     try:
         if request.args['from'] == 'edit':
