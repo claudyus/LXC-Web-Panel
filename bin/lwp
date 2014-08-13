@@ -47,7 +47,7 @@ DATABASE = config.get('database', 'file')
 ADDRESS = config.get('global', 'address')
 PORT = int(config.get('global', 'port'))
 try:
-    SSL = bool(config.get('global', 'ssl'))
+    SSL = config.getboolean('global', 'ssl')
     PKEY = config.get('global', 'pkey')
     CERT = config.get('global', 'cert')
     if not os.path.isfile(PKEY) or not os.path.isfile(CERT):
@@ -57,7 +57,7 @@ except ConfigParser.NoOptionError:
     print("- SSL feature disabled")
 
 try:
-    USE_BUCKET = bool(config.get('global', 'buckets'))
+    USE_BUCKET = config.getboolean('global', 'buckets')
     BUCKET_HOST = config.get('buckets', 'buckets_host')
     BUCKET_PORT = config.get('buckets', 'buckets_port')
 except:
