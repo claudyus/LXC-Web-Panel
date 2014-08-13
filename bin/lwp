@@ -756,7 +756,7 @@ def login():
 
         current_url = request.form['url']
 
-        if (AUTH == 'ldap'):
+        if AUTH == 'ldap':
             try:
                 l = ldap.open(LDAP_HOST, LDAP_PORT)
                 l.set_option(ldap.OPT_REFERRALS, 0)
@@ -765,10 +765,11 @@ def login():
                 q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=' + OBJECT_CLASS + ')(' + ID_MAPPING + '=' + request_username + '))', [])[0]
                 l.bind_s(q[0], request_passwd, ldap.AUTH_SIMPLE)
                 #set the parameters for user by ldap objectClass
-                user = {}
-                user['username'] = q[1][ID_MAPPING][0].decode('utf8')
-                user['name'] = q[1][DISPLAY_MAPPING][0].decode('utf8')
-                user['su'] = 'Yes'   # on ldap all user are admin
+                user = {
+                    'username': q[1][ID_MAPPING][0].decode('utf8'),
+                    'name': q[1][DISPLAY_MAPPING][0].decode('utf8'),
+                    'su': 'Yes'
+                }
             except Exception, e:
                 print(str(e))
                 user = None
