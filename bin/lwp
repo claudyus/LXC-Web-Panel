@@ -23,8 +23,10 @@ import lwp.lxclite as lxc
 config = ConfigParser.SafeConfigParser()
 
 try:
+    # TODO: should really use with statement here rather than rely on cpython reference counting
     config.readfp(open('/etc/lwp/lwp.conf'))
 except:
+    # TODO: another blind exception
     print(' * missed /etc/lwp/lwp.conf file')
     try:
         # fallback on local config file
@@ -33,7 +35,12 @@ except:
         print(' * cannot read config files. Exit!')
         sys.exit(1)
 
-SECRET_KEY = '\xb13\xb6\xfb+Z\xe8\xd1n\x80\x9c\xe7KM\x1c\xc1\xa7\xf8\xbeY\x9a\xfa<.'
+if config.has_option('session', 'secret_key'):
+    SECRET_KEY = config.get('session', 'secret_key')
+else:
+    print(' * secret_key is not specified in config file, exiting')
+    sys.exit(1)
+
 
 DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
@@ -922,7 +929,7 @@ def post_container(name):
         elif status == "freeze":
             lxc.freeze(name)
             return jsonify(status="ok"), 200
- 
+
         return jsonify(status="error", error="Bad request"), 400
     except lxc.ContainerDoesntExists:
         return jsonify(status="error", error="Container doesn' t exists"), 409
