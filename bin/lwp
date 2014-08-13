@@ -2,38 +2,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
 
-import lwp
-import subprocess
-import time
-import re
-import hashlib
-import sqlite3
 import os
-import ConfigParser
-import socket
+import re
 import sys
 import json
+import time
+import socket
+import subprocess
+import ConfigParser
 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 
+import lwp
 import lwp.lxclite as lxc
+from lwp.utils import connect_db, query_db, if_logged_in, get_bucket_token, hash_passwd, get_token, check_session_limit, config
 
-
-# configuration
-config = ConfigParser.SafeConfigParser()
-
-try:
-    # TODO: should really use with statement here rather than rely on cpython reference counting
-    config.readfp(open('/etc/lwp/lwp.conf'))
-except:
-    # TODO: another blind exception
-    print(' * missed /etc/lwp/lwp.conf file')
-    try:
-        # fallback on local config file
-        config.readfp(open('lwp.conf'))
-    except:
-        print(' * cannot read config files. Exit!')
-        sys.exit(1)
 
 if config.has_option('session', 'secret_key'):
     SECRET_KEY = config.get('session', 'secret_key')
@@ -67,7 +50,7 @@ except:
 try:
     AUTH = config.get('global', 'auth')
     print(' * Auth type: ' + AUTH)
-    if (AUTH == 'ldap'):
+    if AUTH == 'ldap':
         import ldap
         LDAP_HOST = config.get('ldap', 'host')
         LDAP_PORT = int(config.get('ldap', 'port'))
@@ -88,20 +71,13 @@ app = Flask('lwp')
 app.config.from_object(__name__)
 
 
-def connect_db():
-    """
-    SQLite3 connect function
-    """
-    return sqlite3.connect(app.config['DATABASE'])
-
-
 @app.before_request
 def before_request():
     """
     executes functions before all requests
     """
     check_session_limit()
-    g.db = connect_db()
+    g.db = connect_db(app.config['DATABASE'])
 
 
 @app.teardown_request
@@ -111,29 +87,6 @@ def teardown_request(exception):
     """
     if hasattr(g, 'db'):
         g.db.close()
-
-
-def if_logged_in(function=render_template, f_args=('login.html', )):
-    """
-    helper decorator to verify if a user is logged
-    """
-    def decorator(handler):
-        def new_handler(*args, **kwargs):
-            if 'logged_in' in session:
-                return handler(*args, **kwargs)
-            else:
-                return function(*f_args)
-        new_handler.func_name = handler.func_name
-        return new_handler
-    return decorator
-
-
-def get_bucket_token(container):
-    query = query_db("SELECT bucket_token FROM machine WHERE machine_name=?", [container], one=True)
-    if query is None:
-        return ""
-    else:
-        return query['bucket_token']
 
 
 @app.route('/')
@@ -146,7 +99,7 @@ def home():
     listx = lxc.listx()
     containers_all = []
 
-    for status in ['RUNNING', 'FROZEN', 'STOPPED']:
+    for status in ('RUNNING', 'FROZEN', 'STOPPED'):
         containers_by_status = []
 
         for container in listx[status]:
@@ -844,32 +797,6 @@ def refresh_memory_containers(name=None):
 @if_logged_in()
 def check_version():
     return jsonify(lwp.check_version())
-
-
-def hash_passwd(passwd):
-    return hashlib.sha512(passwd).hexdigest()
-
-
-def get_token():
-    return hashlib.md5(str(time.time())).hexdigest()
-
-
-def query_db(query, args=(), one=False):
-    cur = g.db.execute(query, args)
-    rv = [dict((cur.description[idx][0], value) for idx, value in enumerate(row)) for row in cur.fetchall()]
-    return (rv[0] if rv else None) if one else rv
-
-
-def check_session_limit():
-    if 'logged_in' in session and session.get('last_activity') is not None:
-        now = int(time.time())
-        limit = now - 60 * int(config.get('session', 'time'))
-        last_activity = session.get('last_activity')
-        if last_activity < limit:
-            flash(u'Session timed out !', 'info')
-            logout()
-        else:
-            session['last_activity'] = now
 
 
 #####################################
