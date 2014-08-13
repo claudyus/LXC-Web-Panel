@@ -750,7 +750,7 @@ def login():
 
         if (AUTH == 'ldap'):
             try:
-                l = ldap.open(LDAP_HOST, LDAP_PORT)
+                l = ldap.initialize('ldap://%s:%d' % (LDAP_HOST, LDAP_PORT))
                 l.set_option(ldap.OPT_REFERRALS, 0)
                 l.protocol_version = 3
                 l.simple_bind(LDAP_BIND_DN, LDAP_PASS)
