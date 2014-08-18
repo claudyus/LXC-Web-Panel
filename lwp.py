@@ -83,10 +83,14 @@ app.config.from_object(__name__)
 
 
 def connect_db():
-    '''
+    """
     SQLite3 connect function
-    '''
-    return sqlite3.connect(app.config['DATABASE'])
+    """
+    try:
+        return sqlite3.connect(app.config['DATABASE'])
+    except sqlite3.OperationalError:
+        print ' * Cannot open sqlite database at {}. Exit!'.format(app.config['DATABASE'])
+        sys.exit(1)
 
 
 @app.before_request
