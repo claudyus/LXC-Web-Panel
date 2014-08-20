@@ -5,7 +5,6 @@ import subprocess
 import os
 import platform
 import time
-import urllib2
 import ConfigParser
 import re
 
@@ -17,22 +16,28 @@ class CalledProcessError(Exception):
 class LxcConfigFileNotComplete(Exception):
     pass
 
-cgroup = {}
-cgroup['type'] = 'lxc.network.type'
-cgroup['link'] = 'lxc.network.link'
-cgroup['flags'] = 'lxc.network.flags'
-cgroup['hwaddr'] = 'lxc.network.hwaddr'
-cgroup['rootfs'] = 'lxc.rootfs'
-cgroup['utsname'] = 'lxc.utsname'
-cgroup['arch'] = 'lxc.arch'
-cgroup['ipv4'] = 'lxc.network.ipv4'
-cgroup['memlimit'] = 'lxc.cgroup.memory.limit_in_bytes'
-cgroup['swlimit'] = 'lxc.cgroup.memory.memsw.limit_in_bytes'
-cgroup['cpus'] = 'lxc.cgroup.cpuset.cpus'
-cgroup['shares'] = 'lxc.cgroup.cpu.shares'
-cgroup['deny'] = 'lxc.cgroup.devices.deny'
-cgroup['allow'] = 'lxc.cgroup.devices.allow'
-cgroup['auto'] = 'lxc.start.auto'
+
+class ContainerNotExists(Exception):
+    pass
+
+
+cgroup = {
+    'type': 'lxc.network.type',
+    'link': 'lxc.network.link',
+    'flags': 'lxc.network.flags',
+    'hwaddr': 'lxc.network.hwaddr',
+    'rootfs': 'lxc.rootfs',
+    'utsname': 'lxc.utsname',
+    'arch': 'lxc.arch',
+    'ipv4': 'lxc.network.ipv4',
+    'memlimit': 'lxc.cgroup.memory.limit_in_bytes',
+    'swlimit': 'lxc.cgroup.memory.memsw.limit_in_bytes',
+    'cpus': 'lxc.cgroup.cpuset.cpus',
+    'shares': 'lxc.cgroup.cpu.shares',
+    'deny': 'lxc.cgroup.devices.deny',
+    'allow': 'lxc.cgroup.devices.allow',
+    'auto': 'lxc.start.auto'
+}
 
 
 class FakeSection(object):
@@ -50,7 +55,7 @@ class FakeSection(object):
             return self.fp.readline()
 
 
-def DelSection(filename=None):
+def del_section(filename=None):
     if filename:
         load = open(filename, 'r')
         read = load.readlines()
@@ -66,9 +71,9 @@ def DelSection(filename=None):
 
 
 def file_exist(filename):
-    '''
+    """
     checks if a given file exist or not
-    '''
+    """
     try:
         with open(filename) as f:
             f.close()
@@ -78,9 +83,9 @@ def file_exist(filename):
 
 
 def memory_usage(name):
-    '''
+    """
     returns memory usage in MB
-    '''
+    """
     if not exists(name):
         raise ContainerNotExists("The container (%s) does not exist!" % name)
     if name in stopped():
@@ -88,19 +93,20 @@ def memory_usage(name):
     cmd = ['lxc-cgroup -n %s memory.usage_in_bytes' % name]
     try:
         out = subprocess.check_output(cmd, shell=True).splitlines()
-    except:
+    except OSError:
         return 0
     return int(out[0]) / 1024 / 1024
 
 
 def host_memory_usage():
-    '''
+    """
     returns a dict of host memory usage values
                     {'percent': int((used/total)*100),
                     'percent_cached':int((cached/total)*100),
                     'used': int(used/1024),
                     'total': int(total/1024)}
-    '''
+    """
+    total = free = buffers = cached = 0
     out = open('/proc/meminfo')
     for line in out:
         if 'MemTotal:' == line.split()[0]:
@@ -118,15 +124,15 @@ def host_memory_usage():
     out.close()
     used = (total - (free + buffers + cached))
     return {'percent': int((used / total) * 100),
-            'percent_cached': int(((cached) / total) * 100),
+            'percent_cached': int((cached / total) * 100),
             'used': int(used / 1024),
             'total': int(total / 1024)}
 
 
 def host_cpu_percent():
-    '''
+    """
     returns CPU usage in percent
-    '''
+    """
     f = open('/proc/stat', 'r')
     line = f.readlines()[0]
     data = line.split()
@@ -146,13 +152,13 @@ def host_cpu_percent():
 
 
 def host_disk_usage(partition=None):
-    '''
+    """
     returns a dict of disk usage values
                     {'total': usage[1],
                     'used': usage[2],
                     'free': usage[3],
                     'percent': usage[4]}
-    '''
+    """
     if not partition:
         partition = '/'
     usage = subprocess.check_output(['df -h %s' % partition], shell=True).split('\n')[1].split()
@@ -163,11 +169,11 @@ def host_disk_usage(partition=None):
 
 
 def host_uptime():
-    '''
+    """
     returns a dict of the system uptime
             {'day': days,
             'time': '%d:%02d' % (hours,minutes)}
-    '''
+    """
     f = open('/proc/uptime')
     uptime = int(f.readlines()[0].split('.')[0])
     minutes = uptime / 60 % 60
@@ -179,16 +185,16 @@ def host_uptime():
 
 
 def check_ubuntu():
-    '''
+    """
     return the System version
-    '''
+    """
     dist = '%s %s' % (platform.linux_distribution()[0], platform.linux_distribution()[1])
 
-    supported_dists = [ 'Ubuntu 12.04',
-                        'Ubuntu 12.10',
-                        'Ubuntu 13.04',
-                        'Ubuntu 13.10',
-                        'Ubuntu 14.04']
+    supported_dists = ['Ubuntu 12.04',
+                       'Ubuntu 12.10',
+                       'Ubuntu 13.04',
+                       'Ubuntu 13.10',
+                       'Ubuntu 14.04']
 
     if dist in supported_dists:
         return dist
@@ -196,15 +202,14 @@ def check_ubuntu():
 
 
 def get_templates_list():
-    '''
+    """
     returns a sorted lxc templates list
-    '''
+    """
     templates = []
-    path = None
 
     try:
         path = os.listdir('/usr/share/lxc/templates')
-    except:
+    except OSError:
         path = os.listdir('/usr/lib/lxc/templates')
 
     if path:
@@ -215,20 +220,20 @@ def get_templates_list():
 
 
 def check_version():
-    '''
-    returns latest LWP version (dict with current and latest)
-    '''
+    """
+    returns latest LWP version (dict with current)
+    """
     try:
         version = subprocess.check_output('git describe --tags', shell=True)
-    except:
+    except OSError:
         version = open('version').read()[0:-1]
     return {'current': version}
 
 
 def get_net_settings():
-    '''
+    """
     returns a dict of all known settings for LXC networking
-    '''
+    """
     filename = '/etc/default/lxc-net'
     if not file_exist(filename):
         filename = '/etc/default/lxc'
@@ -237,22 +242,25 @@ def get_net_settings():
     if check_ubuntu() == "unknown":
         raise LxcConfigFileNotComplete('This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc')
     config = ConfigParser.SafeConfigParser()
-    cfg = {}
+
     config.readfp(FakeSection(open(filename)))
-    cfg['use'] = config.get('DEFAULT', 'USE_LXC_BRIDGE').strip('"')
-    cfg['bridge'] = config.get('DEFAULT', 'LXC_BRIDGE').strip('"')
-    cfg['address'] = config.get('DEFAULT', 'LXC_ADDR').strip('"')
-    cfg['netmask'] = config.get('DEFAULT', 'LXC_NETMASK').strip('"')
-    cfg['network'] = config.get('DEFAULT', 'LXC_NETWORK').strip('"')
-    cfg['range'] = config.get('DEFAULT', 'LXC_DHCP_RANGE').strip('"')
-    cfg['max'] = config.get('DEFAULT', 'LXC_DHCP_MAX').strip('"')
+    cfg = {
+        'use': config.get('DEFAULT', 'USE_LXC_BRIDGE').strip('"'),
+        'bridge': config.get('DEFAULT', 'LXC_BRIDGE').strip('"'),
+        'address': config.get('DEFAULT', 'LXC_ADDR').strip('"'),
+        'netmask': config.get('DEFAULT', 'LXC_NETMASK').strip('"'),
+        'network': config.get('DEFAULT', 'LXC_NETWORK').strip('"'),
+        'range': config.get('DEFAULT', 'LXC_DHCP_RANGE').strip('"'),
+        'max': config.get('DEFAULT', 'LXC_DHCP_MAX').strip('"')
+    }
+
     return cfg
 
 
 def get_container_settings(name):
-    '''
+    """
     returns a dict of all utils settings for a container
-    '''
+    """
     filename = '/var/lib/lxc/%s/config' % name
     if not file_exist(filename):
         return False
@@ -294,7 +302,7 @@ def get_container_settings(name):
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
             push_config_value(cgroup['ipv4'], cfg['ipv4'], name)
-        except:
+        except subprocess.CalledProcessError:
             cfg['ipv4'] = ''
     try:
         cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['memlimit']))
@@ -321,9 +329,9 @@ def get_container_settings(name):
 
 
 def push_net_value(key, value, filename='/etc/default/lxc'):
-    '''
+    """
     replace a var in the lxc-net config file
-    '''
+    """
     if filename:
         config = ConfigParser.RawConfigParser()
         config.readfp(FakeSection(open(filename)))
@@ -335,7 +343,7 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
         with open(filename, 'wb') as configfile:
             config.write(configfile)
 
-        DelSection(filename=filename)
+        del_section(filename=filename)
 
         load = open(filename, 'r')
         read = load.readlines()
@@ -356,15 +364,15 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
 
 
 def push_config_value(key, value, container=None):
-    '''
+    """
     replace a var in a container config file
-    '''
+    """
 
     def save_cgroup_devices(filename=None):
-        '''
+        """
         returns multiple values (lxc.cgroup.devices.deny and lxc.cgroup.devices.allow) in a list.
         because ConfigParser cannot make this...
-        '''
+        """
         if filename:
             values = []
             i = 0
@@ -374,7 +382,8 @@ def push_config_value(key, value, container=None):
             load.close()
 
             while i < len(read):
-                if not read[i].startswith('#') and re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow', read[i]):
+                if not read[i].startswith('#') and \
+                        re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow', read[i]):
                     values.append(read[i])
                 i += 1
             return values
@@ -400,16 +409,16 @@ def push_config_value(key, value, container=None):
         with open(filename, 'wb') as configfile:
             config.write(configfile)
 
-        DelSection(filename=filename)
+        del_section(filename=filename)
 
         with open(filename, "a") as configfile:
             configfile.writelines(save)
 
 
 def net_restart():
-    '''
+    """
     restarts LXC networking
-    '''
+    """
     cmd = ['/usr/sbin/service lxc-net restart']
     try:
         subprocess.check_call(cmd, shell=True)
