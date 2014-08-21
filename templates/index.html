@@ -6,36 +6,37 @@
 {% block content %}
 <div class="span9">
 	{{ super() }}
-	{% if session.su == 'Yes' %}
-		<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-danger" data-toggle="modal" data-target="#reboot"><i class="icon-off icon-white"></i> Reboot</a></p>
-		{% if containers != [] %}
-			<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-inverse" data-toggle="modal" data-target="#cloneCT"> <i class="icon-repeat icon-white"></i> Clone <abbr title="Container">CT</abbr></a></p>
-			{% if storage_repos %}
-				<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="icon-hdd icon-white"></i> Backup <abbr title="Container">CT</abbr></a></p>
-			{% endif %}
-		{% endif %}
-		<p class="pull-right" style="margin:10px 10px 0 0;"><a class="btn btn-small btn-success" data-toggle="modal" data-target="#createCT"><i class="icon-plus-sign icon-white"></i> Create <abbr title="Container">CT</abbr></a></p>
-	{% endif %}
 
 	<div class="hero-unit">
-		{% if dist == 'Unknown' %}<div class="alert alert-error">LXC Web Panel is optimized for Ubuntu 12.10 !</div>{% endif %}
+        <div class="row">
+            {% if session.su == 'Yes' %}
+            <span class="pull-right"><a class="btn btn-small btn-danger" data-toggle="modal" data-target="#reboot"> <i class="icon-off icon-white"></i> Reboot</a></span>
+            {% if containers != [] %}
+                <span class="pull-right"><a class="btn btn-small btn-inverse" data-toggle="modal" data-target="#cloneCT"> <i class="icon-repeat icon-white"></i> Clone <abbr title="Container">CT</abbr></a></span>
+                {% if storage_repos %}
+                    <span class="pull-right"><a class="btn btn-small btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="icon-hdd icon-white"></i> Backup <abbr title="Container">CT</abbr></a></span>
+                {% endif %}
+            {% endif %}
+            <span class="pull-right"><a class="btn btn-small btn-success" data-toggle="modal" data-target="#createCT"><i class="icon-plus-sign icon-white"></i> Create <abbr title="Container">CT</abbr></a></span>
+            {% endif %}
+        </div>
 		<div class="row">
-			<div class="span3" style="margin-left:20px;">
-				<h3 style="position: relative; width: 500px;">{{ dist }} ({{ host }})</h3>
+            <h3 style="margin-left: 10px">{{ dist }} ({{ host }})</h3>
+			<div class="span4">
 				<p>CPU usage : <span id="cpu-usage" class="hide"></span></p>
-				<div class="progress" style="width:250px;">
-					<div class="bar" id="cpu-usage-bar" style="width:0%;"></div>
+				<div class="progress">
+					<div class="bar" id="cpu-usage-bar"></div>
 				</div>
 				<p>Memory usage : <span id="memory-usage" class="hide"></span></p>
-				<div class="progress" style="width:250px;">
-					<div class="bar" id="memory-usage-bar" style="width: 0%;"></div>
-					<abbr title="Cached memory"><div class="bar bar-success" id="memory-cache-usage-bar" style="width: 0%;"></div></abbr>
+				<div class="progress">
+					<div class="bar" id="memory-usage-bar"></div>
+					<abbr title="Cached memory"><div class="bar bar-success" id="memory-cache-usage-bar"></div></abbr>
 				</div>
 			</div>
-			<div class="span3" style="margin-top:29px; margin-left:20px;">
+			<div class="span4">
 				<p>Disk usage : <span id="disk-usage" class="hide"></span></p>
-				<div class="progress" style="width:250px;">
-					<div class="bar" id="disk-usage-bar" style="width: 0%;"></div>
+				<div class="progress">
+					<div class="bar" id="disk-usage-bar"></div>
 				</div>
 				<p>Uptime : <span id="uptime" class="hide"></span></p>
 			</div>
