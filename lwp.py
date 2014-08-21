@@ -245,7 +245,7 @@ def edit(container=None):
             if form['memlimit'] != cfg['memlimit']:
                 lwp.push_config_value('lxc.cgroup.memory.limit_in_bytes', form['memlimit'], container=container)
                 if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'lxc.cgroup.memory.limit_in_bytes', form['memlimit'])
+                    lxc.cgroup(container, 'memory.limit_in_bytes', form['memlimit'])
                 flash(u'Memory limit updated for %s!' % container, 'success')
 
         if form['swlimit'] != cfg['swlimit'] and form['swlimit'].isdigit() and \
@@ -266,21 +266,21 @@ def edit(container=None):
             elif form['swlimit'] != cfg['swlimit'] and form['memlimit'] <= form['swlimit']:
                 lwp.push_config_value('lxc.cgroup.memory.memsw.limit_in_bytes', form['swlimit'], container=container)
                 if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'lxc.cgroup.memory.memsw.limit_in_bytes', form['swlimit'])
+                    lxc.cgroup(container, 'memory.memsw.limit_in_bytes', form['swlimit'])
                 flash(u'Swap limit updated for %s!' % container, 'success')
 
         if (not form['cpus'] and form['cpus'] != cfg['cpus']) or \
                 (form['cpus'] != cfg['cpus'] and re.match('^[0-9,-]+$', form['cpus'])):
             lwp.push_config_value('lxc.cgroup.cpuset.cpus', form['cpus'], container=container)
             if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'lxc.cgroup.cpuset.cpus', form['cpus'])
+                    lxc.cgroup(container, 'cpuset.cpus', form['cpus'])
             flash(u'CPUs updated for %s!' % container, 'success')
 
         if (not form['shares'] and form['shares'] != cfg['shares']) or \
                 (form['shares'] != cfg['shares'] and re.match('^[0-9]+$', form['shares'])):
             lwp.push_config_value('lxc.cgroup.cpu.shares', form['shares'], container=container)
             if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'lxc.cgroup.cpu.shares', form['shares'])
+                    lxc.cgroup(container, 'cpu.shares', form['shares'])
             flash(u'CPU shares updated for %s!' % container, 'success')
 
         if form['rootfs'] != cfg['rootfs'] and re.match('^[a-zA-Z0-9_/\-]+', form['rootfs']):
