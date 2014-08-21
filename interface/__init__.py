@@ -1,5 +1,3 @@
-import sys
-sys.path.append('../')
 from lxclite import exists, stopped
 import subprocess
 import os

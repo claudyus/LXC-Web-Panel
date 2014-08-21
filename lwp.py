@@ -3,7 +3,7 @@
 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 import lxclite as lxc
-import lwp
+import interface
 import subprocess
 import time
 import re
@@ -150,8 +150,8 @@ def home():
         for container in listx[status]:
             containers_by_status.append({
                 'name': container,
-                'memusg': lwp.memory_usage(container),
-                'settings': lwp.get_container_settings(container),
+                'memusg': interface.memory_usage(container),
+                'settings': interface.get_container_settings(container),
                 'ipv4': lxc.get_ipv4(container),
                 'bucket': get_bucket_token(container)
             })
@@ -160,8 +160,8 @@ def home():
             'containers': containers_by_status
         })
 
-    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(),
-                           host=socket.gethostname(), templates=lwp.get_templates_list(), storage_repos=storage_repos,
+    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=interface.check_ubuntu(),
+                           host=socket.gethostname(), templates=interface.get_templates_list(), storage_repos=storage_repos,
                            auth=AUTH)
 
 
@@ -171,7 +171,7 @@ def about():
     """
     about page
     """
-    return render_template('about.html', containers=lxc.ls(), version=lwp.check_version())
+    return render_template('about.html', containers=lxc.ls(), version=interface.check_version())
 
 
 @app.route('/<container>/edit', methods=['POST', 'GET'])
@@ -180,8 +180,8 @@ def edit(container=None):
     """
     edit containers page and actions if form post request
     """
-    host_memory = lwp.host_memory_usage()
-    cfg = lwp.get_container_settings(container)
+    host_memory = interface.host_memory_usage()
+    cfg = interface.get_container_settings(container)
     # read config also from databases
     cfg['bucket'] = get_bucket_token(container)
 
@@ -213,28 +213,28 @@ def edit(container=None):
 
         if form['utsname'] != cfg['utsname'] and \
                 re.match('(?!^containers$)|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$', form['utsname']):
-            lwp.push_config_value('lxc.utsname', form['utsname'], container=container)
+            interface.push_config_value('lxc.utsname', form['utsname'], container=container)
             flash(u'Hostname updated for %s!' % container, 'success')
 
         if form['flags'] != cfg['flags'] and re.match('^(up|down)$', form['flags']):
-            lwp.push_config_value('lxc.network.flags', form['flags'], container=container)
+            interface.push_config_value('lxc.network.flags', form['flags'], container=container)
             flash(u'Network flag updated for %s!' % container, 'success')
 
         if form['type'] != cfg['type'] and re.match('^\w+$', form['type']):
-            lwp.push_config_value('lxc.network.type', form['type'], container=container)
+            interface.push_config_value('lxc.network.type', form['type'], container=container)
             flash(u'Link type updated for %s!' % container, 'success')
 
         if form['link'] != cfg['link'] and re.match('^[a-zA-Z0-9_-]+$', form['link']):
-            lwp.push_config_value('lxc.network.link', form['link'], container=container)
+            interface.push_config_value('lxc.network.link', form['link'], container=container)
             flash(u'Link name updated for %s!' % container, 'success')
 
         if form['hwaddr'] != cfg['hwaddr'] and re.match('^([a-fA-F0-9]{2}[:|\-]?){6}$', form['hwaddr']):
-            lwp.push_config_value('lxc.network.hwaddr', form['hwaddr'], container=container)
+            interface.push_config_value('lxc.network.hwaddr', form['hwaddr'], container=container)
             flash(u'Hardware address updated for %s!' % container, 'success')
 
         if (not form['ipv4'] and form['ipv4'] != cfg['ipv4']) or \
                 (form['ipv4'] != cfg['ipv4'] and re.match('^%s$' % ip_regex, form['ipv4'])):
-            lwp.push_config_value('lxc.network.ipv4', form['ipv4'], container=container)
+            interface.push_config_value('lxc.network.ipv4', form['ipv4'], container=container)
             flash(u'IP address updated for %s!' % container, 'success')
 
         if form['memlimit'] != cfg['memlimit'] and form['memlimit'].isdigit() and \
@@ -243,7 +243,7 @@ def edit(container=None):
                 form['memlimit'] = ''
 
             if form['memlimit'] != cfg['memlimit']:
-                lwp.push_config_value('lxc.cgroup.memory.limit_in_bytes', form['memlimit'], container=container)
+                interface.push_config_value('lxc.cgroup.memory.limit_in_bytes', form['memlimit'], container=container)
                 if info["state"].lower() != 'stopped':
                     lxc.cgroup(container, 'memory.limit_in_bytes', form['memlimit'])
                 flash(u'Memory limit updated for %s!' % container, 'success')
@@ -264,31 +264,31 @@ def edit(container=None):
                 flash(u'Can\'t assign swap memory lower than the memory limit', 'warning')
 
             elif form['swlimit'] != cfg['swlimit'] and form['memlimit'] <= form['swlimit']:
-                lwp.push_config_value('lxc.cgroup.memory.memsw.limit_in_bytes', form['swlimit'], container=container)
+                interface.push_config_value('lxc.cgroup.memory.memsw.limit_in_bytes', form['swlimit'], container=container)
                 if info["state"].lower() != 'stopped':
                     lxc.cgroup(container, 'memory.memsw.limit_in_bytes', form['swlimit'])
                 flash(u'Swap limit updated for %s!' % container, 'success')
 
         if (not form['cpus'] and form['cpus'] != cfg['cpus']) or \
                 (form['cpus'] != cfg['cpus'] and re.match('^[0-9,-]+$', form['cpus'])):
-            lwp.push_config_value('lxc.cgroup.cpuset.cpus', form['cpus'], container=container)
+            interface.push_config_value('lxc.cgroup.cpuset.cpus', form['cpus'], container=container)
             if info["state"].lower() != 'stopped':
                     lxc.cgroup(container, 'cpuset.cpus', form['cpus'])
             flash(u'CPUs updated for %s!' % container, 'success')
 
         if (not form['shares'] and form['shares'] != cfg['shares']) or \
                 (form['shares'] != cfg['shares'] and re.match('^[0-9]+$', form['shares'])):
-            lwp.push_config_value('lxc.cgroup.cpu.shares', form['shares'], container=container)
+            interface.push_config_value('lxc.cgroup.cpu.shares', form['shares'], container=container)
             if info["state"].lower() != 'stopped':
                     lxc.cgroup(container, 'cpu.shares', form['shares'])
             flash(u'CPU shares updated for %s!' % container, 'success')
 
         if form['rootfs'] != cfg['rootfs'] and re.match('^[a-zA-Z0-9_/\-]+', form['rootfs']):
-            lwp.push_config_value('lxc.rootfs', form['rootfs'], container=container)
+            interface.push_config_value('lxc.rootfs', form['rootfs'], container=container)
             flash(u'Rootfs updated!' % container, 'success')
 
         if bool(form['autostart']) != bool(cfg['auto']):
-            lwp.push_config_value('lxc.start.auto', 1 if form['autostart'] else 0, container=container)
+            interface.push_config_value('lxc.start.auto', 1 if form['autostart'] else 0, container=container)
             flash(u'Autostart saved for %s' % container, 'success')
 
         if form['bucket'] != cfg['bucket']:
@@ -300,7 +300,7 @@ def edit(container=None):
     status = info['state']
     pid = info['pid']
 
-    infos = {'status': status, 'pid': pid, 'memusg': lwp.memory_usage(container)}
+    infos = {'status': status, 'pid': pid, 'memusg': interface.memory_usage(container)}
     return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos)
 
 
@@ -315,7 +315,7 @@ def lxc_net():
 
     if request.method == 'POST':
         if lxc.running() == []:
-            cfg = lwp.get_net_settings()
+            cfg = interface.get_net_settings()
             ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
 
             form = {}
@@ -324,39 +324,39 @@ def lxc_net():
             form['use'] = request.form.get('use', None)
 
             if form['use'] != cfg['use']:
-                lwp.push_net_value('USE_LXC_BRIDGE', 'true' if form['use'] else 'false')
+                interface.push_net_value('USE_LXC_BRIDGE', 'true' if form['use'] else 'false')
 
             if form['bridge'] and form['bridge'] != cfg['bridge'] and \
                     re.match('^[a-zA-Z0-9_-]+$', form['bridge']):
-                lwp.push_net_value('LXC_BRIDGE', form['bridge'])
+                interface.push_net_value('LXC_BRIDGE', form['bridge'])
 
             if form['address'] and form['address'] != cfg['address'] and \
                     re.match('^%s$' % ip_regex, form['address']):
-                lwp.push_net_value('LXC_ADDR', form['address'])
+                interface.push_net_value('LXC_ADDR', form['address'])
 
             if form['netmask'] and form['netmask'] != cfg['netmask'] and \
                     re.match('^%s$' % ip_regex, form['netmask']):
-                lwp.push_net_value('LXC_NETMASK', form['netmask'])
+                interface.push_net_value('LXC_NETMASK', form['netmask'])
 
             if form['network'] and form['network'] != cfg['network'] and \
                     re.match('^%s(?:/\d{1,2}|)$' % ip_regex, form['network']):
-                lwp.push_net_value('LXC_NETWORK', form['network'])
+                interface.push_net_value('LXC_NETWORK', form['network'])
 
             if form['range'] and form['range'] != cfg['range'] and \
                     re.match('^%s,%s$' % (ip_regex, ip_regex), form['range']):
-                lwp.push_net_value('LXC_DHCP_RANGE', form['range'])
+                interface.push_net_value('LXC_DHCP_RANGE', form['range'])
 
             if form['max'] and form['max'] != cfg['max'] and \
                     re.match('^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', form['max']):
-                lwp.push_net_value('LXC_DHCP_MAX', form['max'])
+                interface.push_net_value('LXC_DHCP_MAX', form['max'])
 
-            if lwp.net_restart() == 0:
+            if interface.net_restart() == 0:
                 flash(u'LXC Network settings applied successfully!', 'success')
             else:
                 flash(u'Failed to restart LXC networking.', 'error')
         else:
             flash(u'Stop all containers before restart lxc-net.', 'warning')
-    return render_template('lxc-net.html', containers=lxc.ls(), cfg=lwp.get_net_settings(), running=lxc.running())
+    return render_template('lxc-net.html', containers=lxc.ls(), cfg=interface.get_net_settings(), running=lxc.running())
 
 
 @app.route('/lwp/users', methods=['POST', 'GET'])
@@ -831,19 +831,19 @@ def logout():
 @app.route('/_refresh_cpu_host')
 @if_logged_in()
 def refresh_cpu_host():
-    return lwp.host_cpu_percent()
+    return interface.host_cpu_percent()
 
 
 @app.route('/_refresh_uptime_host')
 @if_logged_in()
 def refresh_uptime_host():
-    return jsonify(lwp.host_uptime())
+    return jsonify(interface.host_uptime())
 
 
 @app.route('/_refresh_disk_host')
 @if_logged_in()
 def refresh_disk_host():
-    return jsonify(lwp.host_disk_usage(partition=config.get('overview', 'partition')))
+    return jsonify(interface.host_disk_usage(partition=config.get('overview', 'partition')))
 
 
 @app.route('/_refresh_memory_<name>')
@@ -854,18 +854,18 @@ def refresh_memory_containers(name=None):
         containers = []
         for container in containers_running:
             container = container.replace(' (auto)', '')
-            containers.append({'name': container, 'memusg': lwp.memory_usage(container),
-                               'settings': lwp.get_container_settings(container)})
+            containers.append({'name': container, 'memusg': interface.memory_usage(container),
+                               'settings': interface.get_container_settings(container)})
         return jsonify(data=containers)
     elif name == 'host':
-        return jsonify(lwp.host_memory_usage())
-    return jsonify({'memusg': lwp.memory_usage(name)})
+        return jsonify(interface.host_memory_usage())
+    return jsonify({'memusg': interface.memory_usage(name)})
 
 
 @app.route('/_check_version')
 @if_logged_in()
 def check_version():
-    return jsonify(lwp.check_version())
+    return jsonify(interface.check_version())
 
 
 def hash_passwd(passwd):
