@@ -265,65 +265,41 @@ def get_container_settings(name):
     if not file_exist(filename):
         return False
     config = ConfigParser.SafeConfigParser()
-    cfg = {}
+    cfg = {
+        'type': '',
+        'link': '',
+        'flags': '',
+        'hwaddr': '',
+        'rootfs': '',
+        'utsname': '',
+        'arch': '',
+        'ipv4': '',
+        'memlimit': '',
+        'swlimit': '',
+        'cpus': '',
+        'shares': '',
+        'auto': False
+    }
     config.readfp(FakeSection(open(filename)))
-    try:
-        cfg['type'] = config.get('DEFAULT', cgroup['type'])
-    except ConfigParser.NoOptionError:
-        cfg['type'] = ''
-    try:
-        cfg['link'] = config.get('DEFAULT', cgroup['link'])
-    except ConfigParser.NoOptionError:
-        cfg['link'] = ''
-    try:
-        cfg['flags'] = config.get('DEFAULT', cgroup['flags'])
-    except ConfigParser.NoOptionError:
-        cfg['flags'] = ''
-    try:
-        cfg['hwaddr'] = config.get('DEFAULT', cgroup['hwaddr'])
-    except ConfigParser.NoOptionError:
-        cfg['hwaddr'] = ''
-    try:
-        cfg['rootfs'] = config.get('DEFAULT', cgroup['rootfs'])
-    except ConfigParser.NoOptionError:
-        cfg['rootfs'] = ''
-    try:
-        cfg['utsname'] = config.get('DEFAULT', cgroup['utsname'])
-    except ConfigParser.NoOptionError:
-        cfg['utsname'] = ''
-    try:
-        cfg['arch'] = config.get('DEFAULT', cgroup['arch'])
-    except ConfigParser.NoOptionError:
-        cfg['arch'] = ''
-    try:
-        cfg['ipv4'] = config.get('DEFAULT', cgroup['ipv4'])
-    except ConfigParser.NoOptionError:
+
+    for options in cfg.keys():
+        if config.has_option('DEFAULT', cgroup[options]):
+            cfg[options] = config.get('DEFAULT', cgroup[options])
+
+    # if ipv4 is unset try to determinate it
+    if cfg['ipv4'] == '':
         cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'^%s \'|egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
-            push_config_value(cgroup['ipv4'], cfg['ipv4'], name)
         except subprocess.CalledProcessError:
-            cfg['ipv4'] = ''
-    try:
-        cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['memlimit']))
-    except ConfigParser.NoOptionError:
-        cfg['memlimit'] = ''
-    try:
-        cfg['swlimit'] = re.sub(r'[a-zA-Z]', '', config.get('DEFAULT', cgroup['swlimit']))
-    except ConfigParser.NoOptionError:
-        cfg['swlimit'] = ''
-    try:
-        cfg['cpus'] = config.get('DEFAULT', cgroup['cpus'])
-    except ConfigParser.NoOptionError:
-        cfg['cpus'] = ''
-    try:
-        cfg['shares'] = config.get('DEFAULT', cgroup['shares'])
-    except ConfigParser.NoOptionError:
-        cfg['shares'] = ''
-    try:
-        cfg['auto'] = True if config.get('DEFAULT', cgroup['auto']) else False
-    except ConfigParser.NoOptionError:
-        cfg['auto'] = False
+            pass
+
+    # parse memlimits to int
+    cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', cfg['memlimit'])
+    cfg['swlimit'] = re.sub(r'[a-zA-Z]', '', cfg['swlimit'])
+
+    # parse auto to boolean
+    cfg['auto'] = True if cfg['auto'] is '1' else False
 
     return cfg
 
