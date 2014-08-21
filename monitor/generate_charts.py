@@ -35,11 +35,11 @@ from time import time
 
 
 def generateMemChart(c, group, starttime, endtime, folder):
-	c.execute('SELECT time, mem_rss FROM data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
+	c.execute('SELECT time, mem_rss FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
 	rss=[[row[0], row[1]/1024/1024] for row in c]
-	c.execute('SELECT time, mem_cache FROM data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
+	c.execute('SELECT time, mem_cache FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
 	cache=[[row[0], row[1]/1024/1024] for row in c]
-	c.execute('SELECT time, mem_swap FROM data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
+	c.execute('SELECT time, mem_swap FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
 	swap=[[row[0], row[1]/1024/1024] for row in c]
 	
 	for index, value in enumerate(cache):
@@ -69,7 +69,7 @@ def generateMemChart(c, group, starttime, endtime, folder):
 	g.plot(swapData,cacheData,rssData)
 
 def generateCPUChart(c, group, starttime, endtime, folder):
-	c.execute('SELECT time, cpu_usage FROM data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
+	c.execute('SELECT time, cpu_usage FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',(group,starttime,endtime,))
 	usage=[[row[0], row[1]/1024/1024] for row in c]
 
 	diff = []
@@ -143,7 +143,7 @@ def sendMail(groups, recipients, baseurl):
 	s.quit()
 	
 def cleanDatabase(con, time):
-	con.execute('DELETE FROM data WHERE time < ?',(time,))
+	con.execute('DELETE FROM graph_data WHERE time < ?',(time,))
 	con.commit()
 	con.execute('VACUUM')
 	

@@ -1,4 +1,8 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+import sys
+import os
+import ConfigParser
 
 ################################################################################
 # "THE BEER-WARE LICENSE" (Revision 42):                                       #
@@ -7,22 +11,31 @@
 # this stuff is worth it, you can buy me a beer in return. Lennart Coopmans    #
 ################################################################################
 
-################################################################################
-# DEFAULT CONFIGURATION                                                        #
-################################################################################
+# configuration
+config = ConfigParser.SafeConfigParser()
 
-def_sqlitedb = "lxc_monitor.db";
-def_containers = ["container1", "container2"]
+try:
+    config.readfp(open('/etc/lwp/lwp.conf'))
+except IOError:
+    print ' * missed /etc/lwp/lwp.conf file'
+    try:
+        # fallback on local config file
+        config.readfp(open('../lwp.conf'))
+    except IOError:
+        print ' * cannot read config files. Exit!'
+        sys.exit(1)
 
-################################################################################
-# CODE - DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING                         #
-################################################################################
+
+DEBUG = config.getboolean('global', 'debug')
+DATABASE = config.get('database', 'file')
+
+
 import sqlite3
 import argparse
 from time import time
 
+
 def collecData(con, group, timestamp):
-        cpu_uage = 0
         mem_rss = 0
         mem_cache = 0
         mem_swap = 0
@@ -43,12 +56,12 @@ def collecData(con, group, timestamp):
                 cpu_usage = int(f.readline())
 
         con.execute("""\
-                INSERT INTO data (name, time, cpu_usage, mem_rss, mem_cache, mem_swap)
+                INSERT INTO graph_data (name, time, cpu_usage, mem_rss, mem_cache, mem_swap)
                 VALUES (?,?,?,?,?,?)""", (group, timestamp, cpu_usage, mem_rss, mem_cache, mem_swap) )
 
 def initDatabase(con):
         con.execute("""\
-                CREATE TABLE data (
+                CREATE TABLE graph_data (
                   name TEXT NOT NULL,
                   time INTEGER NOT NULL,
                   cpu_usage INTEGER,
@@ -59,24 +72,46 @@ def initDatabase(con):
                 )
         """)
 
+
+# fixme: import from lxclite
+def ls():
+    """
+    List containers directory
+    """
+    lxcdir = '/var/lib/lxc/'
+    ct_list = []
+
+    try:
+        lsdir = os.listdir(lxcdir)
+        for i in lsdir:
+            if os.path.isdir(lxcdir + i):
+                ct_list.append(i)
+    except OSError:
+        ct_list = []
+    return sorted(ct_list)
+
+
 def main():
         parser = argparse.ArgumentParser()
-        parser.add_argument('-db','--database', default=def_sqlitedb,
+        parser.add_argument('-db','--database', default=DATABASE,
                                  help="SQLite database file")
-        parser.add_argument('-c', '--containers', nargs='+', default=def_containers,
-                                 help="LXC Containers to create charts for")
+        #parser.add_argument('-c', '--containers', nargs='+',
+        #                         help="LXC Containers to create charts for")
         parser.add_argument('--init', action='store_true',
                                  help="Initialize the database")
+        parser.add_argument('--debug', default=DEBUG, help="Active debug")
 
         args = parser.parse_args()
 
         con = sqlite3.connect(args.database)
 
         if args.init:
-                initDatabase(con)
-        else:
-                for group in args.containers:
-                        collecData(con, group, int(time()))
+            initDatabase(con)
+            sys.exit(0)
+
+        containers = ls();
+        for group in containers:
+            collecData(con, group, int(time()))
 
         con.commit()
         con.close()
