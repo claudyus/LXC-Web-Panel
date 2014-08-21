@@ -259,7 +259,7 @@ def get_container_settings(name):
     """
     returns a dict of all utils settings for a container
     """
-    filename = '/var/lib/lxc/%s/config' % name
+    filename = '{}/{}/config'.format(lxc.lxcdir(), name)
     if not file_exist(filename):
         return False
     config = ConfigParser.SafeConfigParser()
@@ -363,7 +363,7 @@ def push_config_value(key, value, container=None):
             return values
 
     if container:
-        filename = '/var/lib/lxc/%s/config' % container
+        filename = '{}/{}/config'.format(lxc.lxcdir(), container)
         save = save_cgroup_devices(filename=filename)
 
         config = ConfigParser.RawConfigParser()

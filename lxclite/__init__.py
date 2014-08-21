@@ -107,7 +107,7 @@ def ls():
 
     Note: Directory mode for Ubuntu 12/13 compatibility
     """
-    lxcdir = '/var/lib/lxc/'
+    lxcdir = lxcdir()
     ct_list = []
 
     try:
@@ -119,6 +119,8 @@ def ls():
         ct_list = []
     return sorted(ct_list)
 
+def lxcdir():
+    return _run('lxc-config lxc.lxcpath', output = True).strip()
 
 def listx():
     """
