@@ -1,3 +1,6 @@
+sudo mount -t cgroup -omemory none /sys/fs/cgroup
+sudo mount -t cgroup -ocpuacct none /sys/fs/cgroup
+
 LXC Monitoring
 =======
 LXC Monitoring collects cpu and memory statistics for several Linux Containers,

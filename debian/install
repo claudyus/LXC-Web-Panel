@@ -7,3 +7,4 @@ lwp.db           srv/lwp
 lwp.py           srv/lwp
 version          srv/lwp
 lwp.example.conf etc/lwp
+monitor/lwp_collector.py usr/bin/lwp_collector
