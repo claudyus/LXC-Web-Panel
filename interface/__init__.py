@@ -1,4 +1,4 @@
-from lxclite import exists, stopped
+from lxclite import exists, stopped, lxcdir
 import subprocess
 import os
 import platform
@@ -259,7 +259,7 @@ def get_container_settings(name):
     """
     returns a dict of all utils settings for a container
     """
-    filename = '{}/{}/config'.format(lxc.lxcdir(), name)
+    filename = '{}/{}/config'.format(lxcdir(), name)
     if not file_exist(filename):
         return False
     config = ConfigParser.SafeConfigParser()
@@ -363,7 +363,7 @@ def push_config_value(key, value, container=None):
             return values
 
     if container:
-        filename = '{}/{}/config'.format(lxc.lxcdir(), container)
+        filename = '{}/{}/config'.format(lxcdir(), container)
         save = save_cgroup_devices(filename=filename)
 
         config = ConfigParser.RawConfigParser()

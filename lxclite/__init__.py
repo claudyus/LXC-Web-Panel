@@ -101,26 +101,26 @@ def info(container):
     return state
 
 
+def lxcdir():
+    return _run('lxc-config lxc.lxcpath', output=True).strip()
+
+
 def ls():
     """
     List containers directory
-
-    Note: Directory mode for Ubuntu 12/13 compatibility
     """
-    lxcdir = lxcdir()
+    lxc_dir = lxcdir()
     ct_list = []
 
     try:
-        lsdir = os.listdir(lxcdir)
+        lsdir = os.listdir(lxc_dir)
         for i in lsdir:
-            if os.path.isdir(lxcdir + i):
+            if os.path.isdir('{}/{}'.format(lxc_dir, i)):
                 ct_list.append(i)
     except OSError:
         ct_list = []
     return sorted(ct_list)
 
-def lxcdir():
-    return _run('lxc-config lxc.lxcpath', output = True).strip()
 
 def listx():
     """
