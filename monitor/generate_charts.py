@@ -1,4 +1,7 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+import sys
+import ConfigParser
 
 # ###############################################################################
 # "THE BEER-WARE LICENSE" (Revision 42):                                       #
@@ -7,42 +10,42 @@
 # this stuff is worth it, you can buy me a beer in return. Lennart Coopmans    #
 ################################################################################
 
-################################################################################
-# DEFAULT CONFIGURATION                                                        #
-################################################################################
+# configuration
+config = ConfigParser.SafeConfigParser()
 
-def_sqlitedb = "lxc_monitor.db";
-def_folder = "/var/www/charts/"
-def_containers = ["container1", "container2"]
-def_baseURL = "http://lacerta.be/charts/"
-def_recipients = ["you@yourdomain"]
-def_fromAddress = "noreply"
-def_days = 7
+try:
+    config.readfp(open('/etc/lwp/lwp.conf'))
+except IOError:
+    print ' * missed /etc/lwp/lwp.conf file'
+    try:
+        # fallback on local config file
+        config.readfp(open('../lwp.conf'))
+    except IOError:
+        print ' * cannot read config files. Exit!'
+        sys.exit(1)
 
-################################################################################
-# CODE - DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING                         #
-################################################################################
+DEBUG = config.getboolean('global', 'debug')
+DATABASE = config.get('database', 'file')
+
+GRAPH_FOLDER = config.get('monitor', 'folder')
+GRAPH_DAYS = config.getint('monitor', 'days')
 
 import Gnuplot
 import sqlite3
-import smtplib
 import argparse
 
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.Utils import COMMASPACE
 from time import time
 
 
-def generateMemChart(c, group, starttime, endtime, folder):
+def generate_mem_chart(c, group, start_time=time() - GRAPH_DAYS * 24 * 60 * 60, end_time=time(), folder=GRAPH_FOLDER):
     c.execute('SELECT time, mem_rss FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',
-              (group, starttime, endtime,))
+              (group, start_time, end_time,))
     rss = [[row[0], row[1] / 1024 / 1024] for row in c]
     c.execute('SELECT time, mem_cache FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',
-              (group, starttime, endtime,))
+              (group, start_time, end_time,))
     cache = [[row[0], row[1] / 1024 / 1024] for row in c]
     c.execute('SELECT time, mem_swap FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',
-              (group, starttime, endtime,))
+              (group, start_time, end_time,))
     swap = [[row[0], row[1] / 1024 / 1024] for row in c]
 
     for index, value in enumerate(cache):
@@ -72,9 +75,9 @@ def generateMemChart(c, group, starttime, endtime, folder):
     g.plot(swapData, cacheData, rssData)
 
 
-def generateCPUChart(c, group, starttime, endtime, folder):
+def generate_CPU_chart(c, group, start_time=time() - GRAPH_DAYS * 24 * 60 * 60, end_time=time(), folder=GRAPH_FOLDER):
     c.execute('SELECT time, cpu_usage FROM graph_data WHERE name = ? AND TIME BETWEEN ? AND ? ORDER by time',
-              (group, starttime, endtime,))
+              (group, start_time, end_time,))
     usage = [[row[0], row[1] / 1024 / 1024] for row in c]
 
     diff = []
@@ -105,51 +108,7 @@ def generateCPUChart(c, group, starttime, endtime, folder):
     g.plot(usageData)
 
 
-def sendMail(groups, recipients, baseurl):
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = "Lacerta LXC Monitor"
-    msg['To'] = COMMASPACE.join(recipients)
-
-    html = """\
-	<body style="padding: 20px">
-	<div style="background-color: #2f2f2f; width: 720px; padding: 10px; margin-left: 20px; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;">
-	<div>
-	<div style="float: left"><a href="http://lacerta.be">
-	<img class="site-logo" src="http://lacerta.be/d7/custom/lacerta.png" alt="Lacerta"/>
-	</a>
-	</div>
-	<h2 style="color: #FAFAFA; padding: 0; margin: 0; font-size: 1.8em">Lacerta</h2>
-	<h3 style="color: #FAFAFA; padding: 0; margin: 0; font-size: .8em">LXC Monitoring</h3>
-	</div>
-	<div style="clear: both">
-	"""
-    for group in groups:
-        html += '<div style="background-color: #FFF; padding: 10px; margin-top: 10px;">'
-        html += '<h3 style="font-size: 1em; margin: .2em 0">%s</h3>' % (group,)
-        html += '<h4 style="font-size: .7em; margin: .2em 0; float: left; clear: left;">Memory (MB):</h4>'
-        html += """
-		<ul style="float: left; list-style-type: none; margin: 0">
-			<li style="font-size: .7em;  display: inline; padding-left: 5px; border-left: 10px solid #3f5f9f">RSS</li>
-			<li style="font-size: .7em;  display: inline; padding-left: 5px; border-left: 10px solid #7fbf3f">Cache</li>
-			<li style="font-size: .7em;  display: inline; padding-left: 5px; border-left: 10px solid #ff7f7f">Swap</li>
-		</ul>
-		"""
-        html += '<img src="%s/%s_mem.png"/>' % (baseurl, group)
-        html += '<h4 style="font-size: .7em; margin: .2em 0; float: left; clear: left;">CPU Usage (per 5m):</h4>'
-        html += '<img src="%s/%s_cpu.png"/>' % (baseurl, group)
-        html += '</div>'
-        html += "\n"
-
-    html += "</div></div></body>"
-
-    part = MIMEText(html, 'html')
-    msg.attach(part)
-    s = smtplib.SMTP('localhost')
-    s.sendmail(def_fromAddress, recipients, msg.as_string())
-    s.quit()
-
-
-def cleanDatabase(con, time):
+def clean_database(con, time):
     con.execute('DELETE FROM graph_data WHERE time < ?', (time,))
     con.commit()
     con.execute('VACUUM')
@@ -157,43 +116,33 @@ def cleanDatabase(con, time):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--days', type=int, default=def_days,
+    parser.add_argument('-d', '--days', type=int, default=GRAPH_DAYS,
                         help='Parse records from last DAYS days.')
     parser.add_argument('-n', '--noclean', action='store_true',
                         help="Don't clean up database")
-    parser.add_argument('-db', '--database', default=def_sqlitedb,
+    parser.add_argument('-db', '--database', default=DATABASE,
                         help="SQLite database file")
-    parser.add_argument('-f', '--folder', default=def_folder,
+    parser.add_argument('-f', '--folder', default=GRAPH_FOLDER,
                         help="Save charts in FOLDER")
-    parser.add_argument('-b', '--baseurl', default=def_baseURL,
-                        help="Base URL")
-    parser.add_argument('-c', '--containers', nargs='+', default=def_containers,
+    parser.add_argument('-c', '--containers', nargs='+',
                         help="LXC Containers to create charts for")
-    parser.add_argument('-m', '--mail', action='store_true',
-                        help='Send mail with the charts')
-    parser.add_argument('-r', '--recipients', nargs='+', default=def_recipients,
-                        help="Mail recipients")
 
     args = parser.parse_args()
 
-    endtime = int(time())
-    starttime = endtime - (args.days * 24 * 60 * 60)
+    end_time = int(time())
+    start_time = end_time - (args.days * 24 * 60 * 60)
 
     con = sqlite3.connect(args.database)
     c = con.cursor()
 
     for group in args.containers:
-        generateMemChart(c, group, starttime, endtime, args.folder)
-        generateCPUChart(c, group, starttime, endtime, args.folder)
+        generate_mem_chart(c, group, start_time, end_time, args.folder)
+        generate_CPU_chart(c, group, start_time, end_time, args.folder)
 
     if not args.noclean:
-        cleanDatabase(con, starttime)
+        clean_database(con, start_time)
 
     c.close()
-
-    if args.mail:
-        sendMail(args.groups, args.recipients, args.baseurl)
-
 
 if __name__ == "__main__":
     main()

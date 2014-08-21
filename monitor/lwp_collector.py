@@ -1,8 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys
-import os
 import ConfigParser
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+
+from lxclite import ls
 
 # ###############################################################################
 # "THE BEER-WARE LICENSE" (Revision 42):                                       #
@@ -33,12 +36,12 @@ import argparse
 from time import time
 
 
-def collecData(con, group, timestamp):
+def collect_data(con, group, timestamp):
     mem_rss = 0
     mem_cache = 0
     mem_swap = 0
 
-    with open('/cgroup/%s/memory.stat' % (group,), 'r') as f:
+    with open('/sys/fs/cgroup/lxc/%s/memory.stat' % (group,), 'r') as f:
         lines = f.read().splitlines()
 
     for line in lines:
@@ -50,15 +53,18 @@ def collecData(con, group, timestamp):
         elif data[0] == "total_swap":
             mem_swap = int(data[1])
 
-    with open('/cgroup/%s/cpuacct.usage' % (group,), 'r') as f:
-        cpu_usage = int(f.readline())
+    try:
+        with open('/sys/fs/cgroup/lxc/%s/cpuacct.usage' % (group,), 'r') as f:
+            cpu_usage = int(f.readline())
+    except IOError:
+        cpu_usage = 0
 
     con.execute("""\
                 INSERT INTO graph_data (name, time, cpu_usage, mem_rss, mem_cache, mem_swap)
                 VALUES (?,?,?,?,?,?)""", (group, timestamp, cpu_usage, mem_rss, mem_cache, mem_swap))
 
 
-def initDatabase(con):
+def init_database(con):
     con.execute("""\
                 CREATE TABLE graph_data (
                   name TEXT NOT NULL,
@@ -70,24 +76,6 @@ def initDatabase(con):
                   PRIMARY KEY (name,time)
                 )
         """)
-
-
-# fixme: import from lxclite
-def ls():
-    """
-    List containers directory
-    """
-    lxcdir = '/var/lib/lxc/'
-    ct_list = []
-
-    try:
-        lsdir = os.listdir(lxcdir)
-        for i in lsdir:
-            if os.path.isdir(lxcdir + i):
-                ct_list.append(i)
-    except OSError:
-        ct_list = []
-    return sorted(ct_list)
 
 
 def main():
@@ -105,12 +93,12 @@ def main():
     con = sqlite3.connect(args.database)
 
     if args.init:
-        initDatabase(con)
+        init_database(con)
         sys.exit(0)
 
-    containers = ls();
+    containers = ls()
     for group in containers:
-        collecData(con, group, int(time()))
+        collect_data(con, group, int(time()))
 
     con.commit()
     con.close()
