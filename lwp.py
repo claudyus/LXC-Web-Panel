@@ -71,6 +71,10 @@ try:
         ID_MAPPING = config.get('ldap', 'id_mapping')
         DISPLAY_MAPPING = config.get('ldap', 'display_mapping')
         OBJECT_CLASS = config.get('ldap', 'object_class')
+    elif AUTH == 'htpasswd':
+        import crypt
+        import hmac
+        HTPASSWD_FILE = config.get('htpasswd', 'file')
 except NameError as err:
     print ' ! Revert to DB authentication ' + err
     AUTH = 'database'
@@ -371,6 +375,9 @@ def lwp_users():
 
     if AUTH == 'ldap':
         return abort(403, 'You are using ldap as AUTH backend.')
+
+    if AUTH == 'htpasswd':
+        return abort(403, 'You are using htpasswd as AUTH backend.')
 
     try:
         trash = request.args.get('trash')
@@ -794,6 +801,13 @@ def login():
             except Exception, e:
                 print str(e)
                 user = None
+        elif AUTH == 'htpasswd':
+            user = None
+            if check_htpasswd(request_username, request_passwd):
+                user = {}
+                user['username'] = request_username
+                user['name'] = request_username
+                user['su'] = 'Yes'   # on htpasswd all users are admin
         else:
             request_passwd = hash_passwd(request_passwd)
             user = query_db('select name, username, su from users where username=? and password=?',
@@ -815,6 +829,22 @@ def login():
         flash(u'Invalid username or password!', 'error')
     return render_template('login.html', auth=AUTH)
 
+def check_htpasswd(username, password):
+    htuser = None
+    htpasswd = None
+
+    lines = open(HTPASSWD_FILE, 'r').readlines()
+    for line in lines:
+      username, pwhash = line.split(':')
+      if (username == htuser):
+        htuser = username
+        htpasswd = pwhash
+        break
+
+    if htuser is None:
+        return False
+    else:
+        return hmac.compare_digest(crypt.crypt(password, htpasswd), htpasswd)
 
 @app.route('/logout')
 def logout():

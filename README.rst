@@ -52,11 +52,19 @@ Where mykey.key and mykey.cert are the key and the certificate generated previou
 
  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mykey.cert
 
-LDAP configuration
-^^^^^^^^^^^^^^^^^^
+Authentication
+^^^^^^^^^^^^^^
+
+Default authentication is against the internal sqlite database, but it's possible to configure alternative backends.
+
+#### LDAP ####
 
 To enable ldap auth you should set ``auth`` type to ``ldap`` inside your config file than configure all options inside ldap section.
 See lwp.example.conf for references.
+
+#### htpasswd ####
+
+To enable authentication agains htpasswd file you should set ``auth`` type to ``htpasswd`` and ``file`` variable in ``htpasswd`` section to point to the htpasswd file.
 
 File-bucket configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
