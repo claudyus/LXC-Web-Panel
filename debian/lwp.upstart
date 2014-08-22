@@ -1,0 +1,11 @@
+description "LXC Web Panel"
+start on runlevel [2345]
+stop on runlevel [06]
+
+respawn
+respawn limit 10 5
+
+setuid root
+setgid root
+
+exec lwp

@@ -13,4 +13,9 @@ debian/lwp
 debian/changelog
 
 # Github pages
-gh-pages/*
+gh-pages
+
+# Python packaging
+*.egg-info
+dist
+build

@@ -13,9 +13,5 @@ override_dh_gencontrol :
 	echo "misc:buildDate=$(shell date)" >> debian/lwp.substvars
 	dh_gencontrol
 
-# a better way would be to use dh_python rather than using a debian/install
-# file, but this would require a setup.py, and then we don't have to do
-# -X ".pyc" anymore either (which is a bonus), however this would also install
-# the whole thing under /usr/lib/pyshared (which is not a bad thing), not /srv
 %:
-	dh $@ -X "__pycache__" -X ".pyc"
+	dh $@ --with python2

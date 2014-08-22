@@ -1,23 +1,15 @@
-from lxclite import exists, stopped, lxcdir
-import subprocess
+from __future__ import absolute_import, print_function, division
+
 import os
-import platform
-import time
-import ConfigParser
 import re
+import time
+import platform
+import subprocess
+import ConfigParser
 
-
-class CalledProcessError(Exception):
-    pass
-
-
-class LxcConfigFileNotComplete(Exception):
-    pass
-
-
-class ContainerNotExists(Exception):
-    pass
-
+from lwp.exceptions import ContainerNotExists, LxcConfigFileNotComplete
+from lwp.lxclite import exists, stopped
+from lwp.lxclite import lxcdir
 
 cgroup = {
     'type': 'lxc.network.type',
@@ -34,7 +26,7 @@ cgroup = {
     'shares': 'lxc.cgroup.cpu.shares',
     'deny': 'lxc.cgroup.devices.deny',
     'allow': 'lxc.cgroup.devices.allow',
-    'auto': 'lxc.start.auto'
+    'auto': 'lxc.start.auto',
 }
 
 
@@ -55,17 +47,15 @@ class FakeSection(object):
 
 def del_section(filename=None):
     if filename:
-        load = open(filename, 'r')
-        read = load.readlines()
-        load.close()
+        with open(filename, 'r') as f:
+            read = f.readlines()
         i = 0
         while i < len(read):
             if '[DEFAULT]' in read[i]:
                 del read[i]
                 break
-        load = open(filename, 'w')
-        load.writelines(read)
-        load.close()
+        with open(filename, 'w') as f:
+            f.writelines(read)
 
 
 def file_exist(filename):
@@ -91,9 +81,9 @@ def memory_usage(name):
     cmd = ['lxc-cgroup -n %s memory.usage_in_bytes' % name]
     try:
         out = subprocess.check_output(cmd, shell=True).splitlines()
-    except OSError:
+    except subprocess.CalledProcessError:
         return 0
-    return int(out[0]) / 1024 / 1024
+    return int(int(out[0]) / 1024 / 1024)
 
 
 def host_memory_usage():
@@ -104,22 +94,20 @@ def host_memory_usage():
                     'used': int(used/1024),
                     'total': int(total/1024)}
     """
-    total = free = buffers = cached = 0
-    out = open('/proc/meminfo')
-    for line in out:
-        if 'MemTotal:' == line.split()[0]:
-            split = line.split()
-            total = float(split[1])
-        if 'MemFree:' == line.split()[0]:
-            split = line.split()
-            free = float(split[1])
-        if 'Buffers:' == line.split()[0]:
-            split = line.split()
-            buffers = float(split[1])
-        if 'Cached:' == line.split()[0]:
-            split = line.split()
-            cached = float(split[1])
-    out.close()
+    total, free, buffers, cached = 0, 0, 0, 0
+    with open('/proc/meminfo') as out:
+        for line in out:
+            parts = line.split()
+            key = parts[0]
+            value = parts[1]
+            if key == 'MemTotal:':
+                total = float(value)
+            if key == 'MemFree:':
+                free = float(value)
+            if key == 'Buffers:':
+                buffers = float(value)
+            if key == 'Cached:':
+                cached = float(value)
     used = (total - (free + buffers + cached))
     return {'percent': int((used / total) * 100),
             'percent_cached': int((cached / total) * 100),
@@ -131,21 +119,22 @@ def host_cpu_percent():
     """
     returns CPU usage in percent
     """
-    f = open('/proc/stat', 'r')
-    line = f.readlines()[0]
+    with open('/proc/stat', 'r') as f:
+        line = f.readlines()[0]
+
     data = line.split()
     previdle = float(data[4])
     prevtotal = float(data[1]) + float(data[2]) + float(data[3]) + float(data[4])
-    f.close()
     time.sleep(0.1)
-    f = open('/proc/stat', 'r')
-    line = f.readlines()[0]
+
+    with open('/proc/stat', 'r') as f:
+        line = f.readlines()[0]
+
     data = line.split()
     idle = float(data[4])
     total = float(data[1]) + float(data[2]) + float(data[3]) + float(data[4])
-    f.close()
     intervaltotal = total - prevtotal
-    percent = 100 * (intervaltotal - (idle - previdle)) / intervaltotal
+    percent = int(100 * (intervaltotal - (idle - previdle)) / intervaltotal)
     return str('%.1f' % percent)
 
 
@@ -172,12 +161,11 @@ def host_uptime():
             {'day': days,
             'time': '%d:%02d' % (hours,minutes)}
     """
-    f = open('/proc/uptime')
-    uptime = int(f.readlines()[0].split('.')[0])
-    minutes = uptime / 60 % 60
-    hours = uptime / 60 / 60 % 24
-    days = uptime / 60 / 60 / 24
-    f.close()
+    with open('/proc/uptime') as f:
+        uptime = int(f.readlines()[0].split('.')[0])
+    minutes = int(uptime / 60) % 60
+    hours = int(uptime / 60 / 60) % 24
+    days = int(uptime / 60 / 60 / 24)
     return {'day': days,
             'time': '%d:%02d' % (hours, minutes)}
 
@@ -208,6 +196,7 @@ def get_templates_list():
     try:
         path = os.listdir('/usr/share/lxc/templates')
     except OSError:
+        # TODO: if this folder doesn't exist, it will cause a crash
         path = os.listdir('/usr/lib/lxc/templates')
 
     if path:
@@ -224,7 +213,7 @@ def check_version():
     try:
         version = subprocess.check_output('git describe --tags', shell=True)
     except OSError:
-        version = open('version').read()[0:-1]
+        version = open(os.path.join(os.path.dirname(__file__), 'version')).read()[0:-1]
     return {'current': version}
 
 
@@ -319,9 +308,9 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
 
         del_section(filename=filename)
 
-        load = open(filename, 'r')
-        read = load.readlines()
-        load.close()
+        with open(filename, 'r') as load:
+            read = load.readlines()
+
         i = 0
         while i < len(read):
             if ' = ' in read[i]:
@@ -332,9 +321,8 @@ def push_net_value(key, value, filename='/etc/default/lxc'):
                 else:
                     read[i] = '%s=\"%s\"\n' % (split[0].upper(), split[1])
             i += 1
-        load = open(filename, 'w')
-        load.writelines(read)
-        load.close()
+        with open(filename, 'w') as load:
+            load.writelines(read)
 
 
 def push_config_value(key, value, container=None):
@@ -351,9 +339,8 @@ def push_config_value(key, value, container=None):
             values = []
             i = 0
 
-            load = open(filename, 'r')
-            read = load.readlines()
-            load.close()
+            with open(filename, 'r') as load:
+                read = load.readlines()
 
             while i < len(read):
                 if not read[i].startswith('#') and \
@@ -397,5 +384,5 @@ def net_restart():
     try:
         subprocess.check_call(cmd, shell=True)
         return 0
-    except CalledProcessError:
+    except subprocess.CalledProcessError:
         return 1

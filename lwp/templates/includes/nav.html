@@ -4,7 +4,7 @@
       <a class="brand" href="../">LXC Web Panel</a>
       <div class="nav-collapse collapse">
         <p class="navbar-text pull-right">
-          <a href="{{ url_for('logout') }}" class="navbar-link">Logout ({% if session.name and session.name != 'None' %}{{ session.name }}{% else %}{{ session.username }}{% endif %})</a>
+          <a href="{{ url_for('auth.logout') }}" class="navbar-link">Logout ({% if session.name and session.name != 'None' %}{{ session.name }}{% else %}{{ session.username }}{% endif %})</a>
         </p>
       </div>
     </div>

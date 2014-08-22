@@ -39,6 +39,13 @@ def get_version_from_debian_changelog():
     return local('dpkg-parsechangelog --show-field Version', capture=True)
 
 
+def get_deb_architecture():
+    """
+    Returns the deb architecture of the local system, e.g. amd64, i386, arm
+    """
+    return local('dpkg --print-architecture', capture=True)
+
+
 @task(alias='deb')
 def debian():
     # the debian changelog is not stored on GIT and rebuilt each time
@@ -68,5 +75,5 @@ def clone():
 @task
 def site():
     clone()
-    debian();
+    debian()
     local('make -C gh-pages/')

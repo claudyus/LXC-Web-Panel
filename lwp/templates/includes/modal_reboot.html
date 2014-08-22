@@ -8,6 +8,6 @@
 	</div>
 	<div class="modal-footer">
 		<button class="btn btn-small" data-dismiss="modal" aria-hidden="true">Cancel</button>
-		<a class="btn btn-danger" href="{{ url_for('action', name='host', action='reboot', token=session.token) }}"><i class="icon-off icon-white"></i> Reboot</a>
+		<a class="btn btn-danger" href="{{ url_for('main.action', name='host', action='main.reboot', token=session.token) }}"><i class="icon-off icon-white"></i> Reboot</a>
 	</div>
 </div>
