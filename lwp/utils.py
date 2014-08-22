@@ -1,5 +1,7 @@
 import sys
+import hmac
 import time
+import crypt
 import hashlib
 import sqlite3
 import ConfigParser
@@ -99,16 +101,14 @@ def api_auth():
         return new_handler
     return decorator
 
-def check_htpasswd(username, password):
-    htuser = None
-    htpasswd = None
 
-    lines = open(HTPASSWD_FILE, 'r').readlines()
+def check_htpasswd(htpasswd_file, username, password):
+    htuser = None
+
+    lines = open(htpasswd_file, 'r').readlines()
     for line in lines:
-      username, pwhash = line.split(':')
-      if (username == htuser):
-        htuser = username
-        htpasswd = pwhash
+      htuser, htpasswd = line.split(':')
+      if username == htuser:
         break
 
     if htuser is None:

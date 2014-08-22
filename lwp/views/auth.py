@@ -18,12 +18,16 @@ try:
         LDAP_BASE = config.get('ldap', 'base')
         LDAP_BIND_DN = config.get('ldap', 'bind_dn')
         LDAP_PASS = config.get('ldap', 'password')
-        ID_MAPPING = config.get('ldap','id_mapping')
-        DISPLAY_MAPPING = config.get('ldap','display_mapping')
-        OBJECT_CLASS = config.get('ldap','object_class')
+        ID_MAPPING = config.get('ldap', 'id_mapping')
+        DISPLAY_MAPPING = config.get('ldap', 'display_mapping')
+        OBJECT_CLASS = config.get('ldap', 'object_class')
+    elif AUTH == 'htpasswd':
+        HTPASSWD_FILE = config.get('htpasswd', 'file')
 except NameError as err:
     print(' ! Revert to DB authentication ' + str(err))
     AUTH = 'database'
+
+
 
 # Flask module
 mod = Blueprint('auth', __name__)
@@ -57,7 +61,7 @@ def login():
         elif AUTH == 'htpasswd':
             from lwp.utils import check_htpasswd
             user = None
-            if check_htpasswd(request_username, request_passwd):
+            if check_htpasswd(HTPASSWD_FILE, request_username, request_passwd):
                 user = {
                     'username': request_username,
                     'name': request_username,

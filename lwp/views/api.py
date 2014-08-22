@@ -80,7 +80,7 @@ def add_container():
             lxc.clone(data.clone, data.name)
         except lxc.ContainerAlreadyExists:
             return jsonify(status="error", error="Container yet exists"), 409
-        except:
+        finally:
             abort(500)
     return jsonify(status="ok"), 200
 
