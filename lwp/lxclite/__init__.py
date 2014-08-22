@@ -4,6 +4,10 @@ import subprocess
 import os
 import time
 
+from lwp.exceptions import ContainerDoesntExists, ContainerAlreadyExists, ContainerAlreadyRunning, ContainerNotRunning,\
+    DirectoryDoesntExists, NFSDirectoryNotMounted
+
+
 # LXC Python Library
 
 # Original author: Elie Deloumeau
@@ -21,31 +25,6 @@ def _run(cmd, output=False):
             out = False
         return out
     return subprocess.check_call('{}'.format(cmd), shell=True)  # returns 0 for True
-
-
-# TODO: move to exceptions.py
-class ContainerAlreadyExists(Exception):
-    pass
-
-
-class ContainerDoesntExists(Exception):
-    pass
-
-
-class ContainerAlreadyRunning(Exception):
-    pass
-
-
-class ContainerNotRunning(Exception):
-    pass
-
-
-class DirectoryDoesntExists(Exception):
-    pass
-
-
-class NFSDirectoryNotMounted(Exception):
-    pass
 
 
 def exists(container):
