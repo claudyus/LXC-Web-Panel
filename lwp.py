@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify, \
+    send_from_directory
 import lxclite as lxc
 import interface
 import subprocess
@@ -74,6 +75,14 @@ try:
 except NameError as err:
     print ' ! Revert to DB authentication ' + err
     AUTH = 'database'
+
+try:
+    USE_MONITOR = config.getboolean('monitor', 'enabled')
+    GRAPH_FOLDER = config.get('monitor', 'folder')
+    GRAPH_DAYS = config.getint('monitor', 'days')
+except ConfigParser.NoOptionError:
+    USE_MONITOR = False
+
 
 storage_repos = config.items('storage_repository')
 
@@ -302,6 +311,17 @@ def edit(container=None):
 
     infos = {'status': status, 'pid': pid, 'memusg': interface.memory_usage(container)}
     return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos)
+
+
+@app.route('/<container>/graphs')
+@if_logged_in()
+def graphs(container=None):
+    return render_template('graphs.html', container=container)
+
+
+@app.route('/graphs/<path:filename>')
+def graphs_file(filename):
+    return send_from_directory(GRAPH_FOLDER, filename)
 
 
 @app.route('/settings/lxc-net', methods=['POST', 'GET'])

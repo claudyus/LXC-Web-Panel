@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}{{container|capitalize}}{% endblock %}
+{% block content %}
+	<div class="span6">
+		{{ super() }}
+		<h3>{{ container|capitalize }}</h3>
+        
+        <img src="/graphs/{{ container }}_cpu.png"/>
+        <img src="/graphs/{{ container }}_mem.png"/>
+
+	</div>
+{% endblock %}

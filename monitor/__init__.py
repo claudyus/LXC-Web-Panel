@@ -1,14 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+# Licence MIT
+# Originally licenced under BEER-WARE r42 by Lennart Coopmans <lennartATlacerta.be>
+
 import sys
 import ConfigParser
 
-# ###############################################################################
-# "THE BEER-WARE LICENSE" (Revision 42):                                       #
-# <lennartATlacerta.be> wrote this file. As long as you retain this notice you #
-# can do whatever you want with this stuff. If we meet some day, and you think #
-# this stuff is worth it, you can buy me a beer in return. Lennart Coopmans    #
-################################################################################
 
 # configuration
 config = ConfigParser.SafeConfigParser()
@@ -103,7 +101,7 @@ def generate_CPU_chart(c, group, start_time=time() - GRAPH_DAYS * 24 * 60 * 60, 
     g('set style fill  transparent solid 0.50 noborder ')
     g('set style data filledcurves y1=0 ')
 
-    usageData = Gnuplot.Data(diff);
+    usageData = Gnuplot.Data(diff)
     usageData.set_option(using=(1, 2))
     g.plot(usageData)
 
