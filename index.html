@@ -90,10 +90,18 @@ cert = mykey.cert
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mykey.cert
 </pre>
 </div>
-<div class="section" id="ldap-configuration">
-<h2>LDAP configuration</h2>
+<div class="section" id="authentication">
+<h2>Authentication</h2>
+<p>Default authentication is against the internal sqlite database, but it's possible to configure alternative backends.</p>
+<div class="section" id="ldap">
+<h3>LDAP</h3>
 <p>To enable ldap auth you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">ldap</tt> inside your config file than configure all options inside ldap section.
 See lwp.example.conf for references.</p>
+</div>
+<div class="section" id="htpasswd">
+<h3>htpasswd</h3>
+<p>To enable authentication agains htpasswd file you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">htpasswd</tt> and <tt class="docutils literal">file</tt> variable in <tt class="docutils literal">htpasswd</tt> section to point to the htpasswd file.</p>
+</div>
 </div>
 <div class="section" id="file-bucket-configuration">
 <h2>File-bucket configuration</h2>

@@ -30,3 +30,10 @@
 .item img {
 	height: 300px !important;
 }
+
+.literal {
+    color: brown;
+    padding: 2px;
+    background-color: #E0DFDF;
+    border-radius: 5px;
+}
