@@ -98,7 +98,6 @@
 {%- endmacro %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='js/bootstrapSwitch.js') }}"></script>
 <script type="text/javascript">
 			function refreshMemoryHost(){
 				$.getJSON($SCRIPT_ROOT + '/_refresh_memory_host', function(data) {

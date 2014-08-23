@@ -5,19 +5,16 @@
 		<title>{% block title %}{% endblock %} - LXC Web Panel</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
-		<meta name="author" content="Antoine Tanzilli, Elie Deloumeau-Prigent">
 
-		<link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
-		<link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet">
-
-		<link href="{{ url_for('static', filename='css/bootstrapSwitch.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='bower/bootstrap/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='bower/bootstrap/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='bower/bootstrap-switch/build/css/bootstrap2/bootstrap-switch.min.css') }}" rel="stylesheet">
 		<link href="{{ url_for('static', filename='css/site.css') }}" rel="stylesheet">
 
 		<!--[if lt IE 9]>
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.ico') }}">
-
 	</head>
 
 	<body>
@@ -54,7 +51,7 @@
 
 		<div id="footer">
 			<div class="container">
-				<p class="muted credit"><small>LXC Web Panel &copy; 2014{% if 'logged_in' in session %} - <a href="{{ url_for('main.about') }}" class="muted">MIT License</a>{% endif %}<small></p>
+				<p class="muted credit"><small>LXC Web Panel &copy; 2014{% if 'logged_in' in session %} - <a href="{{ url_for('main.about') }}" class="muted">MIT License</a>{% endif %}</small></p>
 			</div>
 		</div>
 
@@ -62,10 +59,10 @@
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script> var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/jqBootstrapValidation.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/html5slider.js') }}"></script>
+		<script src="{{ url_for('static', filename='bower/jquery/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='bower/bootstrap/bootstrap/js/bootstrap.min.js') }}"></script>
+  		<script src="{{ url_for('static', filename='bower/jqBootstrapValidation/dist/jqBootstrapValidation-1.3.7.js') }}"></script>
+  		<script src="{{ url_for('static', filename='bower/bootstrap-switch/build/js/bootstrap-switch.min.js') }}"></script>
 		<script>
 				$(function() {
 						$(".alert").not('.dont-hide').alert().delay(5000).slideUp();
@@ -73,6 +70,7 @@
 								$('#home-load').fadeIn();
 						});
 						$("input").not("[type=submit]").jqBootstrapValidation();
+                        $("[type=checkbox]").bootstrapSwitch();
 				});
 		</script>
 		{% block script %}{% endblock %}
