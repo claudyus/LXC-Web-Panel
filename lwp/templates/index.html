@@ -45,9 +45,9 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th>Status</th>
+				<th class="hidden-phone">Status</th>
 				<th>Name</th>
-				<th>Hostname</th>
+				<th class="hidden-phone">Hostname</th>
 				<th>IP Address</th>
 				<th>Mem. usage</th>
 				<th>Actions</th>
@@ -57,9 +57,9 @@
 			<tbody>
 				{% for container in status.containers %}
 					<tr class="{{ tr[status.status] }}">
-						{% if loop.first %}<td rowspan="{{ status.containers|count }}"><span class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</span></td>{% endif %}
+						{% if loop.first %}<td rowspan="{{ status.containers|count }}" class="hidden-phone"><span class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</span></td>{% endif %}
 						<td><a href="{{ url_for('main.edit',container=container.name) }}" title="Click to edit {{container.name}}">{{container.name}}</a></td>
-						<td>{{container.settings.utsname}}</td>
+						<td class="hidden-phone">{{container.settings.utsname}}</td>
 						<td>{% if container.settings.flags == 'up' %}{% if container.settings.ipv4 != '' %}{{container.settings.ipv4}}{% else %}{% if container.ipv4 %}{{ container.ipv4 }}{% else %}Undefined{% endif %}{% endif %}{% elif container.settings.flags == 'down' %}Link Down{% endif %}</td>
 						<td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
 						<td>
@@ -68,7 +68,7 @@
 									{% set start_action = {'stopped':'start','frozen':'unfreeze'} %}
 									<a class="btn btn-small{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action=start_action[status.status], token=session.token) }}"{% endif %}><i class="icon-play"></i> Start</a>
 									<a class="btn btn-small{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action='stop', token=session.token) }}"{% endif %}><i class="icon-stop"></i> Stop</a>
-									<a class="btn btn-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' %} href="{{ url_for('main.action', name=container.name, action='freeze', token=session.token) }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
+									<a class="btn btn-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %} hidden-phone"{% if status.status == 'running' %} href="{{ url_for('main.action', name=container.name, action='freeze', token=session.token) }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
 								</div>
 								{% if session.su == 'Yes' and status.status == 'stopped' %}<a class="pull-right close destroy" data-container-name="{{container.name}}" style="margin-top:4px;"><i class="icon-remove-sign"></i></a>{% endif %}
 							</div>
