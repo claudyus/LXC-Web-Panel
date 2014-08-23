@@ -57,12 +57,14 @@ Authentication
 
 Default authentication is against the internal sqlite database, but it's possible to configure alternative backends.
 
-#### LDAP ####
+LDAP
+++++
 
 To enable ldap auth you should set ``auth`` type to ``ldap`` inside your config file than configure all options inside ldap section.
 See lwp.example.conf for references.
 
-#### htpasswd ####
+htpasswd
+++++++++
 
 To enable authentication agains htpasswd file you should set ``auth`` type to ``htpasswd`` and ``file`` variable in ``htpasswd`` section to point to the htpasswd file.
 
