@@ -12,21 +12,29 @@ from lwp.lxclite import exists, stopped
 from lwp.lxclite import lxcdir
 
 cgroup = {
+    'arch': 'lxc.arch',
+    'utsname': 'lxc.utsname',
     'type': 'lxc.network.type',
     'link': 'lxc.network.link',
     'flags': 'lxc.network.flags',
     'hwaddr': 'lxc.network.hwaddr',
-    'rootfs': 'lxc.rootfs',
-    'utsname': 'lxc.utsname',
-    'arch': 'lxc.arch',
     'ipv4': 'lxc.network.ipv4',
+    'ipv4gw': 'lxc.network.ipv4.gateway',
+    'ipv6': 'lxc.network.ipv6',
+    'ipv6gw': 'lxc.network.ipv6.gateway',
+    'script_up': 'lxc.network.script.up',
+    'script_down': 'lxc.network.script.down',
+    'rootfs': 'lxc.rootfs',
     'memlimit': 'lxc.cgroup.memory.limit_in_bytes',
     'swlimit': 'lxc.cgroup.memory.memsw.limit_in_bytes',
     'cpus': 'lxc.cgroup.cpuset.cpus',
     'shares': 'lxc.cgroup.cpu.shares',
     'deny': 'lxc.cgroup.devices.deny',
     'allow': 'lxc.cgroup.devices.allow',
+    'loglevel': 'lxc.loglevel',
+    'logfile': 'lxc.logfile',
     'auto': 'lxc.start.auto',
+    'start_delay': 'lxc.start.delay',
 }
 
 
@@ -253,19 +261,27 @@ def get_container_settings(name):
         return False
     config = ConfigParser.SafeConfigParser()
     cfg = {
+        'arch': '',
+        'utsname': '',
         'type': '',
         'link': '',
         'flags': '',
         'hwaddr': '',
-        'rootfs': '',
-        'utsname': '',
-        'arch': '',
         'ipv4': '',
+        'ipv4gw': '',
+        'ipv6': '',
+        'ipv6gw': '',
+        'script_up': '',
+        'script_down': '',
+        'rootfs': '',
         'memlimit': '',
         'swlimit': '',
         'cpus': '',
         'shares': '',
-        'auto': False
+        'loglevel': '',
+        'logfile': '',
+        'auto': False,
+        'start_delay': ''
     }
     config.readfp(FakeSection(open(filename)))
 

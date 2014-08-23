@@ -25,10 +25,10 @@
 			<hr>
 
 			<div class="control-group">
-				<label class="control-label" for="inputAutostart">Start at boot</label>
+				<label class="control-label" for="autostart">Start at boot</label>
 				<div class="controls">
 					<div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove icon-white'></i>" data-on="success" data-off="danger">
-						<input type="checkbox" name="autostart" value="True" {% if settings.auto %}checked {% endif %}/>
+						<input type="checkbox" id="autostart" name="autostart" value="True" {% if settings.auto %}checked {% endif %}/>
 					</div>
 				</div>
 			</div>
@@ -62,16 +62,52 @@
 				<div class="control-group">
 					<label class="control-label" for="inputHWaddress">HW address</label>
 					<div class="controls">
-						<input pattern="([a-fA-F0-9]{2}[:|\-]?){6}" type="text" id="inputHWaddress" name="hwaddress" value="{{ settings.hwaddr }}" placeholder="Undefined">
+						<input pattern="([a-fA-F0-9]{2}[:|\-]?){6}" type="text" id="inputHWaddress" name="hwaddr" value="{{ settings.hwaddr }}" placeholder="Undefined">
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="inputIPaddress">IP address</label>
+					<label class="control-label" for="ipv4">IPv4 address</label>
 					<div class="controls">
-						<input pattern="(^25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(/(3[0-2]|[12]?[0-9]))?$|(^Undefined$)" type="text" id="inputIPadress" name="ipaddress" value="{{ settings.ipv4 }}" placeholder="Undefined">
+						<input pattern="^([0-9.]+)+$" type="text" id="ipv4" name="ipv4" value="{{ settings.ipv4 }}" placeholder="Undefined">
 					</div>
 				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="ipv4gw">IPv4 gateway</label>
+					<div class="controls">
+						<input pattern="^([0-9.]+)+$" type="text" id="ipv4gw" name="ipv4gw" value="{{ settings.ipv4gw }}" placeholder="Undefined">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="ipv6">IPv6 address</label>
+					<div class="controls">
+						<input pattern="^([0-9a-fA-F:/]+)+$" type="text" id="ipv6" name="ipv6" value="{{ settings.ipv6 }}" placeholder="Undefined">
+					</div>
+				</div>
+
+            	<div class="control-group">
+					<label class="control-label" for="ipv6gw">IPv6 gateway</label>
+					<div class="controls">
+						<input pattern="^([0-9a-fA-F:/]+)+$" type="text" id="ipv6gw" name="ipv6gw" value="{{ settings.ipv6gw }}" placeholder="Undefined">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="script_up">Network script up</label>
+					<div class="controls">
+						<input pattern="\w+" type="text" id="script_up" name="script_up" value="{{ settings.script_up }}">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="script_down">Network script down</label>
+					<div class="controls">
+						<input pattern="\w+" type="text" id="script_down" name="script_down" value="{{ settings.script_down }}">
+					</div>
+				</div>
+
 			</div>
 
 			<hr>
@@ -103,7 +139,7 @@
 			<div class="control-group">
 				<label class="control-label" for="inputCPUShares">CPU Shares **</label>
 				<div class="controls">
-					<input pattern="[0-9]+" type="number" id="inputCPUShares" name="cpushares" min="16" step="2" value="{{ settings.shares }}" placeholder="1024">
+					<input pattern="[0-9]+" type="number" id="inputCPUShares" name="shares" min="16" step="2" value="{{ settings.shares }}" placeholder="1024">
 				</div>
 			</div>
 
@@ -114,6 +150,34 @@
 				<div class="controls">
 					<input pattern="[a-zA-Z0-9_/\-]+" type="text" id="inputRootfs" name="rootfs" value="{{ settings.rootfs }}">
 					<span class="help-inline"><small>(e.g /var/lib/lxc/{{container}}/rootfs)</small></span>
+				</div>
+			</div>
+
+			<hr>
+
+			<div class="control-group">
+				<label class="control-label" for="loglevel">Log level</label>
+				<div class="controls">
+					<select type="text" id="loglevel" name="loglevel" value="{{ settings.loglevel }}">
+                        <option value="0">trace</option>
+                        <option value="1">debug</option>
+                        <option value="2">info</option>
+                        <option value="3">notice</option>
+                        <option value="4">warn</option>
+                        <option value="5">error</option>
+                        <option value="6">critical</option>
+                        <option value="7">alert</option>
+                        <option value="8">fatal</option>
+                    </select>
+					<span class="help-inline"><small>Default log level: 5 - error</small></span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="logfile">Log file</label>
+				<div class="controls">
+					<input type="text" id="logfile" name="logfile" value="{{ settings.logfile }}">
+					<span class="help-inline"><small></small></span>
 				</div>
 			</div>
 
