@@ -16,7 +16,8 @@ with open(os.getcwd() + '/../changelog.csv', 'r') as csvfile:
     # date;hash;string
     changelog = []
     for row in csvreader:
-        changelog.append({'date': row[0].split(" ")[0], 'hash': row[1], 'string': row[2], 'is_tag': row[2].find("tag ") != -1})
+        changelog.append({'date': row[0].split(" ")[0], 'hash': row[1], 'string': row[2],
+                          'is_release': row[2].find("tag ") != -1 or row[2].find("Release ") != -1 or row[1] == '472dd67' })
 
 
 def preBuildPage(page, context, data):
