@@ -50,7 +50,7 @@
 			$(document).ready(function(){
 				$(".delete").not('.disabled').on('click',function(e){
 					var _this = $(this);
-					$(".delete-link").attr('href',"/lwp/users?username="+ _this.data('username') +"&token="+ token +"&trash=1&userid="+ _this.data('userid'));
+					$(".delete-link").attr('href',"/lwp/users?username="+ _this.data('username') + "&trash=1&userid="+ _this.data('userid'));
 					$('#delete').modal('show');
 				});
 			});

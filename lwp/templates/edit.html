@@ -7,9 +7,9 @@
 			<div class="btn-group" data-toggle="buttons-radio" style="float:right;">
 				<div class="btn-group">
 				{% set start_action = {'STOPPED':'start','FROZEN':'unfreeze'} %}
-					<a class="btn{% if infos['status'] == 'RUNNING' %} disabled{% endif %}" {% if infos['status'] == 'STOPPED' or infos['status'] == 'FROZEN' %}href="{{ url_for('main.action', name=container, action=start_action[infos['status']], token=session.token, from='edit') }}"{% endif %}><i class="icon-play"></i> Start</a>
-					<a class="btn{% if infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' or infos['status'] == 'FROZEN' %}href="{{ url_for('main.action', name=container, action='stop', token=session.token, from='edit') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
-					<a class="btn{% if infos['status'] == 'FROZEN' or infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' %}href="{{ url_for('main.action', name=container, action='freeze', token=session.token, from='edit') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
+					<a class="btn{% if infos['status'] == 'RUNNING' %} disabled{% endif %}" {% if infos['status'] == 'STOPPED' or infos['status'] == 'FROZEN' %}href="{{ url_for('main.action', name=container, action=start_action[infos['status']], from='edit') }}"{% endif %}><i class="icon-play"></i> Start</a>
+					<a class="btn{% if infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' or infos['status'] == 'FROZEN' %}href="{{ url_for('main.action', name=container, action='stop', from='edit') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
+					<a class="btn{% if infos['status'] == 'FROZEN' or infos['status'] == 'STOPPED' %} disabled{% endif %}" {% if infos['status'] == 'RUNNING' %}href="{{ url_for('main.action', name=container, action='freeze', from='edit') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
 				</div>
 			</div>
 		</h3>
@@ -172,7 +172,7 @@
 			}
 
 			function refreshMemory(container){
-				$.getJSON($SCRIPT_ROOT + '/_refresh_memory_' + container, function(data) {
+				$.getJSON('/_refresh_memory_' + container, function(data) {
 					var el = $('#'+container+' span');
 					el.text(data.memusg+' MB');
 					el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data.memusg));

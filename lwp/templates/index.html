@@ -66,9 +66,9 @@
 							<div class="btn-toolbar" style="margin:8px 0;">
 								<div class="btn-group">
 									{% set start_action = {'stopped':'start','frozen':'unfreeze'} %}
-									<a class="btn btn-small{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action=start_action[status.status], token=session.token) }}"{% endif %}><i class="icon-play"></i> Start</a>
-									<a class="btn btn-small{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action='stop', token=session.token) }}"{% endif %}><i class="icon-stop"></i> Stop</a>
-									<a class="btn btn-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' %} href="{{ url_for('main.action', name=container.name, action='freeze', token=session.token) }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
+									<a class="btn btn-small{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action=start_action[status.status]) }}"{% endif %}><i class="icon-play"></i> Start</a>
+									<a class="btn btn-small{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action='stop') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
+									<a class="btn btn-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' %} href="{{ url_for('main.action', name=container.name, action='freeze') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
 								</div>
 								{% if session.su == 'Yes' and status.status == 'stopped' %}<a class="pull-right close destroy" data-container-name="{{container.name}}" style="margin-top:4px;"><i class="icon-remove-sign"></i></a>{% endif %}
 							</div>
@@ -101,7 +101,7 @@
 <script src="{{ url_for('static', filename='js/bootstrapSwitch.js') }}"></script>
 <script type="text/javascript">
 			function refreshMemoryHost(){
-				$.getJSON($SCRIPT_ROOT + '/_refresh_memory_host', function(data) {
+				$.getJSON('/_refresh_memory_host', function(data) {
 					$('#memory-usage').text(data.used +' / '+ data.total +' MB').fadeIn();
 					$('#memory-usage-bar').css({'width':data.percent+'%'});
 					$('#memory-cache-usage-bar').css({'width':data.percent_cached+'%'});
@@ -109,27 +109,27 @@
 			}
 
 			function refreshCPUHost(){
-				$.get($SCRIPT_ROOT + '/_refresh_cpu_host', function(data) {
+				$.get('/_refresh_cpu_host', function(data) {
 					$('#cpu-usage').text(data +'%').fadeIn();
 					$('#cpu-usage-bar').css({'width':data +'%'});
 				});
 			}
 
 			function refreshDiskHost(){
-				$.getJSON($SCRIPT_ROOT + '/_refresh_disk_host', function(data) {
+				$.getJSON('/_refresh_disk_host', function(data) {
 					$('#disk-usage').text(data.used +' ('+ data.free +' free)').fadeIn();
 					$('#disk-usage-bar').css({'width':data.percent});
 				});
 			}
 
 			function refreshUptimeHost(){
-				$.getJSON($SCRIPT_ROOT + '/_refresh_uptime_host', function(data) {
+				$.getJSON('/_refresh_uptime_host', function(data) {
 					$('#uptime').text(data.day +' day(s) '+ data.time).fadeIn();
 				});
 			}
 
 			function refreshMemoryContainers(){
-				$.getJSON($SCRIPT_ROOT + '/_refresh_memory_containers', function(data) {
+				$.getJSON('/_refresh_memory_containers', function(data) {
 					data = data.data;
 					for (i in data) {
 						var el = $('#'+data[i].name+' span');
@@ -171,10 +171,8 @@
 
 			{% if session.su == 'Yes' %}$(document).ready(function(){
 
-				var token = '{{ session.token }}';
-
 				$(".destroy").on('click',function(e){
-					$(".destroy-link").attr('href',"{{url_for('main.action', action='destroy') }}" + "&token="+ token +"&name="+ $(this).data('container-name'));
+					$(".destroy-link").attr('href',"{{url_for('main.action', action='destroy') }}" + "&name=" + $(this).data('container-name'));
 					$('.modal-body #destroy-container-name').text($(this).data('container-name'));
 					$('#destroy').modal('show');
 				});

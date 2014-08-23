@@ -424,71 +424,68 @@ def action():
     name = request.args['name']
 
     # TODO: refactor this method, it's horrible to read
-    if request.args['token'] == session.get('token'):
-
-        if act == 'start':
-            try:
-                if lxc.start(name) == 0:
-                    time.sleep(1)  # Fix bug : "the container is randomly not displayed in overview list after a boot"
-                    flash(u'Container %s started successfully!' % name, 'success')
-                else:
-                    flash(u'Unable to start %s!' % name, 'error')
-            except lxc.ContainerAlreadyRunning:
-                flash(u'Container %s is already running!' % name, 'error')
-        elif act == 'stop':
-            try:
-                if lxc.stop(name) == 0:
-                    flash(u'Container %s stopped successfully!' % name, 'success')
-                else:
-                    flash(u'Unable to stop %s!' % name, 'error')
-            except lxc.ContainerNotRunning:
-                flash(u'Container %s is already stopped!' % name, 'error')
-        elif act == 'freeze':
-            try:
-                if lxc.freeze(name) == 0:
-                    flash(u'Container %s frozen successfully!' % name, 'success')
-                else:
-                    flash(u'Unable to freeze %s!' % name, 'error')
-            except lxc.ContainerNotRunning:
-                flash(u'Container %s not running!' % name, 'error')
-        elif act == 'unfreeze':
-            try:
-                if lxc.unfreeze(name) == 0:
-                    flash(u'Container %s unfrozen successfully!' % name, 'success')
-                else:
-                    flash(u'Unable to unfeeze %s!' % name, 'error')
-            except lxc.ContainerNotRunning:
-                flash(u'Container %s not frozen!' % name, 'error')
-        elif act == 'destroy':
-            if session['su'] != 'Yes':
-                return abort(403)
-            try:
-                if lxc.destroy(name) == 0:
-                    flash(u'Container %s destroyed successfully!' % name, 'success')
-                else:
-                    flash(u'Unable to destroy %s!' % name, 'error')
-            except lxc.ContainerDoesntExists:
-                flash(u'The Container %s does not exists!' % name, 'error')
-        elif act == 'reboot' and name == 'host':
-            if session['su'] != 'Yes':
-                return abort(403)
-            msg = '\v*** LXC Web Panel *** \
-                    \nReboot from web panel'
-            try:
-                subprocess.check_call('/sbin/shutdown -r now \'%s\'' % msg, shell=True)
-                flash(u'System will now restart!', 'success')
-            # TODO: fix blind exception handling
-            except:
-                flash(u'System error!', 'error')
-        elif act == 'push':
-            pass
+    if act == 'start':
+        try:
+            if lxc.start(name) == 0:
+                time.sleep(1)  # Fix bug : "the container is randomly not displayed in overview list after a boot"
+                flash(u'Container %s started successfully!' % name, 'success')
+            else:
+                flash(u'Unable to start %s!' % name, 'error')
+        except lxc.ContainerAlreadyRunning:
+            flash(u'Container %s is already running!' % name, 'error')
+    elif act == 'stop':
+        try:
+            if lxc.stop(name) == 0:
+                flash(u'Container %s stopped successfully!' % name, 'success')
+            else:
+                flash(u'Unable to stop %s!' % name, 'error')
+        except lxc.ContainerNotRunning:
+            flash(u'Container %s is already stopped!' % name, 'error')
+    elif act == 'freeze':
+        try:
+            if lxc.freeze(name) == 0:
+                flash(u'Container %s frozen successfully!' % name, 'success')
+            else:
+                flash(u'Unable to freeze %s!' % name, 'error')
+        except lxc.ContainerNotRunning:
+            flash(u'Container %s not running!' % name, 'error')
+    elif act == 'unfreeze':
+        try:
+            if lxc.unfreeze(name) == 0:
+                flash(u'Container %s unfrozen successfully!' % name, 'success')
+            else:
+                flash(u'Unable to unfeeze %s!' % name, 'error')
+        except lxc.ContainerNotRunning:
+            flash(u'Container %s not frozen!' % name, 'error')
+    elif act == 'destroy':
+        if session['su'] != 'Yes':
+            return abort(403)
+        try:
+            if lxc.destroy(name) == 0:
+                flash(u'Container %s destroyed successfully!' % name, 'success')
+            else:
+                flash(u'Unable to destroy %s!' % name, 'error')
+        except lxc.ContainerDoesntExists:
+            flash(u'The Container %s does not exists!' % name, 'error')
+    elif act == 'reboot' and name == 'host':
+        if session['su'] != 'Yes':
+            return abort(403)
+        msg = '\v*** LXC Web Panel *** \
+                \nReboot from web panel'
+        try:
+            subprocess.check_call('/sbin/shutdown -r now \'%s\'' % msg, shell=True)
+            flash(u'System will now restart!', 'success')
+        except subprocess.CalledProcessError:
+            flash(u'System error!', 'error')
+    elif act == 'push':
+        # TODO: implement push action
+        pass
     try:
         if request.args['from'] == 'edit':
             return redirect('../%s/edit' % name)
         else:
             return redirect(url_for('main.home'))
-    # TODO: fix blind exception handling
-    except:
+    except KeyError:
         return redirect(url_for('main.home'))
 
 
