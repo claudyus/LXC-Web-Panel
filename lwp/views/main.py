@@ -69,30 +69,38 @@ def about():
     """
     return render_template('about.html', containers=lxc.ls(), version=lwp.check_version())
 
-flash_message = {
-    'arch': 'lxc.arch',
-    'utsname': 'Hostname updated for {}!',
-    'type': 'Link type updated for {}!',
-    'link': 'Link name updated for {}!',
-    'flags': 'Network flag updated for {}',
-    'hwaddr': 'Hardware address updated for {}!',
-    'ipv4': 'IPv4 address updated for {}!',
-    'ipv4gw': 'IPv4 gateway address updated for {}!',
-    'ipv6': 'IPv6 address updated for {}!',
-    'ipv6gw': 'IPv6 gateway address updated for {}!',
-    'script_up': 'lxc.network.script.up',
-    'script_down': 'lxc.network.script.down',
-    'rootfs': 'Rootfs updated for {}!',
-    'memlimit': 'Memory limit updated for {}!',
-    'swlimit': 'Swap limit updated for {}!',
-    'cpus': 'CPUs updated for {}!',
-    'shares': 'CPU shares updated for {}!',
-    'deny': 'lxc.cgroup.devices.deny',
-    'allow': 'lxc.cgroup.devices.allow',
-    'loglevel': 'lxc.loglevel',
-    'logfile': 'lxc.logfile',
-    'auto': 'Autostart saved for {}',
-    'start_delay': 'lxc.start.delay',
+"""
+cgroup_ext is a data structure where for each input of edit.html we have an array with:
+    position 0: the lxc container option to be saved on file
+    position 1: the regex to validate the field
+    position 2: the flash message to display on success.
+"""
+ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
+
+cgroup_ext = {
+    'arch': ['lxc.arch', '^(x86|i686|x86_64|amd64)$', ''],
+    'utsname': ['lxc.utsname', '^[\w.-]+$', 'Hostname updated'],
+    'type': ['lxc.network.type', '^(none|empty|veth|vlan|macvlan|phys)$', 'Link network type updated'],
+    'link': ['lxc.network.link', '^[\w.-/]+$', 'Link name updated'],
+    'flags': ['lxc.network.flags', '^(up|down)$', 'Network flag updated'],
+    'hwaddr': ['lxc.network.hwaddr', '^[0-9a-fA-F:]+$', 'Hardware address updated'],
+    'ipv4': ['lxc.network.ipv4', ip_regex, 'IPv4 address updated'],
+    'ipv4gw': ['lxc.network.ipv4.gateway', ip_regex, 'IPv4 gateway address updated'],
+    'ipv6': ['lxc.network.ipv6', '^[0-9a-f:]+$', 'IPv6 address updated'], #weak ipv6 regex check
+    'ipv6gw': ['lxc.network.ipv6.gateway', '[0-9a-f:]+^$', 'IPv6 gateway address updated'],
+    'script_up': ['lxc.network.script.up', '^[\w.-/]+$', 'Network script down updated'],
+    'script_down': ['lxc.network.script.down', '^[\w.-/]+$', 'Network script down updated'],
+    'rootfs': ['lxc.rootfs', '^[\w.-/]+$', 'Rootfs updated'],
+    'memlimit': ['lxc.cgroup.memory.limit_in_bytes', '^[0-9]+$', 'Memory limit updated'],
+    'swlimit': ['lxc.cgroup.memory.memsw.limit_in_bytes', '^[0-9]+$', 'Swap limit updated'],
+    'cpus': ['lxc.cgroup.cpuset.cpus', '^[0-9,-]+$', 'CPUs updated'],
+    'shares': ['lxc.cgroup.cpu.shares', '^[0-9]+$', 'CPU shares updated'],
+    'deny': ['lxc.cgroup.devices.deny', '^$', '???'],
+    'allow': ['lxc.cgroup.devices.allow', '^$', '???'],
+    'loglevel': ['lxc.loglevel', '^[0-9]$', 'Log level updated'],
+    'logfile': ['lxc.logfile', '^[\w.-/]+$', 'Log file updated'],
+    'auto': ['lxc.start.auto', '^(0|1)$', 'Autostart saved'],
+    'start_delay': ['lxc.start.delay', '[0-9]+^$', 'Autostart delay option updated']
 }
 
 @mod.route('/<container>/edit', methods=['POST', 'GET'])
@@ -105,23 +113,34 @@ def edit(container=None):
     cfg = lwp.get_container_settings(container)
 
     if request.method == 'POST':
-        form = request.form
+        form = request.form.copy()
 
         if form['bucket'] != get_bucket_token(container):
             g.db.execute("INSERT INTO machine(machine_name, bucket_token) VALUES (?, ?)", [container, form['bucket']])
             g.db.commit()
-            flash(u'Bucket config for %s saved!' % container, 'success')
+            flash(u'Bucket config for %s saved' % container, 'success')
 
-        for options in form.keys():
-            if options in cfg.keys() and form[options] != cfg[options]:
-                # TODO support some form of validation
-                lwp.push_config_value(lwp.cgroup[options], form[options], container=container)
-                flash(flash_message[options].format(container), 'success')
+        #convert boolean in correct value for lxc
+        form['flags'] = 'up' if form['flags'] is True else 'down'
+        form['autostart'] = '1' if form['autostart'] is True else '0'
+
+        for option in form.keys():
+            #if the key is supported AND is different
+            if option in cfg.keys() and form[option] != cfg[option]:
+                # validate value with regex
+                if re.match(cgroup_ext[option][1], form[option]):
+                    lwp.push_config_value(cgroup_ext[option][0], form[option], container=container)
+                    flash(cgroup_ext[option][2], 'success')
+                else:
+                    flash('Cannot validate value for option {}. Unsaved!'.format(option), 'error')
+
+        # we should re-read container configuration now to be coherent with the newly saved values
+        cfg = lwp.get_container_settings(container)
+
 
     info = lxc.info(container)
-    status, pid = info['state'], info['pid']
+    infos = {'status': info['state'], 'pid': info['pid'], 'memusg': lwp.memory_usage(container)}
 
-    infos = {'status': status, 'pid': pid, 'memusg': lwp.memory_usage(container)}
     return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos)
 
 
