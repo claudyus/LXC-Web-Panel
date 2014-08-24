@@ -4,8 +4,8 @@
 
 <div class="container">
 	{% for line in CHANGELOG %}
-		{% if line.is_tag == True %}
-			<h4>{{ line.string}} - {{ line.date }}</h4>
+		{% if line.is_release == True %}
+			<h4>{{ line.string}} - {{ line.date }} (<a href="http://github.com/claudyus/LXC-Web-Panel/commit/{{ line.hash }}">link</a>)</h4>
 		{% else %}
 			<li><a href="http://github.com/claudyus/LXC-Web-Panel/commit/{{ line.hash }}">{{ line.hash }}</a> {{ line.string }}</li>
 		{% endif %}
