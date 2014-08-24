@@ -27,7 +27,7 @@
 				<label class="control-label" for="autostart">Start at boot</label>
 				<div class="controls">
 					<div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove icon-white'></i>" data-on="success" data-off="danger">
-						<input type="checkbox" id="autostart" name="autostart" value="True" {% if settings.auto %}checked {% endif %}/>
+						<input type="checkbox" id="autostart" name="autostart" value="True" {% if settings.autostart %}checked {% endif %}/>
 					</div>
 				</div>
 			</div>
@@ -35,33 +35,33 @@
 			<hr>
 
 			<div class="control-group switch-network-flags">
-				<label class="control-label" for="inputNetworkFlags">Network flag</label>
+				<label class="control-label" for="flags">Network flag</label>
 				<div class="controls">
 					<div class="switch" data-on-label="Up" data-off-label="Down" data-on="success" data-off="danger">
-						<input type="checkbox" id="inputNetworkFlags" name="flags" value="{{ settings.flags }}"{% if settings.flags == 'up'%} checked{% endif %}/>
+						<input type="checkbox" id="flags" name="flags" value="{{ settings.flags }}"{% if settings.flags == 'up'%} checked{% endif %}/>
 					</div>
 				</div>
 			</div>
 			
 			<div id="network"{% if settings.flags != 'up' %} class="hide"{% endif %}>
 				<div class="control-group">
-					<label class="control-label" for="inputType">Network type</label>
+					<label class="control-label" for="type">Network type</label>
 					<div class="controls">
-						<input pattern="\w+" type="text" id="inputType" name="type" value="{{ settings.type }}" placeholder="Undefined">
+						<input pattern="\w+" type="text" id="type" name="type" value="{{ settings.type }}" placeholder="Undefined">
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="inputLink">Network link</label>
+					<label class="control-label" for="link">Network link</label>
 					<div class="controls">
-						<input pattern="[a-zA-Z0-9_-]+" type="text" id="inputLink" name="link" value="{{ settings.link }}" placeholder="Undefined">
+						<input pattern="[a-zA-Z0-9_-]+" type="text" id="link" name="link" value="{{ settings.link }}" placeholder="Undefined">
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="inputHWaddress">HW address</label>
+					<label class="control-label" for="hwaddr">HW address</label>
 					<div class="controls">
-						<input pattern="([a-fA-F0-9]{2}[:|\-]?){6}" type="text" id="inputHWaddress" name="hwaddr" value="{{ settings.hwaddr }}" placeholder="Undefined">
+						<input pattern="([a-fA-F0-9]{2}[:|\-]?){6}" type="text" id="hwaddr" name="hwaddr" value="{{ settings.hwaddr }}" placeholder="Undefined">
 					</div>
 				</div>
 
@@ -112,9 +112,9 @@
 			<hr>
 
 			<div class="control-group form-inline">
-				<label class="control-label" for="sliderMemlimit">Memory limit *</label>
+				<label class="control-label" for="memlimit">Memory limit *</label>
 				<div class="controls">
-					<input class="fix-height" pattern="[0-9]+" type="range" id="sliderMemlimit" name="memlimit" min="16" max="{{ host_memory.total }}" step="2" value="{% if settings.memlimit %}{{ settings.memlimit }}{% else %}{{ host_memory.total }}{% endif %}" onChange="updateMemInput('inputMemlimit', this.value, {{ host_memory.total }});">		
+					<input class="fix-height" pattern="[0-9]+" type="range" id="memlimit" name="memlimit" min="16" max="{{ host_memory.total }}" step="2" value="{% if settings.memlimit %}{{ settings.memlimit }}{% else %}{{ host_memory.total }}{% endif %}" onChange="updateMemInput('inputMemlimit', this.value, {{ host_memory.total }});">
 					<input pattern="[0-9]+" class="input-mini{% if not settings.memlimit %} hide{% endif %}" id="inputMemlimit" type="number" min="16" step="2" max="{{ host_memory.total }}" value="{% if settings.memlimit %}{{ settings.memlimit }}{% endif %}" onChange="updateMemSlider('sliderMemlimit', this.value);"><span class="help-inline fix-height">{% if settings.memlimit %}MB{% else %}Unlimited{% endif %}</span>
 				</div>
 			</div>

@@ -33,7 +33,7 @@ cgroup = {
     'allow': 'lxc.cgroup.devices.allow',
     'loglevel': 'lxc.loglevel',
     'logfile': 'lxc.logfile',
-    'auto': 'lxc.start.auto',
+    'autostart': 'lxc.start.auto',
     'start_delay': 'lxc.start.delay',
 }
 
@@ -280,7 +280,7 @@ def get_container_settings(name):
         'shares': '',
         'loglevel': '',
         'logfile': '',
-        'auto': False,
+        'autostart': False,
         'start_delay': ''
     }
     config.readfp(FakeSection(open(filename)))
@@ -301,8 +301,9 @@ def get_container_settings(name):
     cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', cfg['memlimit'])
     cfg['swlimit'] = re.sub(r'[a-zA-Z]', '', cfg['swlimit'])
 
-    # parse auto to boolean
-    cfg['auto'] = True if cfg['auto'] is '1' else False
+    # convert internal lxc values to boolean
+    cfg['autostart'] = True if cfg['autostart'] is '1' else False
+    cfg['flags'] = True if cfg['flags'] is 'up' else False
 
     return cfg
 

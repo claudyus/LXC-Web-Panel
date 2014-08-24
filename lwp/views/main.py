@@ -86,7 +86,7 @@ cgroup_ext = {
     'hwaddr': ['lxc.network.hwaddr', '^[0-9a-fA-F:]+$', 'Hardware address updated'],
     'ipv4': ['lxc.network.ipv4', ip_regex, 'IPv4 address updated'],
     'ipv4gw': ['lxc.network.ipv4.gateway', ip_regex, 'IPv4 gateway address updated'],
-    'ipv6': ['lxc.network.ipv6', '^[0-9a-f:]+$', 'IPv6 address updated'], #weak ipv6 regex check
+    'ipv6': ['lxc.network.ipv6', '^[0-9a-f:]+$', 'IPv6 address updated'],  # weak ipv6 regex check
     'ipv6gw': ['lxc.network.ipv6.gateway', '[0-9a-f:]+^$', 'IPv6 gateway address updated'],
     'script_up': ['lxc.network.script.up', '^[\w.-/]+$', 'Network script down updated'],
     'script_down': ['lxc.network.script.down', '^[\w.-/]+$', 'Network script down updated'],
@@ -99,7 +99,7 @@ cgroup_ext = {
     'allow': ['lxc.cgroup.devices.allow', '^$', '???'],
     'loglevel': ['lxc.loglevel', '^[0-9]$', 'Log level updated'],
     'logfile': ['lxc.logfile', '^[\w.-/]+$', 'Log file updated'],
-    'auto': ['lxc.start.auto', '^(0|1)$', 'Autostart saved'],
+    'autostart': ['lxc.start.auto', '^(0|1)$', 'Autostart saved'],
     'start_delay': ['lxc.start.delay', '[0-9]+^$', 'Autostart delay option updated']
 }
 
@@ -120,9 +120,15 @@ def edit(container=None):
             g.db.commit()
             flash(u'Bucket config for %s saved' % container, 'success')
 
+        print (form)
+
         #convert boolean in correct value for lxc
-        form['flags'] = 'up' if form['flags'] is True else 'down'
-        form['autostart'] = '1' if form['autostart'] is True else '0'
+        if 'flags' in form.keys():
+            form['flags'] = 'up' if bool(form['flags']) is True else 'down'
+        if 'autostart' in form.keys():
+            form['autostart'] = '1' if bool(form['autostart']) is True else '0'
+
+        print  (form)
 
         for option in form.keys():
             #if the key is supported AND is different
@@ -136,6 +142,7 @@ def edit(container=None):
 
         # we should re-read container configuration now to be coherent with the newly saved values
         cfg = lwp.get_container_settings(container)
+        print (cfg)
 
 
     info = lxc.info(container)
