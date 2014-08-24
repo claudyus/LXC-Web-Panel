@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+    <nav>
+        <span class="prev">
+            {% if prevPost %}
+                <a href='{{ ROOT_URL }}/{{ prevPost.path }}'>
+                    &laquo; {{ prevPost.title }}
+                </a>
+            {% else %}
+                First post
+            {% endif %}
+        </span>
+
+        <span>
+            <a href="/">Home</a>
+        </span>
+
+        <span class="next">
+            {% if nextPost %}
+                <a href='{{ ROOT_URL }}/{{ nextPost.path }}'>
+                    {{ nextPost.title }} &raquo;
+                </a>
+            {% else %}
+                Last post
+            {% endif %}
+        </span>
+    </nav>
+    <article>
+        <header>
+            <h1>{{ title }}</h1>
+            <h5><time pubdate="pubdate">{{ date|date:"F j, Y" }}</time> by <span class="author">{{ author }}</address></h5>
+        </header>
+            {% block news %}{% endblock %}
+        <footer class="pull-right">
+            Thanks for reading.
+        </footer>
+    </article>
+</div>
+
+{% endblock %}

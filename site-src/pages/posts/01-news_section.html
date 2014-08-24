@@ -1,0 +1,12 @@
+title: Welcome News Section
+author: Claudio Mignanti
+date: 24-08-2014
+
+{% extends "post.html" %}
+{% block news %}
+
+{% load markup %}
+{% filter markdown %}
+#
+{% endfilter %}
+{% endblock %}

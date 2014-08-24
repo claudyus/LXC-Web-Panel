@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+    <ul>
+        {% for post in posts %}
+        <li>
+            <b><a href='{{ ROOT_URL }}/{{ post.path }}'>{{ post.title }}</a></b>
+            by {{ post.author }} at {{ post.date|date:"F j Y" }}<br>
+            {{ post.body|truncatewords_html:30}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
