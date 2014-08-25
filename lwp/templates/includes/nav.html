@@ -1,9 +1,34 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="brand" href="../">LXC Web Panel</a>
       <div class="nav-collapse collapse">
-        <p class="navbar-text pull-right">
+        <ul class="nav visible-phone">
+          {% if containers != [] %}
+            <li class="divider"></li>
+            <li class="nav-header">Containers</li>
+		    {% for c in containers %}
+		      <li{% if request.path=='/'+ c +'/edit' %} class="active"{% endif %}><a href="{{ url_for('main.edit',container=c) }}"><i class="icon-hdd icon-white"></i> {{c}}</a></li>
+		    {% endfor %}
+		  {% endif %}
+		  {% if session.su == 'Yes' %}
+            <li class="divider"></li>
+			<li class="nav-header">LXC Settings</li>
+			<li{% if request.path=="/settings/lxc-net" %} class="active"{% endif %}><a href="{{ url_for('main.lxc_net') }}"><i class="icon-globe icon-white"></i> Networking</a></li>
+			<li{% if request.path=="/lwp/tokens" %} class="active"{% endif %}><a href="{{ url_for('main.lwp_tokens') }}"><i class="icon-lock icon-white"></i> API tokens</a></li>
+			<li{% if request.path=="/checkconfig" %} class="active"{% endif %}><a href="{{ url_for('main.checkconfig') }}"><i class="icon-check icon-white"></i> Check config</a></li>
+		  {% endif %}
+          <li class="divider"></li>
+          <li class="nav-header">Users action</li>
+          <li><a href="{{ url_for('main.lwp_users') }}"><i class="icon-user icon-white"></i> Users</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout ({% if session.name and session.name != 'None' %}{{ session.name }}{% else %}{{ session.username }}{% endif %})</a></li>
+        </ul>
+        <p class="navbar-text pull-right hidden-phone">
           <a href="{{ url_for('auth.logout') }}" class="navbar-link">Logout ({% if session.name and session.name != 'None' %}{{ session.name }}{% else %}{{ session.username }}{% endif %})</a>
         </p>
       </div>

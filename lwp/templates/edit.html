@@ -137,7 +137,7 @@
 
 
 	</div>
-	<div class="span3">
+	<div class="span3 visible-desktop">
 		<ul class="nav nav-list">{% set span = {'RUNNING':'success','FROZEN':'info','STOPPED':'important'} %}
 			<li class="nav-header">Infos</li>
 			<li><strong>Status :</strong> <span class="label label-{{ span[infos.status] }}">{{ infos.status|capitalize }}</span></li>
@@ -161,7 +161,6 @@
 {%- endmacro %}
 
 {% block script %}
-	<script src="{{ url_for('static', filename='js/bootstrapSwitch.js') }}"></script>
 	<script type="text/javascript">
 		{% if infos['status'] != 'STOPPED' %}
 			function memory_color(value){
