@@ -53,11 +53,18 @@
 				</div>
 			</div>
 			
-			<div id="network"{% if settings.flags != 'up' %} class="hide"{% endif %}>
+			<div id="network"{% if not settings.flags %} class="hide"{% endif %}>
 				<div class="control-group">
 					<label class="control-label" for="type">Network type</label>
 					<div class="controls">
-						<input pattern="\w+" type="text" id="type" name="type" value="{{ settings.type }}" placeholder="Undefined">
+						<select pattern="\w+" type="text" id="type" name="type" value="{{ settings.type }}">
+                            <option value="none">none</option>
+                            <option value="empty">empty</option>
+                            <option value="veth">veth</option>
+                            <option value="vlan">vlan</option>
+                            <option value="macvlan">macvlan</option>
+                            <option value="phys">phys</option>
+                        </select>
 					</div>
 				</div>
 
