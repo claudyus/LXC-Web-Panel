@@ -8,7 +8,7 @@
 	{{ super() }}
 
 	<div class="hero-unit">
-        <div class="row">
+        <div class="row buttons">
             {% if session.su == 'Yes' %}
             <span class="pull-right"><a class="btn btn-small btn-danger" data-toggle="modal" data-target="#reboot"> <i class="icon-off icon-white"></i> Reboot</a></span>
             {% if containers != [] %}
