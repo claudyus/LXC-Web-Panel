@@ -69,6 +69,39 @@ def about():
     """
     return render_template('about.html', containers=lxc.ls(), version=lwp.check_version())
 
+"""
+cgroup_ext is a data structure where for each input of edit.html we have an array with:
+    position 0: the lxc container option to be saved on file
+    position 1: the regex to validate the field
+    position 2: the flash message to display on success.
+"""
+ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
+
+cgroup_ext = {
+    'arch': ['lxc.arch', '^(x86|i686|x86_64|amd64)$', ''],
+    'utsname': ['lxc.utsname', '^[\w.-]+$', 'Hostname updated'],
+    'type': ['lxc.network.type', '^(none|empty|veth|vlan|macvlan|phys)$', 'Link network type updated'],
+    'link': ['lxc.network.link', '^[\w.-/]+$', 'Link name updated'],
+    'flags': ['lxc.network.flags', '^(up|down)$', 'Network flag updated'],
+    'hwaddr': ['lxc.network.hwaddr', '^[0-9a-fA-F:]+$', 'Hardware address updated'],
+    'ipv4': ['lxc.network.ipv4', ip_regex, 'IPv4 address updated'],
+    'ipv4gw': ['lxc.network.ipv4.gateway', ip_regex, 'IPv4 gateway address updated'],
+    'ipv6': ['lxc.network.ipv6', '^[0-9a-f:]+$', 'IPv6 address updated'],  # weak ipv6 regex check
+    'ipv6gw': ['lxc.network.ipv6.gateway', '[0-9a-f:]+^$', 'IPv6 gateway address updated'],
+    'script_up': ['lxc.network.script.up', '^[\w.-/]+$', 'Network script down updated'],
+    'script_down': ['lxc.network.script.down', '^[\w.-/]+$', 'Network script down updated'],
+    'rootfs': ['lxc.rootfs', '^[\w.-/]+$', 'Rootfs updated'],
+    'memlimit': ['lxc.cgroup.memory.limit_in_bytes', '^[0-9]+$', 'Memory limit updated'],
+    'swlimit': ['lxc.cgroup.memory.memsw.limit_in_bytes', '^[0-9]+$', 'Swap limit updated'],
+    'cpus': ['lxc.cgroup.cpuset.cpus', '^[0-9,-]+$', 'CPUs updated'],
+    'shares': ['lxc.cgroup.cpu.shares', '^[0-9]+$', 'CPU shares updated'],
+    'deny': ['lxc.cgroup.devices.deny', '^$', '???'],
+    'allow': ['lxc.cgroup.devices.allow', '^$', '???'],
+    'loglevel': ['lxc.loglevel', '^[0-9]$', 'Log level updated'],
+    'logfile': ['lxc.logfile', '^[\w.-/]+$', 'Log file updated'],
+    'autostart': ['lxc.start.auto', '^(0|1)$', 'Autostart saved'],
+    'start_delay': ['lxc.start.delay', '[0-9]+^$', 'Autostart delay option updated']
+}
 
 @mod.route('/<container>/edit', methods=['POST', 'GET'])
 @if_logged_in()
@@ -78,125 +111,43 @@ def edit(container=None):
     """
     host_memory = lwp.host_memory_usage()
     cfg = lwp.get_container_settings(container)
-    # read config also from databases
-    cfg['bucket'] = get_bucket_token(container)
 
     if request.method == 'POST':
-        ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(/(3[0-2]|[12]?[0-9]))?'
-        info = lxc.info(container)
+        form = request.form.copy()
 
-        form = {
-            'type': request.form['type'],
-            'link': request.form['link'],
-            'hwaddr': request.form['hwaddress'],
-            'rootfs': request.form['rootfs'],
-            'utsname': request.form['hostname'],
-            'ipv4': request.form['ipaddress'],
-            'memlimit': request.form['memlimit'],
-            'swlimit': request.form['swlimit'],
-            'cpus': request.form['cpus'],
-            'shares': request.form['cpushares'],
-            'bucket': request.form['bucket']
-        }
-        try:
-            form['flags'] = request.form['flags']
-        except KeyError:
-            form['flags'] = 'down'
-        try:
-            form['autostart'] = request.form['autostart']
-        except KeyError:
-            form['autostart'] = False
-
-        if form['utsname'] != cfg['utsname'] and \
-                re.match('(?!^containers$)|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$', form['utsname']):
-            lwp.push_config_value('lxc.utsname', form['utsname'], container=container)
-            flash(u'Hostname updated for %s!' % container, 'success')
-
-        if form['flags'] != cfg['flags'] and re.match('^(up|down)$', form['flags']):
-            lwp.push_config_value('lxc.network.flags', form['flags'], container=container)
-            flash(u'Network flag updated for %s!' % container, 'success')
-
-        if form['type'] != cfg['type'] and re.match('^\w+$', form['type']):
-            lwp.push_config_value('lxc.network.type', form['type'], container=container)
-            flash(u'Link type updated for %s!' % container, 'success')
-
-        if form['link'] != cfg['link'] and re.match('^[a-zA-Z0-9_-]+$', form['link']):
-            lwp.push_config_value('lxc.network.link', form['link'], container=container)
-            flash(u'Link name updated for %s!' % container, 'success')
-
-        if form['hwaddr'] != cfg['hwaddr'] and re.match('^([a-fA-F0-9]{2}[:|\-]?){6}$', form['hwaddr']):
-            lwp.push_config_value('lxc.network.hwaddr', form['hwaddr'], container=container)
-            flash(u'Hardware address updated for %s!' % container, 'success')
-
-        if (not form['ipv4'] and form['ipv4'] != cfg['ipv4']) or \
-                (form['ipv4'] != cfg['ipv4'] and re.match('^%s$' % ip_regex, form['ipv4'])):
-            lwp.push_config_value('lxc.network.ipv4', form['ipv4'], container=container)
-            flash(u'IP address updated for %s!' % container, 'success')
-
-        if form['memlimit'] != cfg['memlimit'] and form['memlimit'].isdigit() and \
-                        int(form['memlimit']) <= int(host_memory['total']):
-            if int(form['memlimit']) == int(host_memory['total']):
-                form['memlimit'] = ''
-
-            if form['memlimit'] != cfg['memlimit']:
-                lwp.push_config_value('lxc.cgroup.memory.limit_in_bytes', form['memlimit'], container=container)
-                if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'memory.limit_in_bytes', form['memlimit'])
-                flash(u'Memory limit updated for %s!' % container, 'success')
-
-        if form['swlimit'] != cfg['swlimit'] and form['swlimit'].isdigit() and \
-                        int(form['swlimit']) <= int(host_memory['total'] * 2):
-            if int(form['swlimit']) == int(host_memory['total'] * 2):
-                form['swlimit'] = ''
-
-            if form['swlimit'].isdigit():
-                form['swlimit'] = int(form['swlimit'])
-
-            if form['memlimit'].isdigit():
-                form['memlimit'] = int(form['memlimit'])
-
-            if (form['memlimit'] == '' and form['swlimit'] != '') or \
-                    (form['memlimit'] > form['swlimit']):
-                flash(u'Can\'t assign swap memory lower than the memory limit', 'warning')
-
-            elif form['swlimit'] != cfg['swlimit'] and form['memlimit'] <= form['swlimit']:
-                lwp.push_config_value('lxc.cgroup.memory.memsw.limit_in_bytes', form['swlimit'], container=container)
-                if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'memory.memsw.limit_in_bytes', form['swlimit'])
-                flash(u'Swap limit updated for %s!' % container, 'success')
-
-        if (not form['cpus'] and form['cpus'] != cfg['cpus']) or \
-                (form['cpus'] != cfg['cpus'] and re.match('^[0-9,-]+$', form['cpus'])):
-            lwp.push_config_value('lxc.cgroup.cpuset.cpus', form['cpus'], container=container)
-            if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'cpuset.cpus', form['cpus'])
-            flash(u'CPUs updated for %s!' % container, 'success')
-
-        if (not form['shares'] and form['shares'] != cfg['shares']) or \
-                (form['shares'] != cfg['shares'] and re.match('^[0-9]+$', form['shares'])):
-            lwp.push_config_value('lxc.cgroup.cpu.shares', form['shares'], container=container)
-            if info["state"].lower() != 'stopped':
-                    lxc.cgroup(container, 'cpu.shares', form['shares'])
-            flash(u'CPU shares updated for %s!' % container, 'success')
-
-        if form['rootfs'] != cfg['rootfs'] and re.match('^[a-zA-Z0-9_/\-]+', form['rootfs']):
-            lwp.push_config_value('lxc.rootfs', form['rootfs'], container=container)
-            flash(u'Rootfs updated!' % container, 'success')
-
-        if bool(form['autostart']) != bool(cfg['auto']):
-            lwp.push_config_value('lxc.start.auto', 1 if form['autostart'] else 0, container=container)
-            flash(u'Autostart saved for %s' % container, 'success')
-
-        if form['bucket'] != cfg['bucket']:
+        if form['bucket'] != get_bucket_token(container):
             g.db.execute("INSERT INTO machine(machine_name, bucket_token) VALUES (?, ?)", [container, form['bucket']])
             g.db.commit()
-            flash(u'Bucket config for %s saved!' % container, 'success')
+            flash(u'Bucket config for %s saved' % container, 'success')
+
+        print (form)
+
+        #convert boolean in correct value for lxc
+        if 'flags' in form.keys():
+            form['flags'] = 'up' if bool(form['flags']) is True else 'down'
+        if 'autostart' in form.keys():
+            form['autostart'] = '1' if bool(form['autostart']) is True else '0'
+
+        print  (form)
+
+        for option in form.keys():
+            #if the key is supported AND is different
+            if option in cfg.keys() and form[option] != cfg[option]:
+                # validate value with regex
+                if re.match(cgroup_ext[option][1], form[option]):
+                    lwp.push_config_value(cgroup_ext[option][0], form[option], container=container)
+                    flash(cgroup_ext[option][2], 'success')
+                else:
+                    flash('Cannot validate value for option {}. Unsaved!'.format(option), 'error')
+
+        # we should re-read container configuration now to be coherent with the newly saved values
+        cfg = lwp.get_container_settings(container)
+        print (cfg)
+
 
     info = lxc.info(container)
-    status = info['state']
-    pid = info['pid']
+    infos = {'status': info['state'], 'pid': info['pid'], 'memusg': lwp.memory_usage(container)}
 
-    infos = {'status': status, 'pid': pid, 'memusg': lwp.memory_usage(container)}
     return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos)
 
 
