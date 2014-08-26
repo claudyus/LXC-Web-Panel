@@ -19,3 +19,6 @@ gh-pages
 *.egg-info
 dist
 build
+
+#Pycharm conf
+.idea/
