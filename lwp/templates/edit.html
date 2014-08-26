@@ -24,22 +24,32 @@
 			<hr>
 
 			<div class="control-group">
-				<label class="control-label" for="autostart">Start at boot</label>
+				<label class="control-label" for="start_auto">Start at boot</label>
 				<div class="controls">
-					<div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove icon-white'></i>" data-on="success" data-off="danger">
-						<input type="checkbox" id="autostart" name="autostart" value="True" {% if settings.autostart %}checked {% endif %}/>
-					</div>
+					<input type="checkbox" id="start_auto" name="start_auto" value="True" {% if settings.start_auto %}checked {% endif %}/>
 				</div>
 			</div>
+
+            <div class="control-group">
+                <label class="control-label" for="start_delay">Delay at boot time</label>
+                <div class="controls">
+                    <input pattern="^[0-9]+$" type="number" id="start_delay" name="start_delay" value="{{ settings.start_delay }}" placeholder="Undefined">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="start_order">Start order</label>
+                <div class="controls">
+                    <input pattern="^[0-9]+$" type="number" id="start_order" name="start_order" value="{{ settings.start_order }}" placeholder="Undefined">
+                </div>
+            </div>
 
 			<hr>
 
 			<div class="control-group switch-network-flags">
 				<label class="control-label" for="flags">Network flag</label>
 				<div class="controls">
-					<div class="switch" data-on-label="Up" data-off-label="Down" data-on="success" data-off="danger">
-						<input type="checkbox" id="flags" name="flags" value="{{ settings.flags }}"{% if settings.flags == 'up'%} checked{% endif %}/>
-					</div>
+					<input type="checkbox" id="flags" name="flags" value="{{ settings.flags }}"{% if settings.flags %} checked{% endif %}/>
 				</div>
 			</div>
 			

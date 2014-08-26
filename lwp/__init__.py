@@ -10,32 +10,7 @@ import ConfigParser
 from lwp.exceptions import ContainerNotExists, LxcConfigFileNotComplete
 from lwp.lxclite import exists, stopped
 from lwp.lxclite import lxcdir
-
-cgroup = {
-    'arch': 'lxc.arch',
-    'utsname': 'lxc.utsname',
-    'type': 'lxc.network.type',
-    'link': 'lxc.network.link',
-    'flags': 'lxc.network.flags',
-    'hwaddr': 'lxc.network.hwaddr',
-    'ipv4': 'lxc.network.ipv4',
-    'ipv4gw': 'lxc.network.ipv4.gateway',
-    'ipv6': 'lxc.network.ipv6',
-    'ipv6gw': 'lxc.network.ipv6.gateway',
-    'script_up': 'lxc.network.script.up',
-    'script_down': 'lxc.network.script.down',
-    'rootfs': 'lxc.rootfs',
-    'memlimit': 'lxc.cgroup.memory.limit_in_bytes',
-    'swlimit': 'lxc.cgroup.memory.memsw.limit_in_bytes',
-    'cpus': 'lxc.cgroup.cpuset.cpus',
-    'shares': 'lxc.cgroup.cpu.shares',
-    'deny': 'lxc.cgroup.devices.deny',
-    'allow': 'lxc.cgroup.devices.allow',
-    'loglevel': 'lxc.loglevel',
-    'logfile': 'lxc.logfile',
-    'autostart': 'lxc.start.auto',
-    'start_delay': 'lxc.start.delay',
-}
+from lwp.utils import cgroup_ext
 
 
 class FakeSection(object):
@@ -260,37 +235,18 @@ def get_container_settings(name):
     if not file_exist(filename):
         return False
     config = ConfigParser.SafeConfigParser()
-    cfg = {
-        'arch': '',
-        'utsname': '',
-        'type': '',
-        'link': '',
-        'flags': '',
-        'hwaddr': '',
-        'ipv4': '',
-        'ipv4gw': '',
-        'ipv6': '',
-        'ipv6gw': '',
-        'script_up': '',
-        'script_down': '',
-        'rootfs': '',
-        'memlimit': '',
-        'swlimit': '',
-        'cpus': '',
-        'shares': '',
-        'loglevel': '',
-        'logfile': '',
-        'autostart': False,
-        'start_delay': ''
-    }
     config.readfp(FakeSection(open(filename)))
 
-    for options in cfg.keys():
-        if config.has_option('DEFAULT', cgroup[options]):
-            cfg[options] = config.get('DEFAULT', cgroup[options])
+    cfg = {}
+    # for each key in cgroup_ext add value to cfg dict and initialize values
+    for options in cgroup_ext.keys():
+        if config.has_option('DEFAULT', cgroup_ext[options][0]):
+            cfg[options] = config.get('DEFAULT', cgroup_ext[options][0])
+        else:
+            cfg[options] = ''  # add the key in dictionary anyway to match form
 
     # if ipv4 is unset try to determinate it
-    if cfg['ipv4'] == '':
+    if 'ipv4' not in cfg:
         cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'^%s \'|egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
@@ -302,8 +258,8 @@ def get_container_settings(name):
     cfg['swlimit'] = re.sub(r'[a-zA-Z]', '', cfg['swlimit'])
 
     # convert internal lxc values to boolean
-    cfg['autostart'] = True if cfg['autostart'] is '1' else False
-    cfg['flags'] = True if cfg['flags'] is 'up' else False
+    cfg['start_auto'] = True if cfg['start_auto'] is '1' else False
+    cfg['flags'] = True if cfg['flags'] == 'up' else False
 
     return cfg
 
@@ -374,15 +330,15 @@ def push_config_value(key, value, container=None):
         config.readfp(FakeSection(open(filename)))
         if not value:
             config.remove_option('DEFAULT', key)
-        elif key == cgroup['memlimit'] or key == cgroup['swlimit'] and value is not False:
+        elif key == cgroup_ext['memlimit'][0] or key == cgroup_ext['swlimit'][0] and value is not False:
             config.set('DEFAULT', key, '%sM' % value)
         else:
             config.set('DEFAULT', key, value)
 
         # Bugfix (can't duplicate keys with config parser)
-        if config.has_option('DEFAULT', cgroup['deny']) or config.has_option('DEFAULT', cgroup['allow']):
-            config.remove_option('DEFAULT', cgroup['deny'])
-            config.remove_option('DEFAULT', cgroup['allow'])
+        if config.has_option('DEFAULT', cgroup_ext['deny'][0]) or config.has_option('DEFAULT', cgroup_ext['allow'][0]):
+            config.remove_option('DEFAULT', cgroup_ext['deny'][0])
+            config.remove_option('DEFAULT', cgroup_ext['allow'][0])
 
         with open(filename, 'wb') as configfile:
             config.write(configfile)

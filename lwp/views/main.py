@@ -11,7 +11,7 @@ from flask import Blueprint, request, session, g, redirect, url_for, abort, rend
 
 import lwp
 import lwp.lxclite as lxc
-from lwp.utils import query_db, if_logged_in, get_bucket_token, hash_passwd, config
+from lwp.utils import query_db, if_logged_in, get_bucket_token, hash_passwd, config, cgroup_ext
 from lwp.views.auth import AUTH
 
 # TODO: see if we can move this block somewhere better
@@ -69,39 +69,6 @@ def about():
     """
     return render_template('about.html', containers=lxc.ls(), version=lwp.check_version())
 
-"""
-cgroup_ext is a data structure where for each input of edit.html we have an array with:
-    position 0: the lxc container option to be saved on file
-    position 1: the regex to validate the field
-    position 2: the flash message to display on success.
-"""
-ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
-
-cgroup_ext = {
-    'arch': ['lxc.arch', '^(x86|i686|x86_64|amd64)$', ''],
-    'utsname': ['lxc.utsname', '^[\w.-]+$', 'Hostname updated'],
-    'type': ['lxc.network.type', '^(none|empty|veth|vlan|macvlan|phys)$', 'Link network type updated'],
-    'link': ['lxc.network.link', '^[\w.-/]+$', 'Link name updated'],
-    'flags': ['lxc.network.flags', '^(up|down)$', 'Network flag updated'],
-    'hwaddr': ['lxc.network.hwaddr', '^[0-9a-fA-F:]+$', 'Hardware address updated'],
-    'ipv4': ['lxc.network.ipv4', ip_regex, 'IPv4 address updated'],
-    'ipv4gw': ['lxc.network.ipv4.gateway', ip_regex, 'IPv4 gateway address updated'],
-    'ipv6': ['lxc.network.ipv6', '^[0-9a-f:]+$', 'IPv6 address updated'],  # weak ipv6 regex check
-    'ipv6gw': ['lxc.network.ipv6.gateway', '[0-9a-f:]+^$', 'IPv6 gateway address updated'],
-    'script_up': ['lxc.network.script.up', '^[\w.-/]+$', 'Network script down updated'],
-    'script_down': ['lxc.network.script.down', '^[\w.-/]+$', 'Network script down updated'],
-    'rootfs': ['lxc.rootfs', '^[\w.-/]+$', 'Rootfs updated'],
-    'memlimit': ['lxc.cgroup.memory.limit_in_bytes', '^[0-9]+$', 'Memory limit updated'],
-    'swlimit': ['lxc.cgroup.memory.memsw.limit_in_bytes', '^[0-9]+$', 'Swap limit updated'],
-    'cpus': ['lxc.cgroup.cpuset.cpus', '^[0-9,-]+$', 'CPUs updated'],
-    'shares': ['lxc.cgroup.cpu.shares', '^[0-9]+$', 'CPU shares updated'],
-    'deny': ['lxc.cgroup.devices.deny', '^$', '???'],
-    'allow': ['lxc.cgroup.devices.allow', '^$', '???'],
-    'loglevel': ['lxc.loglevel', '^[0-9]$', 'Log level updated'],
-    'logfile': ['lxc.logfile', '^[\w.-/]+$', 'Log file updated'],
-    'autostart': ['lxc.start.auto', '^(0|1)$', 'Autostart saved'],
-    'start_delay': ['lxc.start.delay', '[0-9]+^$', 'Autostart delay option updated']
-}
 
 @mod.route('/<container>/edit', methods=['POST', 'GET'])
 @if_logged_in()
@@ -120,15 +87,11 @@ def edit(container=None):
             g.db.commit()
             flash(u'Bucket config for %s saved' % container, 'success')
 
-        print (form)
-
         #convert boolean in correct value for lxc
         if 'flags' in form.keys():
             form['flags'] = 'up' if bool(form['flags']) is True else 'down'
-        if 'autostart' in form.keys():
-            form['autostart'] = '1' if bool(form['autostart']) is True else '0'
-
-        print  (form)
+        if 'start_auto' in form.keys():
+            form['start_auto'] = '1' if bool(form['start_auto']) is True else '0'
 
         for option in form.keys():
             #if the key is supported AND is different
@@ -142,8 +105,6 @@ def edit(container=None):
 
         # we should re-read container configuration now to be coherent with the newly saved values
         cfg = lwp.get_container_settings(container)
-        print (cfg)
-
 
     info = lxc.info(container)
     infos = {'status': info['state'], 'pid': info['pid'], 'memusg': lwp.memory_usage(container)}
