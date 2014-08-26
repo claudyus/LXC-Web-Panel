@@ -51,6 +51,12 @@ app.register_blueprint(auth.mod)
 app.register_blueprint(api.mod)
 
 
+if '--profiling' in sys.argv[1:]:
+    from werkzeug.contrib.profiler import ProfilerMiddleware
+    app.config['PROFILE'] = True
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
+    app.debug = True  # also enable debug
+
 @app.before_request
 def before_request():
     """
