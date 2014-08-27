@@ -114,7 +114,8 @@ def ls():
     try:
         lsdir = os.listdir(lxc_dir)
         for i in lsdir:
-            if os.path.isdir('{}/{}'.format(lxc_dir, i)):
+            # ensure that we have a valid path and config file
+            if os.path.isdir('{}/{}'.format(lxc_dir, i)) and os.path.isfile(('{}/{}/config'.format(lxc_dir, i))):
                 ct_list.append(i)
     except OSError:
         ct_list = []
