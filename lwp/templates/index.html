@@ -5,9 +5,9 @@
 {% block title %}Overview{% endblock %}
 {% block content %}
 <div class="span9">
-	{{ super() }}
+    {{ super() }}
 
-	<div class="hero-unit">
+    <div class="hero-unit">
         <div class="row buttons">
             {% if session.su == 'Yes' %}
             <span class="pull-right"><a class="btn btn-small btn-danger" data-toggle="modal" data-target="#reboot"> <i class="icon-off icon-white"></i> Reboot</a></span>
@@ -20,199 +20,199 @@
             <span class="pull-right"><a class="btn btn-small btn-success" data-toggle="modal" data-target="#createCT"><i class="icon-plus-sign icon-white"></i> Create <abbr title="Container">CT</abbr></a></span>
             {% endif %}
         </div>
-		<div class="row">
+        <div class="row">
             <h3 style="margin-left: 10px">{{ dist }} ({{ host }})</h3>
-			<div class="span4">
-				<p>CPU usage : <span id="cpu-usage" class="hide"></span></p>
-				<div class="progress">
-					<div class="bar" id="cpu-usage-bar"></div>
-				</div>
-				<p>Memory usage : <span id="memory-usage" class="hide"></span></p>
-				<div class="progress">
-					<div class="bar" id="memory-usage-bar"></div>
-					<abbr title="Cached memory"><div class="bar bar-success" id="memory-cache-usage-bar"></div></abbr>
-				</div>
-			</div>
-			<div class="span4">
-				<p>Disk usage : <span id="disk-usage" class="hide"></span></p>
-				<div class="progress">
-					<div class="bar" id="disk-usage-bar"></div>
-				</div>
-				<p>Uptime : <span id="uptime" class="hide"></span></p>
-			</div>
-		</div>
-	</div>
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th class="hidden-phone">Status</th>
-				<th>Name</th>
-				<th class="hidden-phone">Hostname</th>
-				<th>IP Address</th>
-				<th>Mem. usage</th>
-				<th>Actions</th>
-			</tr>
-		</thead>	
-		{% for status in containers_all %}
-			<tbody>
-				{% for container in status.containers %}
-					<tr class="{{ tr[status.status] }}">
-						{% if loop.first %}<td rowspan="{{ status.containers|count }}" class="hidden-phone"><span class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</span></td>{% endif %}
-						<td><a href="{{ url_for('main.edit',container=container.name) }}" title="Click to edit {{container.name}}">{{container.name}}</a></td>
-						<td class="hidden-phone">{{container.settings.utsname}}</td>
-						<td>{% if container.settings.flags == 'up' %}{% if container.settings.ipv4 != '' %}{{container.settings.ipv4}}{% else %}{% if container.ipv4 %}{{ container.ipv4 }}{% else %}Undefined{% endif %}{% endif %}{% elif container.settings.flags == 'down' %}Link Down{% endif %}</td>
-						<td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
-						<td>
-							<div class="btn-toolbar" style="margin:8px 0;">
-								<div class="btn-group">
-									{% set start_action = {'stopped':'start','frozen':'unfreeze'} %}
-									<a class="btn btn-small{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action=start_action[status.status]) }}"{% endif %}><i class="icon-play"></i> Start</a>
-									<a class="btn btn-small{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action='stop') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
-									<a class="btn btn-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %} hidden-phone"{% if status.status == 'running' %} href="{{ url_for('main.action', name=container.name, action='freeze') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
-								</div>
-								{% if session.su == 'Yes' and status.status == 'stopped' %}<a class="pull-right close destroy" data-container-name="{{container.name}}" style="margin-top:4px;"><i class="icon-remove-sign"></i></a>{% endif %}
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		{% endfor %}
-	</table>
+            <div class="span4">
+                <p>CPU usage : <span id="cpu-usage" class="hide"></span></p>
+                <div class="progress">
+                    <div class="bar" id="cpu-usage-bar"></div>
+                </div>
+                <p>Memory usage : <span id="memory-usage" class="hide"></span></p>
+                <div class="progress">
+                    <div class="bar" id="memory-usage-bar"></div>
+                    <abbr title="Cached memory"><div class="bar bar-success" id="memory-cache-usage-bar"></div></abbr>
+                </div>
+            </div>
+            <div class="span4">
+                <p>Disk usage : <span id="disk-usage" class="hide"></span></p>
+                <div class="progress">
+                    <div class="bar" id="disk-usage-bar"></div>
+                </div>
+                <p>Uptime : <span id="uptime" class="hide"></span></p>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="hidden-phone">Status</th>
+                <th>Name</th>
+                <th class="hidden-phone">Hostname</th>
+                <th>IP Address</th>
+                <th>Mem. usage</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        {% for status in containers_all %}
+            <tbody>
+                {% for container in status.containers %}
+                    <tr class="{{ tr[status.status] }}">
+                        {% if loop.first %}<td rowspan="{{ status.containers|count }}" class="hidden-phone"><span class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</span></td>{% endif %}
+                        <td><a href="{{ url_for('main.edit',container=container.name) }}" title="Click to edit {{container.name}}">{{container.name}}</a></td>
+                        <td class="hidden-phone">{{container.settings.utsname}}</td>
+                        <td>{% if container.settings.flags == 'up' %}{% if container.settings.ipv4 != '' %}{{container.settings.ipv4}}{% else %}{% if container.ipv4 %}{{ container.ipv4 }}{% else %}Undefined{% endif %}{% endif %}{% elif container.settings.flags == 'down' %}Link Down{% endif %}</td>
+                        <td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
+                        <td>
+                            <div class="btn-toolbar" style="margin:8px 0;">
+                                <div class="btn-group">
+                                    {% set start_action = {'stopped':'start','frozen':'unfreeze'} %}
+                                    <a class="btn btn-small{% if status.status == 'running' %} disabled{% endif %}"{% if status.status == 'stopped' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action=start_action[status.status]) }}"{% endif %}><i class="icon-play"></i> Start</a>
+                                    <a class="btn btn-small{% if status.status == 'stopped' %} disabled{% endif %}"{% if status.status == 'running' or status.status == 'frozen' %} href="{{ url_for('main.action', name=container.name, action='stop') }}"{% endif %}><i class="icon-stop"></i> Stop</a>
+                                    <a class="btn btn-small{% if status.status == 'frozen' or status.status == 'stopped' %} disabled{% endif %} hidden-phone"{% if status.status == 'running' %} href="{{ url_for('main.action', name=container.name, action='freeze') }}"{% endif %}><i class="icon-pause"></i> Freeze</a>
+                                </div>
+                                {% if session.su == 'Yes' and status.status == 'stopped' %}<a class="pull-right close destroy" data-container-name="{{container.name}}" style="margin-top:4px;"><i class="icon-remove-sign"></i></a>{% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endfor %}
+    </table>
 </div>
 {% if session.su == 'Yes' %}
-	{% include "includes/modal_reboot.html" %}
-	{% include "includes/modal_create.html" %}
+    {% include "includes/modal_reboot.html" %}
+    {% include "includes/modal_create.html" %}
 
-	{% if containers != [] %}
-		{% include "includes/modal_clone.html" %}
-		{% include "includes/modal_backup.html" %}
-		{% include "includes/modal_destroy.html" %}
-	{% endif %}
+    {% if containers != [] %}
+        {% include "includes/modal_clone.html" %}
+        {% include "includes/modal_backup.html" %}
+        {% include "includes/modal_destroy.html" %}
+    {% endif %}
 {% endif %}
 
 {% endblock %}
 
 {% macro memory_color(value) -%}{% if value != 0 %}{% if 0 <= value <= 511 %}success{% elif 512 <= value < 980 %}warning{% else %}important{% endif %}{% endif %}{%- endmacro %}
 {% macro render_memory_wrapper(value, limit) -%}
-	{% if value != 0 %}<span class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</span>{% endif %}
+    {% if value != 0 %}<span class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</span>{% endif %}
 {%- endmacro %}
 
 {% block script %}
 <script type="text/javascript">
-			function refreshMemoryHost(){
-				$.getJSON('/_refresh_memory_host', function(data) {
-					$('#memory-usage').text(data.used +' / '+ data.total +' MB').fadeIn();
-					$('#memory-usage-bar').css({'width':data.percent+'%'});
-					$('#memory-cache-usage-bar').css({'width':data.percent_cached+'%'});
-				});
-			}
+            function refreshMemoryHost(){
+                $.getJSON('/_refresh_memory_host', function(data) {
+                    $('#memory-usage').text(data.used +' / '+ data.total +' MB').fadeIn();
+                    $('#memory-usage-bar').css({'width':data.percent+'%'});
+                    $('#memory-cache-usage-bar').css({'width':data.percent_cached+'%'});
+                });
+            }
 
-			function refreshCPUHost(){
-				$.get('/_refresh_cpu_host', function(data) {
-					$('#cpu-usage').text(data +'%').fadeIn();
-					$('#cpu-usage-bar').css({'width':data +'%'});
-				});
-			}
+            function refreshCPUHost(){
+                $.get('/_refresh_cpu_host', function(data) {
+                    $('#cpu-usage').text(data +'%').fadeIn();
+                    $('#cpu-usage-bar').css({'width':data +'%'});
+                });
+            }
 
-			function refreshDiskHost(){
-				$.getJSON('/_refresh_disk_host', function(data) {
-					$('#disk-usage').text(data.used +' ('+ data.free +' free)').fadeIn();
-					$('#disk-usage-bar').css({'width':data.percent});
-				});
-			}
+            function refreshDiskHost(){
+                $.getJSON('/_refresh_disk_host', function(data) {
+                    $('#disk-usage').text(data.used +' ('+ data.free +' free)').fadeIn();
+                    $('#disk-usage-bar').css({'width':data.percent});
+                });
+            }
 
-			function refreshUptimeHost(){
-				$.getJSON('/_refresh_uptime_host', function(data) {
-					$('#uptime').text(data.day +' day(s) '+ data.time).fadeIn();
-				});
-			}
+            function refreshUptimeHost(){
+                $.getJSON('/_refresh_uptime_host', function(data) {
+                    $('#uptime').text(data.day +' day(s) '+ data.time).fadeIn();
+                });
+            }
 
-			function refreshMemoryContainers(){
-				$.getJSON('/_refresh_memory_containers', function(data) {
-					data = data.data;
-					for (i in data) {
-						var el = $('#'+data[i].name+' span');
-						if (data[i].settings.memlimit == '') {
-							el.text(data[i].memusg + ' MB');
-						} else {
-							el.text(data[i].memusg + " / " + data[i].settings.memlimit + ' MB');
-						}
-						el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg));
-					}
-				});
-			}
+            function refreshMemoryContainers(){
+                $.getJSON('/_refresh_memory_containers', function(data) {
+                    data = data.data;
+                    for (i in data) {
+                        var el = $('#'+data[i].name+' span');
+                        if (data[i].settings.memlimit == '') {
+                            el.text(data[i].memusg + ' MB');
+                        } else {
+                            el.text(data[i].memusg + " / " + data[i].settings.memlimit + ' MB');
+                        }
+                        el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg));
+                    }
+                });
+            }
 
-			function memory_color(value){
-				if(value != 0)
-					if ('0' <= value && value <= '512')
-						 return 'success';
-					else if ('512' <= value && value < '1024')
-						return 'warning';
-					else
-						return 'important';
-			}
+            function memory_color(value){
+                if(value != 0)
+                    if ('0' <= value && value <= '512')
+                         return 'success';
+                    else if ('512' <= value && value < '1024')
+                        return 'warning';
+                    else
+                        return 'important';
+            }
 
-			function refresh(){
-				$('#home-load').fadeIn();
-				refreshMemoryHost();
-				refreshCPUHost();
-				refreshDiskHost();
-				refreshUptimeHost();
-				refreshMemoryContainers();
-				$('#home-load').fadeOut();
-			}
+            function refresh(){
+                $('#home-load').fadeIn();
+                refreshMemoryHost();
+                refreshCPUHost();
+                refreshDiskHost();
+                refreshUptimeHost();
+                refreshMemoryContainers();
+                $('#home-load').fadeOut();
+            }
 
-			$(function() {
-				refresh();
-				{% if session.su == 'Yes' and containers == [] %}$('#createCT').modal('show'){% endif %}
-				window.setInterval('refresh()', 15000);
-			});
+            $(function() {
+                refresh();
+                {% if session.su == 'Yes' and containers == [] %}$('#createCT').modal('show'){% endif %}
+                window.setInterval('refresh()', 15000);
+            });
 
-			{% if session.su == 'Yes' %}$(document).ready(function(){
+            {% if session.su == 'Yes' %}$(document).ready(function(){
 
-				$(".destroy").on('click',function(e){
-					$(".destroy-link").attr('href',"{{url_for('main.action', action='destroy') }}" + "&name=" + $(this).data('container-name'));
-					$('.modal-body #destroy-container-name').text($(this).data('container-name'));
-					$('#destroy').modal('show');
-				});
+                $(".destroy").on('click',function(e){
+                    $(".destroy-link").attr('href',"{{url_for('main.action', action='destroy') }}" + "&name=" + $(this).data('container-name'));
+                    $('.modal-body #destroy-container-name').text($(this).data('container-name'));
+                    $('#destroy').modal('show');
+                });
 
-				// Create CT
-				$('#advancedcreate').click(function(e){ e.preventDefault(); $('#advancedcreatediv').slideToggle(); });
+                // Create CT
+                $('#advancedcreate').click(function(e){ e.preventDefault(); $('#advancedcreatediv').slideToggle(); });
 
-				// Clone CT
-				$('#advancedclone').click(function(e){ e.preventDefault(); $('#advancedclonediv').slideToggle(); });
+                // Clone CT
+                $('#advancedclone').click(function(e){ e.preventDefault(); $('#advancedclonediv').slideToggle(); });
 
-				$(".backingstore").on('change',function(){
-						var _val = $(this).val();
-						var _lvm = $(this).closest('.advanced-wrapper').find('.lvm');
-						var _zfs = $(this).closest('.advanced-wrapper').find('.zfs');
-						var _directory = $(this).closest('.advanced-wrapper').find('.directory');
-						
-						if( _val == 'lvm'){
-							_lvm.slideDown();
-							_directory.slideUp();
-							_zfs.slideUp();
-						}
-						else if ( _val == 'directory' ){
-							_directory.slideDown();
-							_lvm.slideUp();
-							_zfs.slideUp();
-						}
-						else if ( _val == 'zfs'){
-							_zfs.slideDown();
-							_lvm.slideUp();
-							_directory.slideUp();
-						}
-						else{
-							_directory.slideUp();
-							_lvm.slideUp();
-						}
-					});
+                $(".backingstore").on('change',function(){
+                        var _val = $(this).val();
+                        var _lvm = $(this).closest('.advanced-wrapper').find('.lvm');
+                        var _zfs = $(this).closest('.advanced-wrapper').find('.zfs');
+                        var _directory = $(this).closest('.advanced-wrapper').find('.directory');
 
-					$('.modalbutton').on('click', function () {
-						$('.buttons-modal-footer').slideUp()
-						$('.loader-modal-footer').slideDown()
-					})
-			});{% endif %}
+                        if( _val == 'lvm'){
+                            _lvm.slideDown();
+                            _directory.slideUp();
+                            _zfs.slideUp();
+                        }
+                        else if ( _val == 'directory' ){
+                            _directory.slideDown();
+                            _lvm.slideUp();
+                            _zfs.slideUp();
+                        }
+                        else if ( _val == 'zfs'){
+                            _zfs.slideDown();
+                            _lvm.slideUp();
+                            _directory.slideUp();
+                        }
+                        else{
+                            _directory.slideUp();
+                            _lvm.slideUp();
+                        }
+                    });
+
+                    $('.modalbutton').on('click', function () {
+                        $('.buttons-modal-footer').slideUp()
+                        $('.loader-modal-footer').slideDown()
+                    })
+            });{% endif %}
 </script>
 {% endblock %}

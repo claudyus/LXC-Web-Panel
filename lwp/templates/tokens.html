@@ -2,46 +2,46 @@
 {% block title %}Token management{% endblock %}
 {% block content %}
 <div class="span7">
-	{{ super() }}
-	<p>On this page you can review, add and revoke API tokens.</p>
-	<table class="table table-hover">
-		<thead>
-	    <tr>
-	      <th>Token</th>
-	      <th>Description</th>
-	      <th>Authorized by</th>
-	      <th></th>
-	    </tr>
-	  </thead>
-	  <tbody>
-		{% for token in tokens %}
-	  	<tr>
-	  		<td>{{ token.token }}</td>
-	  		<td>{{ token.description }}</td>
-	  		<td>{{ token.username }} </td>
-	  		<td><a href="{{ url_for('main.lwp_tokens') }}?action=del&token={{ token.token }}"><i class="icon-remove-circle"></i></a></td>
-	  	</tr>
-		{% endfor %}
-	  </tbody>
-	</table>
+    {{ super() }}
+    <p>On this page you can review, add and revoke API tokens.</p>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Token</th>
+            <th>Description</th>
+            <th>Authorized by</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for token in tokens %}
+        <tr>
+            <td>{{ token.token }}</td>
+            <td>{{ token.description }}</td>
+            <td>{{ token.username }} </td>
+            <td><a href="{{ url_for('main.lwp_tokens') }}?action=del&token={{ token.token }}"><i class="icon-remove-circle"></i></a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-	<form class="form-inline" action="{{ url_for('main.lwp_tokens') }}" method="post">
-	  <input type="text" id="token" name="token" class="input-medium" placeholder="token">
-	  <button id="generate" class="btn"><i class="icon-refresh"></i></button>
-	  <input type="text" name="description" class="input-large" placeholder="description">
-	  <input type="hidden" name="action" value="add">
-	  <button type="submit" class="btn btn-success">Add token</button>
-	</form>
+    <form class="form-inline" action="{{ url_for('main.lwp_tokens') }}" method="post">
+        <input type="text" id="token" name="token" class="input-medium" placeholder="token">
+        <button id="generate" class="btn"><i class="icon-refresh"></i></button>
+        <input type="text" name="description" class="input-large" placeholder="description">
+        <input type="hidden" name="action" value="add">
+        <button type="submit" class="btn btn-success">Add token</button>
+    </form>
 
 </div>
 {% endblock %}
 {% block script %}
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$('#generate').on('click', function(event) {
-				event.preventDefault();
-				$('#token').val( Math.random().toString(36).substring(7));
-			})
-		});
-	</script>
+<script type="text/javascript">
+        $(document).ready(function(){
+            $('#generate').on('click', function(event) {
+                event.preventDefault();
+                $('#token').val( Math.random().toString(36).substring(7));
+            })
+        });
+    </script>
 {% endblock %}
