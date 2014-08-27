@@ -310,7 +310,7 @@ def lwp_tokens():
         flash(u'Token %s successfully deleted!' % token, 'success')
 
     tokens = query_db("SELECT description, token, username FROM api_tokens ORDER BY token DESC")
-    return render_template('tokens.html', tokens=tokens)
+    return render_template('tokens.html', containers=lxc.ls(), tokens=tokens)
 
 
 @mod.route('/checkconfig')
