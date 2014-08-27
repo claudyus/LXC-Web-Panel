@@ -104,26 +104,8 @@
                     $('#memory-usage').text(data.used +' / '+ data.total +' MB').fadeIn();
                     $('#memory-usage-bar').css({'width':data.percent+'%'});
                     $('#memory-cache-usage-bar').css({'width':data.percent_cached+'%'});
-                });
-            }
 
-            function refreshCPUHost(){
-                $.get('/_refresh_cpu_host', function(data) {
-                    $('#cpu-usage').text(data +'%').fadeIn();
-                    $('#cpu-usage-bar').css({'width':data +'%'});
-                });
-            }
-
-            function refreshDiskHost(){
-                $.getJSON('/_refresh_disk_host', function(data) {
-                    $('#disk-usage').text(data.used +' ('+ data.free +' free)').fadeIn();
-                    $('#disk-usage-bar').css({'width':data.percent});
-                });
-            }
-
-            function refreshUptimeHost(){
-                $.getJSON('/_refresh_uptime_host', function(data) {
-                    $('#uptime').text(data.day +' day(s) '+ data.time).fadeIn();
+                    refreshMemoryContainers()
                 });
             }
 
@@ -140,6 +122,8 @@
                         el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg));
                     }
                 });
+
+                $('#home-load').fadeOut();
             }
 
             function memory_color(value){
@@ -154,12 +138,19 @@
 
             function refresh(){
                 $('#home-load').fadeIn();
-                refreshMemoryHost();
-                refreshCPUHost();
-                refreshDiskHost();
-                refreshUptimeHost();
-                refreshMemoryContainers();
-                $('#home-load').fadeOut();
+
+                $.getJSON('/_refresh_info', function(data) {
+                    console.log(data);
+                    $('#uptime').text(data.uptime.day +' day(s) '+ data.uptime.time).fadeIn();
+
+                    $('#cpu-usage').text(data.cpu +'%').fadeIn();
+                    $('#cpu-usage-bar').css({'width':data.cpu + '%'});
+
+                    $('#disk-usage').text(data.disk.used +' ('+ data.disk.free +' free)').fadeIn();
+                    $('#disk-usage-bar').css({'width':data.disk.percent});
+
+                    refreshMemoryHost()
+                });
             }
 
             $(function() {

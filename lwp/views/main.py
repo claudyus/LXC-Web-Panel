@@ -579,22 +579,12 @@ def backup_container():
     return redirect(url_for('main.home'))
 
 
-@mod.route('/_refresh_cpu_host')
+@mod.route('/_refresh_info')
 @if_logged_in()
-def refresh_cpu_host():
-    return lwp.host_cpu_percent()
-
-
-@mod.route('/_refresh_uptime_host')
-@if_logged_in()
-def refresh_uptime_host():
-    return jsonify(lwp.host_uptime())
-
-
-@mod.route('/_refresh_disk_host')
-@if_logged_in()
-def refresh_disk_host():
-    return jsonify(lwp.host_disk_usage(partition=config.get('overview', 'partition')))
+def refresh_info():
+    return jsonify({'cpu': lwp.host_cpu_percent(),
+            'uptime': lwp.host_uptime(),
+            'disk': lwp.host_disk_usage(partition=config.get('overview', 'partition'))})
 
 
 @mod.route('/_refresh_memory_<name>')
