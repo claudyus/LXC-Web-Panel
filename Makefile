@@ -7,6 +7,10 @@ static-build:
 	md5sum *.deb > md5sum
 	#build after any site-src modification
 	cd site-src; cactus build; cd ..
+	# prepend complete URI to support sub-directory
+	find . -name '*.html' -exec sed -i 's/\.\/posts/http:\/\/claudyus\.github\.io\/LXC-Web-Panel\/posts/g' \{\} \;
+	find . -name '*.html' -exec sed -i 's/href=\"\//href=\"http:\/\/claudyus.github.io\/LXC-Web-Panel\//g' \{\} \;
+	find . -name '*.html' -exec sed -i 's/src=\"\//src=\"http:\/\/claudyus.github.io\/LXC-Web-Panel\//g' \{\} \;
 	cp -r site-src/.build/* .
 
 scanpkg:
