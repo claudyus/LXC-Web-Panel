@@ -60,7 +60,7 @@
                         {% if loop.first %}<td rowspan="{{ status.containers|count }}" class="hidden-phone"><span class="label label-{{ td[status.status] }}">{{ status.status|capitalize }}</span></td>{% endif %}
                         <td><a href="{{ url_for('main.edit',container=container.name) }}" title="Click to edit {{container.name}}">{{container.name}}</a></td>
                         <td class="hidden-phone">{{container.settings.utsname}}</td>
-                        <td>{% if container.settings.flags == 'up' %}{% if container.settings.ipv4 != '' %}{{container.settings.ipv4}}{% else %}{% if container.ipv4 %}{{ container.ipv4 }}{% else %}Undefined{% endif %}{% endif %}{% elif container.settings.flags == 'down' %}Link Down{% endif %}</td>
+                        <td>{% if container.settings.ipv4  %}{{container.settings.ipv4}}{% else %}-{% endif %}</td>
                         <td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
                         <td>
                             <div class="btn-toolbar" style="margin:8px 0;">

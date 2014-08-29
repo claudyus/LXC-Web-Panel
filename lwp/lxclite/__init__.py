@@ -36,20 +36,6 @@ def exists(container):
     return False
 
 
-def get_ipv4(container):
-    """
-    Get the IPv4 address for a container
-    """
-    if not exists(container):
-        raise ContainerDoesntExists('Container {} does not exist!'.format(container))
-    output = _run('lxc-ls --fancy {}'.format(container), output=True).splitlines()
-    for l in output:
-        parts = l.split()
-        if parts[0] == container:
-            return parts[2]
-    return None
-
-
 def create(container, template='ubuntu', storage=None, xargs=None):
     """
     Create a container (without all options)

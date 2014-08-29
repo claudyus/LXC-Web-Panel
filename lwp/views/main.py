@@ -48,7 +48,6 @@ def home():
                 'name': container,
                 'memusg': lwp.memory_usage(container),
                 'settings': lwp.get_container_settings(container),
-                'ipv4': lxc.get_ipv4(container),
                 'bucket': get_bucket_token(container)
             })
         containers_all.append({
