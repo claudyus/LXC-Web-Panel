@@ -13,7 +13,7 @@
 		</thead>
 		<tbody id="debian">
       {% for file in released_files%}
-        <tr><td><a href="{{ file.file }}">{{ file.file }}</a></td><td>{{ file.md5 }}</td></tr>
+        <tr><td><a href="debian/{{ file.file }}">{{ file.file }}</a></td><td>{{ file.md5 }}</td></tr>
       {% endfor %}
 		</tbody>
 	</table>
