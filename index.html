@@ -65,10 +65,12 @@
 <p>You can download latest debian packages from <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/download.html">http://claudyus.github.io/LXC-Web-Panel/download.html</a> or, better, you can also use the lwp debian repo:</p>
 <pre class="literal-block">
 $ wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
-$ echo &quot;deb http://claudyus.github.io/LXC-Web-Panel/ ./&quot; | sudo tee /etc/apt/sources.list.d/lwp.list
+$ echo &quot;deb http://claudyus.github.io/LXC-Web-Panel/ debian&quot; | sudo tee /etc/apt/sources.list.d/lwp.list
 $ sudo apt-get update
 $ sudo apt-get install lwp
 </pre>
+<p>Beware: The repository system was reorganize after the 0.6 release. See [this blog post](<a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/posts/02-reorganize-deb-repo.html">http://claudyus.github.io/LXC-Web-Panel/posts/02-reorganize-deb-repo.html</a>) for more information</p>
+<p>Note: you can also include the debian-testing repo inside your source.list file to receive release candidate build.</p>
 </div>
 <div class="section" id="configuration">
 <h1>Configuration</h1>

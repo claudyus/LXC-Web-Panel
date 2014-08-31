@@ -1,0 +1,32 @@
+title: Reorganize Debian Repo
+author: Claudio Mignanti
+date: 31-08-2014
+
+{% extends "post.html" %}
+{% block news %}
+
+{% load markup %}
+{% filter markdown %}
+
+The LXC-Web-Panel is growing! During the last month the project was heavly refactor thanks to important community contributions.
+
+This refactor otherwise let me rethink the release cicle that the LWP should follow to be consider stable, to simplify
+the installation and community test of the lwp package I decided to reorganize the debian repository on gh-pages.
+
+The stable version of lwp is now inside ```deb http://claudyus.github.io/LXC-Web-Panel/ debian``` while the release candidate
+version can be found inside the ```deb http://claudyus.github.io/LXC-Web-Panel/ debian-testing``` repo.
+
+To add the new repo to your sistem you can use this for stable version:
+```
+$ wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
+$ echo "deb http://claudyus.github.io/LXC-Web-Panel/ debian" | sudo tee /etc/apt/sources.list.d/lwp.list
+```
+
+and this commands fot testing version:
+```
+$ wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
+$ echo "deb http://claudyus.github.io/LXC-Web-Panel/ debian-testing" | sudo tee /etc/apt/sources.list.d/lwp.list
+```
+
+{% endfilter %}
+{% endblock %}

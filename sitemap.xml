@@ -6,6 +6,11 @@
         <priority>1.0</priority>
     </url>
     <url>
+        <loc>posts02-reorganize-deb-repo.html</loc>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
         <loc>README.html</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
