@@ -57,10 +57,11 @@ def debian():
     package = 'lwp_{}_all.deb'.format(version)
 
     # finally, move package into gh-pages dir
-    local('mv ../{} gh-pages/'.format(package))
+    target = 'debian-testing' if 'rc' in version else 'debian'
+    local('mv ../{} gh-pages/{}/'.format(package, target))
     local('rm ../lwp_*.changes')
     if (os.environ['USER'] == 'claudyus'):
-        local('dpkg-sig -k 0DFD7CBB --sign builder gh-pages/{}'.format(package))
+        local('dpkg-sig -k 0DFD7CBB --sign builder gh-pages/{}/{}'.format(target, package))
 
 
 @task
