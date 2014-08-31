@@ -2,41 +2,28 @@
 
 {% block body %}
 <div class="container">
-    <nav>
-        <span class="prev">
-            {% if prevPost %}
-                <a href="http://claudyus.github.io/LXC-Web-Panel/{{ prevPost.path }}">
-                    &laquo; {{ prevPost.title }}
-                </a>
-            {% else %}
-                First post
-            {% endif %}
-        </span>
+    <div class="row">
+        <div class="col-lg-3">
+            <ul>
+            {% for p in posts %}
+                <li><a href="http://claudyus.github.io/LXC-Web-Panel/{{ p.url }}">{{ p.title }}</a></li>
+                <p><small>{{ p.date | date:"d/m/Y" }}</small></p>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <article>
+                <header>
+                    <h1>{{ title }}</h1>
+                    <h5><time pubdate="pubdate">{{ date|date:"F j, Y" }}</time> by <span class="author">{{ author }}</address></h5>
+                </header>
+                    {% block news %}{% endblock %}
+                <footer class="pull-right">
+                    Thanks for reading.
+                </footer>
+            </article>
+        </div>
 
-        <span>
-            <a href="http://claudyus.github.io/LXC-Web-Panel/">Home</a>
-        </span>
-
-        <span class="next">
-            {% if nextPost %}
-                <a href="http://claudyus.github.io/LXC-Web-Panel/{{ nextPost.path }}">
-                    {{ nextPost.title }} &raquo;
-                </a>
-            {% else %}
-                Last post
-            {% endif %}
-        </span>
-    </nav>
-    <article>
-        <header>
-            <h1>{{ title }}</h1>
-            <h5><time pubdate="pubdate">{{ date|date:"F j, Y" }}</time> by <span class="author">{{ author }}</address></h5>
-        </header>
-            {% block news %}{% endblock %}
-        <footer class="pull-right">
-            Thanks for reading.
-        </footer>
-    </article>
+    </div>
 </div>
-
 {% endblock %}

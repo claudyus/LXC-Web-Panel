@@ -38,31 +38,25 @@
 
     
 <div class="container">
-    <nav>
-        <span class="prev">
+    <div class="row">
+        <div class="col-lg-3">
+            <ul>
             
-                <a href="http://claudyus.github.io/LXC-Web-Panel/posts/01-news_section.html">
-                    &laquo; Welcome News Section
-                </a>
+                <li><a href="http://claudyus.github.io/LXC-Web-Panel/">Reorganize Debian Repo</a></li>
+                <p><small>31/08/2014</small></p>
             
-        </span>
-
-        <span>
-            <a href="http://claudyus.github.io/LXC-Web-Panel/">Home</a>
-        </span>
-
-        <span class="next">
+                <li><a href="http://claudyus.github.io/LXC-Web-Panel/">Welcome News Section</a></li>
+                <p><small>25/08/2014</small></p>
             
-                Last post
-            
-        </span>
-    </nav>
-    <article>
-        <header>
-            <h1>Reorganize Debian Repo</h1>
-            <h5><time pubdate="pubdate">August 31, 2014</time> by <span class="author">Claudio Mignanti</address></h5>
-        </header>
-            
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <article>
+                <header>
+                    <h1>Reorganize Debian Repo</h1>
+                    <h5><time pubdate="pubdate">August 31, 2014</time> by <span class="author">Claudio Mignanti</address></h5>
+                </header>
+                    
 
 
 <p>The LXC-Web-Panel is growing! During the last month the project was heavly refactor thanks to important community contributions.</p>
@@ -77,12 +71,14 @@ $ echo "deb http://claudyus.github.io/LXC-Web-Panel/ debian" | sudo tee /etc/apt
 <code>$ wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
 $ echo "deb http://claudyus.github.io/LXC-Web-Panel/ debian-testing" | sudo tee /etc/apt/sources.list.d/lwp.list</code></p>
 
-        <footer class="pull-right">
-            Thanks for reading.
-        </footer>
-    </article>
-</div>
+                <footer class="pull-right">
+                    Thanks for reading.
+                </footer>
+            </article>
+        </div>
 
+    </div>
+</div>
 
     <div class="github-fork-ribbon-wrapper right">
       <div class="github-fork-ribbon">
