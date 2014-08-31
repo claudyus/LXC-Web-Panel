@@ -14,8 +14,8 @@ static-build:
 	cp -r site-src/.build/* .
 
 scanpkg:
-	dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-	# deb http://claudyus.github.io/LXC-Web-Panel/ ./
+	dpkg-scanpackages debian/ /dev/null | gzip -9c > debian/Packages.gz
+	dpkg-scanpackages debian-testing/ /dev/null | gzip -9c > debian-testing/Packages.gz
 
 serve: all
 	cd site-src/; cactus serve
