@@ -90,6 +90,12 @@ def edit(container=None):
         form['flags'] = 'up' if 'flags' in form else 'down'
         form['start_auto'] = '1' if 'start_auto' in form else '0'
 
+        # if memlimits/memswlimit is at max values unset form values
+        if int(form['memlimit']) == host_memory['total']:
+            form['memlimit'] = ''
+        if int(form['swlimit']) == host_memory['total'] * 2:
+            form['swlimit'] = ''
+
         for option in form.keys():
             #if the key is supported AND is different
             if option in cfg.keys() and form[option] != cfg[option]:

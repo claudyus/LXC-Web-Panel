@@ -131,16 +131,16 @@
 <div class="control-group form-inline">
     <label class="control-label" for="memlimit">Memory limit *</label>
     <div class="controls">
-        <input class="fix-height" pattern="[0-9]+" type="range" id="memlimit" name="memlimit" min="16" max="{{ host_memory.total }}" step="2" value="{% if settings.memlimit %}{{ settings.memlimit }}{% else %}{{ host_memory.total }}{% endif %}" onChange="updateMemInput('inputMemlimit', this.value, {{ host_memory.total }});">
-        <input pattern="[0-9]+" class="input-mini{% if not settings.memlimit %} hide{% endif %}" id="inputMemlimit" type="number" min="16" step="2" max="{{ host_memory.total }}" value="{% if settings.memlimit %}{{ settings.memlimit }}{% endif %}" onChange="updateMemSlider('memlimit', this.value);"><span class="help-inline fix-height">{% if settings.memlimit %}MB{% else %}Unlimited{% endif %}</span>
+        <input class="fix-height" pattern="[0-9]+" type="range" id="memlimit" name="memlimit" min="16" max="{{ host_memory.total }}" value="{% if settings.memlimit %}{{ settings.memlimit }}{% else %}{{ host_memory.total }}{% endif %}" onChange="updateMemInput('inputMemlimit', this.value, {{ host_memory.total }});">
+        <input pattern="[0-9]+" class="input-mini{% if not settings.memlimit %} hide{% endif %}" id="inputMemlimit" type="number" min="16" max="{{ host_memory.total }}" value="{% if settings.memlimit %}{{ settings.memlimit }}{% endif %}" onChange="updateMemSlider('memlimit', this.value);"><span class="help-inline fix-height">{% if settings.memlimit %}MB{% else %}Unlimited{% endif %}</span>
     </div>
 </div>
 
 <div class="control-group">
     <label class="control-label" for="sliderSwlimit">Memory + Swap limit *</label>
     <div class="controls">
-        <input class="fix-height" pattern="[0-9]+" type="range" id="sliderSwlimit" name="swlimit" min="32" max="{{ host_memory.total * 2 }}" step="2" value="{% if settings.swlimit %}{{ settings.swlimit }}{% else %}{{ host_memory.total * 2 }}{% endif %}" onChange="updateMemInput('inputSwlimit', this.value, {{ host_memory.total * 2 }});">
-        <input pattern="[0-9]+" class="input-mini{% if not settings.swlimit %} hide{% endif %}" id="inputSwlimit" type="number" min="32" step="2" max="{{ host_memory.total *2 }}" value="{% if settings.swlimit %}{{ settings.swlimit }}{% endif %}" onChange="updateMemSlider('sliderSwlimit', this.value);"><span class="help-inline fix-height">{% if settings.swlimit %}MB{% else %}Unlimited{% endif %}</span>
+        <input class="fix-height" pattern="[0-9]+" type="range" id="sliderSwlimit" name="swlimit" min="32" max="{{ host_memory.total * 2 }}" value="{% if settings.swlimit %}{{ settings.swlimit }}{% else %}{{ host_memory.total * 2 }}{% endif %}" onChange="updateMemInput('inputSwlimit', this.value, {{ host_memory.total * 2 }});">
+        <input pattern="[0-9]+" class="input-mini{% if not settings.swlimit %} hide{% endif %}" id="inputSwlimit" type="number" min="32" max="{{ host_memory.total *2 }}" value="{% if settings.swlimit %}{{ settings.swlimit }}{% endif %}" onChange="updateMemSlider('sliderSwlimit', this.value);"><span class="help-inline fix-height">{% if settings.swlimit %}MB{% else %}Unlimited{% endif %}</span>
     </div>
 </div>
 
@@ -275,6 +275,7 @@
         });
 
         function updateMemInput(elem, value, mem_total){
+            // called to update the inputText value when slider onChange
             if (value < mem_total) {
                 $('#' + elem).val(value).show().next('.help-inline').text('MB');
             }
@@ -284,6 +285,7 @@
         };
 
         function updateMemSlider(elem, value){
+            // called to update the slider value when inputText changes
             $('#' + elem).val(value);
         };
     </script>
