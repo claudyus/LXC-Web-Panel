@@ -2,8 +2,8 @@
 {% block title %}About{% endblock %}
 {% block content %}
 <div class="span9">
-	{{ super() }}
-	<h2>LXC Web Panel <small class="muted">Version : {{ version.current }}</small></h2>
+    {{ super() }}
+    <h2>LXC Web Panel <small class="muted">Version : {{ version.current }}</small></h2>
 
     <div class="span5">
         <h4>The MIT License (MIT)</h4>
@@ -18,26 +18,26 @@
     </div>
     <div class="span3">
         <h4>Contributors</h4>
-	    <div id="contributors">
-	    </div>
+        <div id="contributors">
+        </div>
     </div>
 </div>
 
 {% endblock %}
 {% block script %}
-	<script>
-		$( document ).ready(function() {
-			$.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stats/contributors',
-				{
-					success: function (data, status) {
-						for (var i = data.length - 1; i > 0; i--) {
-							var author = data[i].author;
-							$('#contributors').append('<div class="contributor"><img src=' + author.avatar_url + '/>' +
-								'<strong><a href="' + author.html_url + '">' + author.login + '</a></strong>' +
-								'<commits><i class="icon-plus-sign"></i>' + data[i].total + '</commits></div>');
-						}
-					}
-				});
-		});
-	</script>
+<script>
+    $( document ).ready(function() {
+        $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stats/contributors',
+            {
+                success: function (data, status) {
+                    for (var i = data.length - 1; i > 0; i--) {
+                        var author = data[i].author;
+                        $('#contributors').append('<div class="contributor"><img src=' + author.avatar_url + '/>' +
+                            '<strong><a href="' + author.html_url + '">' + author.login + '</a></strong>' +
+                            '<commits><i class="icon-plus-sign"></i>' + data[i].total + '</commits></div>');
+                    }
+                }
+            });
+    });
+    </script>
 {% endblock %}

@@ -48,7 +48,6 @@ def home():
                 'name': container,
                 'memusg': lwp.memory_usage(container),
                 'settings': lwp.get_container_settings(container),
-                'ipv4': lxc.get_ipv4(container),
                 'bucket': get_bucket_token(container)
             })
         containers_all.append({
@@ -310,7 +309,7 @@ def lwp_tokens():
         flash(u'Token %s successfully deleted!' % token, 'success')
 
     tokens = query_db("SELECT description, token, username FROM api_tokens ORDER BY token DESC")
-    return render_template('tokens.html', tokens=tokens)
+    return render_template('tokens.html', containers=lxc.ls(), tokens=tokens)
 
 
 @mod.route('/checkconfig')
@@ -579,22 +578,12 @@ def backup_container():
     return redirect(url_for('main.home'))
 
 
-@mod.route('/_refresh_cpu_host')
+@mod.route('/_refresh_info')
 @if_logged_in()
-def refresh_cpu_host():
-    return lwp.host_cpu_percent()
-
-
-@mod.route('/_refresh_uptime_host')
-@if_logged_in()
-def refresh_uptime_host():
-    return jsonify(lwp.host_uptime())
-
-
-@mod.route('/_refresh_disk_host')
-@if_logged_in()
-def refresh_disk_host():
-    return jsonify(lwp.host_disk_usage(partition=config.get('overview', 'partition')))
+def refresh_info():
+    return jsonify({'cpu': lwp.host_cpu_percent(),
+            'uptime': lwp.host_uptime(),
+            'disk': lwp.host_disk_usage(partition=config.get('overview', 'partition'))})
 
 
 @mod.route('/_refresh_memory_<name>')

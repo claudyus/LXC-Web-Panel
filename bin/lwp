@@ -8,26 +8,22 @@ import ConfigParser
 
 from flask import Flask, g
 
-from lwp.utils import connect_db, check_session_limit, config
-from lwp.views import main, auth, api
+SESSION_SECRET_FILE = '/etc/lwp/session_secret'
 
-SESSION_SECRET_PATH = '/etc/lwp/session_secret'
-
-def generate_key():
-    return os.urandom(24)
-
-if len(sys.argv) == 2 and sys.argv[1] == 'generate_session_secret':
-    key = generate_key()
-    with os.fdopen(os.open(SESSION_SECRET_PATH, os.O_WRONLY | os.O_CREAT, 0640), 'w') as handle:
+if '--generate_session_secret' in sys.argv[1:]:
+    key = os.urandom(24)
+    with os.fdopen(os.open(SESSION_SECRET_FILE, os.O_WRONLY | os.O_CREAT, 0644), 'w') as handle:
       handle.write(key)
     exit(0)
 
 try:
-    SECRET_KEY = open(SESSION_SECRET_PATH, 'r').read()
-except:
+    SECRET_KEY = open(SESSION_SECRET_FILE, 'r').read()
+except IOError:
     print(' * Missing session_secret file, your session will not survive server reboot')
-    SECRET_KEY = generate_key()
+    SECRET_KEY = os.urandom(24)
 
+from lwp.utils import connect_db, check_session_limit, config
+from lwp.views import main, auth, api
 
 DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')

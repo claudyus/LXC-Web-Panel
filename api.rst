@@ -23,28 +23,36 @@ API list and description
 
 Returns all lxc containers on the current machine and brief status information.
 
+------------
+
 ::
 
-  GET /api/v1/container/<name>
+  GET /api/v1/containers/<name>
 
 Returns full information about the ``name`` container.
 
+------------
+
 ::
 
-  POST /api/v1/container/<name>
+  POST /api/v1/containers/<name>
 
 Update a container status.
+
 This api accept the following parameters in body request:
 
-	- action: the new container status, possible status are start, stop and freeze
+    - action: the new container status, possible status are start, stop and freeze
 
-This api returns ```400``` if missed or mispelled json format, ```409``` if container *name* doesn't exist
+This api returns ``400`` if missed or mispelled json format, ``409`` if container *name* doesn't exist
+
+------------
 
 ::
 
-	PUT /api/v1/container/
+  PUT /api/v1/containers/
 
 Create or clone a lxc container.
+
 This api accept the following parameters in body request:
 
   - name: the name container (mandatory)
@@ -53,25 +61,30 @@ This api accept the following parameters in body request:
   - store: the appropriate backing store system (optional)
   - xargs: optional xargs to be passed to lxc-create
 
+------------
+
 ::
 
-  DELETE /api/v1/container/<name>
+  DELETE /api/v1/containers/<name>
 
 Delete the ``name`` container.
 
+------------
 
 ::
 
-  POST /api/v1/token
+  POST /api/v1/tokens
 
 Add a new access token for the api
 This api accept the following parameters in body request:
 
-	- token: the new token to add (mandatory)
-	- description: an optional token description
+  - token: the new token to add (mandatory)
+  - description: an optional token description
+
+------------
 
 ::
 
-  DELETE /api/v1/token/<private-token>
+  DELETE /api/v1/tokens/<private-token>
 
 Revoke the given ``private-token``

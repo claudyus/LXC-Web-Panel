@@ -12,7 +12,7 @@ from lwp.utils import api_auth
 mod = Blueprint('api', __name__)
 
 
-@mod.route('/api/v1/containers')
+@mod.route('/api/v1/container(s)?')
 @api_auth()
 def get_containers():
     """
@@ -22,13 +22,13 @@ def get_containers():
     return json.dumps(list_container)
 
 
-@mod.route('/api/v1/container/<name>')
+@mod.route('/api/v1/container(s)?/<name>')
 @api_auth()
 def get_container(name):
     return jsonify(lxc.info(name))
 
 
-@mod.route('/api/v1/container/<name>', methods=['POST'])
+@mod.route('/api/v1/container(s)?/<name>', methods=['POST'])
 @api_auth()
 def post_container(name):
     data = request.get_json(force=True)
@@ -52,7 +52,7 @@ def post_container(name):
         return jsonify(status="error", error="Container doesn' t exists"), 409
 
 
-@mod.route('/api/v1/container/', methods=['PUT'])
+@mod.route('/api/v1/container(s)?/', methods=['PUT'])
 @api_auth()
 def add_container():
     data = request.get_json(force=True)
@@ -85,7 +85,7 @@ def add_container():
     return jsonify(status="ok"), 200
 
 
-@mod.route('/api/v1/container/<name>', methods=['DELETE'])
+@mod.route('/api/v1/container(s)?/<name>', methods=['DELETE'])
 @api_auth()
 def delete_container(name):
     try:
@@ -95,7 +95,7 @@ def delete_container(name):
         return jsonify(status="error", error="Container doesn' t exists"), 400
 
 
-@mod.route('/api/v1/token/', methods=['POST'])
+@mod.route('/api/v1/token(s)?/', methods=['POST'])
 @api_auth()
 def add_token():
     data = request.get_json(force=True)
@@ -109,7 +109,7 @@ def add_token():
     return jsonify(status="ok"), 200
 
 
-@mod.route('/api/v1/token/<token>', methods=['DELETE'])
+@mod.route('/api/v1/token(s)?/<token>', methods=['DELETE'])
 @api_auth()
 def delete_token(token):
     g.db.execute('delete from api_tokens where token=?', [token])

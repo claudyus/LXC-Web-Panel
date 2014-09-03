@@ -16,6 +16,7 @@ cgroup_ext is a data structure where for each input of edit.html we have an arra
     position 2: the flash message to display on success.
 """
 ip_regex = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
+file_match = '^[\w.-/]+$'
 
 cgroup_ext = {
     'arch': ['lxc.arch', '^(x86|i686|x86_64|amd64)$', ''],
@@ -28,9 +29,9 @@ cgroup_ext = {
     'ipv4gw': ['lxc.network.ipv4.gateway', ip_regex, 'IPv4 gateway address updated'],
     'ipv6': ['lxc.network.ipv6', '^[0-9a-f:]+$', 'IPv6 address updated'],  # weak ipv6 regex check
     'ipv6gw': ['lxc.network.ipv6.gateway', '[0-9a-f:]+^$', 'IPv6 gateway address updated'],
-    'script_up': ['lxc.network.script.up', '^[\w.-/]+$', 'Network script down updated'],
-    'script_down': ['lxc.network.script.down', '^[\w.-/]+$', 'Network script down updated'],
-    'rootfs': ['lxc.rootfs', '^[\w.-/]+$', 'Rootfs updated'],
+    'script_up': ['lxc.network.script.up', file_match, 'Network script down updated'],
+    'script_down': ['lxc.network.script.down', file_match, 'Network script down updated'],
+    'rootfs': ['lxc.rootfs', file_match, 'Rootfs updated'],
     'memlimit': ['lxc.cgroup.memory.limit_in_bytes', '^[0-9]+$', 'Memory limit updated'],
     'swlimit': ['lxc.cgroup.memory.memsw.limit_in_bytes', '^[0-9]+$', 'Swap limit updated'],
     'cpus': ['lxc.cgroup.cpuset.cpus', '^[0-9,-]+$', 'CPUs updated'],
@@ -38,7 +39,14 @@ cgroup_ext = {
     'deny': ['lxc.cgroup.devices.deny', '^$', '???'],
     'allow': ['lxc.cgroup.devices.allow', '^$', '???'],
     'loglevel': ['lxc.loglevel', '^[0-9]$', 'Log level updated'],
-    'logfile': ['lxc.logfile', '^[\w.-/]+$', 'Log file updated'],
+    'logfile': ['lxc.logfile', file_match, 'Log file updated'],
+    'id_map': ['lxc.id_map', '^[ug0-9 ]+$', 'UID Mapping updated'],
+    'hook_pre_start': ['lxc.hook.pre-start', file_match, 'Pre hook start updated'],
+    'hook_pre_mount': ['lxc.hook.pre-mount', file_match, 'Pre mount hook updated'],
+    'hook_mount': ['lxc.hook.mount', file_match, 'Mount hook updated'],
+    'hook_start': ['lxc.hook.start', file_match, 'Container start hook updated'],
+    'hook_post_stop': ['lxc.hook.post-stop', file_match, 'Container post hook updated'],
+    'hook_clone': ['lxc.hook.clone', file_match, 'Container clone hook updated'],
     'start_auto': ['lxc.start.auto', '^(0|1)$', 'Autostart saved'],
     'start_delay': ['lxc.start.delay', '^[0-9]*$', 'Autostart delay option updated'],
     'start_order': ['lxc.start.order', '^[0-9]*$', 'Autostart order option updated']
