@@ -26,7 +26,7 @@
         <div class="control-group">
             <label class="control-label" for="start_auto">Start at boot</label>
             <div class="controls">
-                <input type="checkbox" id="start_auto" name="start_auto" value="True" {% if settings.start_auto %}checked {% endif %}/>
+                <input type="checkbox" id="start_auto" name="start_auto" value="{{ settings.start_auto }}" {% if settings.start_auto == '1' %} checked{% endif %}/>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
         <div class="control-group switch-network-flags">
             <label class="control-label" for="flags">Network flag</label>
             <div class="controls">
-                <input type="checkbox" id="flags" name="flags" value="{{ settings.flags }}"{% if settings.flags %} checked{% endif %}/>
+                <input type="checkbox" id="flags" name="flags" value="{{ settings.flags }}"{% if settings.flags == 'up' %} checked{% endif %}/>
             </div>
         </div>
 

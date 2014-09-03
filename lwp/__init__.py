@@ -257,10 +257,6 @@ def get_container_settings(name):
     cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', cfg['memlimit'])
     cfg['swlimit'] = re.sub(r'[a-zA-Z]', '', cfg['swlimit'])
 
-    # convert internal lxc values to boolean
-    cfg['start_auto'] = True if cfg['start_auto'] is '1' else False
-    cfg['flags'] = True if cfg['flags'] == 'up' else False
-
     return cfg
 
 

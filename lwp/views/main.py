@@ -86,11 +86,9 @@ def edit(container=None):
             g.db.commit()
             flash(u'Bucket config for %s saved' % container, 'success')
 
-        #convert boolean in correct value for lxc
-        if 'flags' in form.keys():
-            form['flags'] = 'up' if bool(form['flags']) is True else 'down'
-        if 'start_auto' in form.keys():
-            form['start_auto'] = '1' if bool(form['start_auto']) is True else '0'
+        #convert boolean in correct value for lxc, if checkbox is inset value is not submitted inside POST
+        form['flags'] = 'up' if 'flags' in form else 'down'
+        form['start_auto'] = '1' if 'start_auto' in form else '0'
 
         for option in form.keys():
             #if the key is supported AND is different
