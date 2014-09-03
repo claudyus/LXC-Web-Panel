@@ -58,12 +58,11 @@
             <label class="control-label" for="type">Network type</label>
             <div class="controls">
                 <select pattern="\w+" type="text" id="type" name="type" value="{{ settings.type }}">
-                    <option value="none">none</option>
-                    <option value="empty">empty</option>
-                    <option value="veth">veth</option>
-                    <option value="vlan">vlan</option>
-                    <option value="macvlan">macvlan</option>
-                    <option value="phys">phys</option>
+                    <option value="empty" {% if settings.type == "empty" %}selected{% endif %}>empty</option>
+                    <option value="veth" {% if settings.type == "veth" %}selected{% endif %}>veth</option>
+                    <option value="vlan" {% if settings.type == "vlan" %}selected{% endif %}>vlan</option>
+                    <option value="macvlan" {% if settings.type == "macvlan" %}selected{% endif %}>macvlan</option>
+                    <option value="phys" {% if settings.type == "phys" %}selected{% endif %}>phys</option>top
                 </select>
             </div>
         </div>
