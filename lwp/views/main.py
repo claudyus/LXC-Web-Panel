@@ -44,12 +44,14 @@ def home():
         containers_by_status = []
 
         for container in listx[status]:
-            containers_by_status.append({
+            container_info = {
                 'name': container,
-                'memusg': lwp.memory_usage(container),
                 'settings': lwp.get_container_settings(container),
+                'memusg': lwp.memory_usage(container),
                 'bucket': get_bucket_token(container)
-            })
+            }
+
+            containers_by_status.append(container_info)
         containers_all.append({
             'status': status.lower(),
             'containers': containers_by_status
