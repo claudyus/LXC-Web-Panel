@@ -195,7 +195,7 @@ def check_version():
     """
     try:
         version = subprocess.check_output('git describe --tags', shell=True)
-    except OSError:
+    except subprocess.CalledProcessError:
         version = open(os.path.join(os.path.dirname(__file__), 'version')).read()[0:-1]
     return {'current': version}
 

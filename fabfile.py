@@ -48,6 +48,7 @@ def get_deb_architecture():
 
 @task(alias='deb')
 def debian():
+    local('git describe --tag > lwp/version')
     # the debian changelog is not stored on GIT and rebuilt each time
     generate_debian_changelog()
     local('dpkg-buildpackage -us -uc -b')
