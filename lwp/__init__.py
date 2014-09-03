@@ -246,12 +246,12 @@ def get_container_settings(name):
             cfg[options] = ''  # add the key in dictionary anyway to match form
 
     # if ipv4 is unset try to determinate it
-    if 'ipv4' not in cfg:
-        cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'^%s \'|egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
+    if cfg['ipv4'] == '':
+        cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'%s\' |egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
         except subprocess.CalledProcessError:
-            pass
+            cfg['ipv4'] = ''
 
     # parse memlimits to int
     cfg['memlimit'] = re.sub(r'[a-zA-Z]', '', cfg['memlimit'])
