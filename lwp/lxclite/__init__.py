@@ -20,11 +20,11 @@ def _run(cmd, output=False):
     """
     if output:
         try:
-            out = subprocess.check_output('{}'.format(cmd), shell=True)
+            out = subprocess.check_output('{}'.format(cmd), shell=True, close_fds=True)
         except subprocess.CalledProcessError:
             out = False
         return out
-    return subprocess.check_call('{}'.format(cmd), shell=True)  # returns 0 for True
+    return subprocess.check_call('{}'.format(cmd), shell=True, close_fds=True)  # returns 0 for True
 
 
 def exists(container):
