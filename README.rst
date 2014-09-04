@@ -89,10 +89,27 @@ Than add a section ``buckets`` like this:
  buckets_port = 1234
 
 
+Developers/Debug
+----------------
+After a fresh git clone you should download the bower component and setup the package for development purpose.
+
+::
+
+ bower install
+ sudo ./setup.py develop
+ cp lwp.example.conf lwp.conf
+
+Now you can run lwp locally using ``sudo ./bin/lwp --debug``
+
+Debug is just one of the available options to profile lwp you can use ``--profiling`` options, those options can also be
+used against the global installation using: ``sudo lwp --debug``
+
+Anyway ensure to stop the lwp service if any: ``sudo service lwp stop``
+
 Info
 ----
 
-This repo contains a lot of mixup from various forks, I like to thanks all contributors to this project.
+This repo contains a lot of mixed up from spare forks, I like to thanks all contributors to this project.
 
 LICENSE
 -------
