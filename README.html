@@ -69,9 +69,22 @@ buckets_port = 1234
 </pre>
 </div>
 </div>
+<div class="section" id="developers-debug">
+<h1>Developers/Debug</h1>
+<p>After a fresh git clone you should download the bower component and setup the package for development purpose.</p>
+<pre class="literal-block">
+bower install
+sudo ./setup.py develop
+cp lwp.example.conf lwp.conf
+</pre>
+<p>Now you can run lwp locally using <tt class="docutils literal">sudo ./bin/lwp <span class="pre">--debug</span></tt></p>
+<p>Debug is just one of the available options to profile lwp you can use <tt class="docutils literal"><span class="pre">--profiling</span></tt> options, those options can also be
+used against the global installation using: <tt class="docutils literal">sudo lwp <span class="pre">--debug</span></tt></p>
+<p>Anyway ensure to stop the lwp service if any: <tt class="docutils literal">sudo service lwp stop</tt></p>
+</div>
 <div class="section" id="info">
 <h1>Info</h1>
-<p>This repo contains a lot of mixup from various forks, I like to thanks all contributors to this project.</p>
+<p>This repo contains a lot of mixed up from spare forks, I like to thanks all contributors to this project.</p>
 </div>
 <div class="section" id="license">
 <h1>LICENSE</h1>

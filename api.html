@@ -62,26 +62,29 @@ curl --header &quot;private-token: d41d8cd98f00b204e9800998ecf8427e&quot; http:/
 GET /api/v1/containers
 </pre>
 <p>Returns all lxc containers on the current machine and brief status information.</p>
+<hr class="docutils" />
 <pre class="literal-block">
-GET /api/v1/container/&lt;name&gt;
+GET /api/v1/containers/&lt;name&gt;
 </pre>
 <p>Returns full information about the <tt class="docutils literal">name</tt> container.</p>
+<hr class="docutils" />
 <pre class="literal-block">
-POST /api/v1/container/&lt;name&gt;
+POST /api/v1/containers/&lt;name&gt;
 </pre>
-<p>Update a container status.
-This api accept the following parameters in body request:</p>
+<p>Update a container status.</p>
+<p>This api accept the following parameters in body request:</p>
 <blockquote>
 <ul class="simple">
 <li>action: the new container status, possible status are start, stop and freeze</li>
 </ul>
 </blockquote>
-<p>This api returns <tt class="docutils literal">`400`</tt> if missed or mispelled json format, <tt class="docutils literal">`409`</tt> if container <em>name</em> doesn't exist</p>
+<p>This api returns <tt class="docutils literal">400</tt> if missed or mispelled json format, <tt class="docutils literal">409</tt> if container <em>name</em> doesn't exist</p>
+<hr class="docutils" />
 <pre class="literal-block">
-PUT /api/v1/container/
+PUT /api/v1/containers/
 </pre>
-<p>Create or clone a lxc container.
-This api accept the following parameters in body request:</p>
+<p>Create or clone a lxc container.</p>
+<p>This api accept the following parameters in body request:</p>
 <blockquote>
 <ul class="simple">
 <li>name: the name container (mandatory)</li>
@@ -91,12 +94,14 @@ This api accept the following parameters in body request:</p>
 <li>xargs: optional xargs to be passed to lxc-create</li>
 </ul>
 </blockquote>
+<hr class="docutils" />
 <pre class="literal-block">
-DELETE /api/v1/container/&lt;name&gt;
+DELETE /api/v1/containers/&lt;name&gt;
 </pre>
 <p>Delete the <tt class="docutils literal">name</tt> container.</p>
+<hr class="docutils" />
 <pre class="literal-block">
-POST /api/v1/token
+POST /api/v1/tokens
 </pre>
 <p>Add a new access token for the api
 This api accept the following parameters in body request:</p>
@@ -106,8 +111,9 @@ This api accept the following parameters in body request:</p>
 <li>description: an optional token description</li>
 </ul>
 </blockquote>
+<hr class="docutils" />
 <pre class="literal-block">
-DELETE /api/v1/token/&lt;private-token&gt;
+DELETE /api/v1/tokens/&lt;private-token&gt;
 </pre>
 <p>Revoke the given <tt class="docutils literal"><span class="pre">private-token</span></tt></p>
 </div>
