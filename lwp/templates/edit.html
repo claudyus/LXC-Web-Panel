@@ -84,14 +84,16 @@
         <div class="control-group">
             <label class="control-label" for="ipv4">IPv4 address</label>
             <div class="controls">
-                <input pattern="^([0-9.]+)+$" type="text" id="ipv4" name="ipv4" value="{{ settings.ipv4 }}" placeholder="Undefined">
+                <input pattern="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(\d|[1-2]\d|3[0-2]))*"
+                       type="text" id="ipv4" name="ipv4" value="{{ settings.ipv4 }}" placeholder="Undefined">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="ipv4gw">IPv4 gateway</label>
             <div class="controls">
-                <input pattern="^([0-9.]+)+$" type="text" id="ipv4gw" name="ipv4gw" value="{{ settings.ipv4gw }}" placeholder="Undefined">
+                <input pattern="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+                       type="text" id="ipv4gw" name="ipv4gw" value="{{ settings.ipv4gw }}" placeholder="Undefined">
             </div>
         </div>
 
@@ -105,7 +107,7 @@
         <div class="control-group">
             <label class="control-label" for="ipv6gw">IPv6 gateway</label>
             <div class="controls">
-                <input pattern="^([0-9a-fA-F:/]+)+$" type="text" id="ipv6gw" name="ipv6gw" value="{{ settings.ipv6gw }}" placeholder="Undefined">
+                <input pattern="^([0-9a-fA-F:]+)+$" type="text" id="ipv6gw" name="ipv6gw" value="{{ settings.ipv6gw }}" placeholder="Undefined">
             </div>
         </div>
 
