@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+                <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+                <li data-target="#myCarousel" data-slide-to="3" class=""></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="static/images/01-login.png" alt="">
+
+                    <div class="carousel-caption">
+                        <h4>Multiple login backend</h4>
+                        <p>Lwp support multiple auth backend as auth based on database, LDAP/Active Directory and httpasswd file.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="static/images/02-home.png" alt="">
+
+                    <div class="carousel-caption">
+                        <h4>Clear homepage</h4>
+                        <p>A clear homepage with informations about containers and their status, ipv4 and resource usages.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="static/images/03-edit.png" alt="">
+
+                    <div class="carousel-caption">
+                        <h4>Advanced configuration</h4>
+                        <p>An extensive support to lxc container configuration options.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="static/images/04-apis.png" alt="">
+
+                    <div class="carousel-caption">
+                        <h4>Api feature</h4>
+                        <p>A basic RestAPI implementation based on token auth to control and lwp instances in a PaaS environment.</p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
