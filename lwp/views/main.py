@@ -46,7 +46,7 @@ def home():
         for container in listx[status]:
             container_info = {
                 'name': container,
-                'settings': lwp.get_container_settings(container),
+                'settings': lwp.get_container_settings(container, status),
                 'memusg': 0,
                 'bucket': get_bucket_token(container)
             }

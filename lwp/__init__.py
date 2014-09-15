@@ -227,9 +227,10 @@ def get_net_settings():
     return cfg
 
 
-def get_container_settings(name):
+def get_container_settings(name, status=None):
     """
     returns a dict of all utils settings for a container
+    status is optional and should be set to RUNNING to retrieve ipv4 config (if unset)
     """
     filename = '{}/{}/config'.format(lxcdir(), name)
     if not file_exist(filename):
@@ -246,7 +247,7 @@ def get_container_settings(name):
             cfg[options] = ''  # add the key in dictionary anyway to match form
 
     # if ipv4 is unset try to determinate it
-    if cfg['ipv4'] == '':
+    if cfg['ipv4'] == '' and status == 'RUNNING':
         cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'%s\' |egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
