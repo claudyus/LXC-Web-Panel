@@ -94,7 +94,11 @@
 
 {% macro memory_color(value) -%}{% if value != 0 %}{% if 0 <= value <= 511 %}success{% elif 512 <= value < 980 %}warning{% else %}important{% endif %}{% endif %}{%- endmacro %}
 {% macro render_memory_wrapper(value, limit) -%}
-    {% if value != 0 %}<span class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</span>{% endif %}
+    {% if value != 0 %}
+        <span class="label label-{{ memory_color(value) }}">{{ value }}{% if limit != '' %} / {{ limit }}{% endif %} MB</span>
+    {% else %}
+        <span class="label label-success"></span>
+    {% endif %}
 {%- endmacro %}
 
 {% block script %}
