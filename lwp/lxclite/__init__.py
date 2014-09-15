@@ -129,7 +129,7 @@ def listx():
         if status_container[container][0] == 'STOPPED':
             stopped.append(container)
         if status_container[container][0] == 'FROZEN':
-            stopped.append(container)
+            frozen.append(container)
 
     return {'RUNNING': running,
             'FROZEN': frozen,
