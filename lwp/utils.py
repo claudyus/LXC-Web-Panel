@@ -122,7 +122,13 @@ def check_session_limit():
         last_activity = session.get('last_activity')
         if last_activity < limit:
             flash(u'Session timed out !', 'info')
-            redirect(url_for('auth.logout'))
+            session.pop('logged_in', None)
+            session.pop('token', None)
+            session.pop('last_activity', None)
+            session.pop('username', None)
+            session.pop('name', None)
+            session.pop('su', None)
+            flash(u'You are logged out!', 'success')
         else:
             session['last_activity'] = now
 
