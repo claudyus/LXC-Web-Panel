@@ -249,7 +249,7 @@ def get_container_settings(name, status=None):
 
     # if ipv4 is unset try to determinate it
     if cfg['ipv4'] == '' and status == 'RUNNING':
-        cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep \'%s\' |egrep -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\'' % name]
+        cmd = ['lxc-ls --fancy --fancy-format name,ipv4|grep -w \'%s\' | awk \'{ print $2 }\'' % name]
         try:
             cfg['ipv4'] = subprocess.check_output(cmd, shell=True)
         except subprocess.CalledProcessError:
