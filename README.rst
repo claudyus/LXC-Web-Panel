@@ -40,20 +40,10 @@ Your lwp panel is not at http://locahost:5000/
 SSL configuration
 ^^^^^^^^^^^^^^^^^
 
-To add SSL Support add to global section of lwp.conf this entries:
+SSL direct support was dropped after v0.6 release.
 
-::
+You can configure nginx as reverse proxy if you want to use SSL encryption, see `bug #34 <https://github.com/claudyus/LXC-Web-Panel/issues/34>`_ for info.
 
- ssl = True
- pkey = mykey.key
- cert = mykey.cert
-
-
-Where mykey.key and mykey.cert are the key and the certificate generated previously for example by the command:
-
-::
-
- openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mykey.cert
 
 Authentication
 ^^^^^^^^^^^^^^

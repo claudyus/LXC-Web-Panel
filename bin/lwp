@@ -29,15 +29,6 @@ DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
 ADDRESS = config.get('global', 'address')
 PORT = int(config.get('global', 'port'))
-try:
-    SSL = config.getboolean('global', 'ssl')
-    PKEY = config.get('global', 'pkey')
-    CERT = config.get('global', 'cert')
-    if not os.path.isfile(PKEY) or not os.path.isfile(CERT):
-        SSL = False
-except ConfigParser.NoOptionError:
-    SSL = False
-    print("- SSL feature disabled")
 
 # Flask app
 app = Flask('lwp')
@@ -74,13 +65,4 @@ def teardown_request(exception):
 if __name__ == '__main__':
     # override debug configuration from command line
     app.debug = True if '--debug' in sys.argv[1:] else DEBUG
-    if app.config['SSL']:
-        from OpenSSL import SSL
-        context = SSL.Context(SSL.SSLv23_METHOD)
-        context.use_privatekey_file(app.config['PKEY'])
-        context.use_certificate_file(app.config['CERT'])
-        app.run(host=app.config['ADDRESS'],
-                port=app.config['PORT'],
-                ssl_context=context)
-    else:
-        app.run(host=app.config['ADDRESS'], port=app.config['PORT'])
+    app.run(host=app.config['ADDRESS'], port=app.config['PORT'])
