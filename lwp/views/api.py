@@ -52,7 +52,7 @@ def post_container(name):
         return jsonify(status="error", error="Container doesn' t exists"), 409
 
 
-@mod.route('/api/v1/container(s)?/', methods=['PUT'])
+@mod.route('/api/v1/containers/', methods=['PUT'])
 @api_auth()
 def add_container():
     data = request.get_json(force=True)
@@ -85,7 +85,7 @@ def add_container():
     return jsonify(status="ok"), 200
 
 
-@mod.route('/api/v1/container(s)?/<name>', methods=['DELETE'])
+@mod.route('/api/v1/containers/<name>', methods=['DELETE'])
 @api_auth()
 def delete_container(name):
     try:
@@ -95,7 +95,7 @@ def delete_container(name):
         return jsonify(status="error", error="Container doesn' t exists"), 400
 
 
-@mod.route('/api/v1/token(s)?/', methods=['POST'])
+@mod.route('/api/v1/tokens/', methods=['POST'])
 @api_auth()
 def add_token():
     data = request.get_json(force=True)
@@ -109,7 +109,7 @@ def add_token():
     return jsonify(status="ok"), 200
 
 
-@mod.route('/api/v1/token(s)?/<token>', methods=['DELETE'])
+@mod.route('/api/v1/tokens/<token>', methods=['DELETE'])
 @api_auth()
 def delete_token(token):
     g.db.execute('delete from api_tokens where token=?', [token])
