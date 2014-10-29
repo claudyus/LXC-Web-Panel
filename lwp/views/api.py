@@ -12,7 +12,7 @@ from lwp.utils import api_auth
 mod = Blueprint('api', __name__)
 
 
-@mod.route('/api/v1/container(s)?')
+@mod.route('/api/v1/containers/')
 @api_auth()
 def get_containers():
     """
@@ -22,13 +22,13 @@ def get_containers():
     return json.dumps(list_container)
 
 
-@mod.route('/api/v1/container(s)?/<name>')
+@mod.route('/api/v1/containers/<name>')
 @api_auth()
 def get_container(name):
     return jsonify(lxc.info(name))
 
 
-@mod.route('/api/v1/container(s)?/<name>', methods=['POST'])
+@mod.route('/api/v1/containers/<name>', methods=['POST'])
 @api_auth()
 def post_container(name):
     data = request.get_json(force=True)

@@ -19,7 +19,7 @@ API list and description
 
 ::
 
-  GET /api/v1/containers
+  GET /api/v1/containers/
 
 Returns all lxc containers on the current machine and brief status information.
 
