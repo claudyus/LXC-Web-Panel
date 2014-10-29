@@ -9,14 +9,35 @@ curl --header &quot;private-token: d41d8cd98f00b204e9800998ecf8427e&quot; http:/
 <div class="section" id="api-list-and-description">
 <h1>API list and description</h1>
 <pre class="literal-block">
-GET /api/v1/containers
+GET /api/v1/containers/
 </pre>
 <p>Returns all lxc containers on the current machine and brief status information.</p>
+<p>This api will return a json array like:</p>
+<pre class="literal-block">
+[{&quot;state&quot;: &quot;running&quot;, &quot;container&quot;: &quot;base&quot;}, {&quot;state&quot;: &quot;stopped&quot;, &quot;container&quot;: &quot;test&quot;}]
+</pre>
 <hr class="docutils" />
 <pre class="literal-block">
 GET /api/v1/containers/&lt;name&gt;
 </pre>
 <p>Returns full information about the <tt class="docutils literal">name</tt> container.</p>
+<p>This api will return a json object like:</p>
+<pre class="literal-block">
+{
+  &quot;blkio_use&quot;: &quot;7.66 MiB&quot;,
+  &quot;cpu_use&quot;: &quot;0.67 seconds&quot;,
+  &quot;ip&quot;: &quot;192.168.9.100&quot;,
+  &quot;kmem_use&quot;: &quot;0 bytes&quot;,
+  &quot;link&quot;: &quot;lxcbr0&quot;,
+  &quot;memory_use&quot;: &quot;2.02 MiB&quot;,
+  &quot;name&quot;: &quot;base&quot;,
+  &quot;pid&quot;: &quot;4548&quot;,
+  &quot;rx_bytes&quot;: &quot;81.08 KiB&quot;,
+  &quot;state&quot;: &quot;RUNNING&quot;,
+  &quot;total_bytes&quot;: &quot;81.08 KiB&quot;,
+  &quot;tx_bytes&quot;: &quot;0 bytes&quot;
+}
+</pre>
 <hr class="docutils" />
 <pre class="literal-block">
 POST /api/v1/containers/&lt;name&gt;
