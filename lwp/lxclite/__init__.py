@@ -81,7 +81,7 @@ def info(container):
     
     state = {'pid': 0}
     for val in output:
-        state[val.split(':')[0].lower()] = val.split(':')[1].strip()
+        state[val.split(':')[0].lower().strip().replace(" ", "_")] = val.split(':')[1].strip()
 
     return state
 

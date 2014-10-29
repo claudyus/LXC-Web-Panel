@@ -23,6 +23,12 @@ API list and description
 
 Returns all lxc containers on the current machine and brief status information.
 
+This api will return a json array like:
+
+::
+
+  [{"state": "running", "container": "base"}, {"state": "stopped", "container": "test"}]
+
 ------------
 
 ::
@@ -30,6 +36,25 @@ Returns all lxc containers on the current machine and brief status information.
   GET /api/v1/containers/<name>
 
 Returns full information about the ``name`` container.
+
+This api will return a json object like:
+
+::
+
+  {
+    "blkio_use": "7.66 MiB",
+    "cpu_use": "0.67 seconds",
+    "ip": "192.168.9.100",
+    "kmem_use": "0 bytes",
+    "link": "lxcbr0",
+    "memory_use": "2.02 MiB",
+    "name": "base",
+    "pid": "4548",
+    "rx_bytes": "81.08 KiB",
+    "state": "RUNNING",
+    "total_bytes": "81.08 KiB",
+    "tx_bytes": "0 bytes"
+  }
 
 ------------
 
