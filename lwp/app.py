@@ -51,7 +51,8 @@ def before_request():
     executes functions before all requests
     """
     check_session_limit()
-    g.db = connect_db(app.config['DATABASE'])
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(app.config['DATABASE'])
+    g.db = SQLAlchemy(app)
 
 
 @app.teardown_request

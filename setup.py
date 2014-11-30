@@ -23,6 +23,7 @@ setup(
         'jinja2>=2.7.2',
         'python-ldap',
         'PyOpenSSL',
+        'Flask-SQLAlchemy',
     ],
     scripts=['bin/lwp'],
 )
