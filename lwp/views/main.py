@@ -551,7 +551,10 @@ def backup_container():
     if request.method == 'POST':
         container = request.form['orig']
         sr_type = request.form['dest']
-        push = request.form['push']
+        if 'push' in request.form:
+            push = request.form['push']
+        else:
+            push = False
         sr_path = None
         for sr in storage_repos:
             if sr_type in sr:
