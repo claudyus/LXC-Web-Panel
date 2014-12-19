@@ -239,7 +239,7 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
 
     Returns path/filename of the backup instances
     """
-    prefix = time.strftime("%Y-%m-%d__%H-%m.tar.gz")
+    prefix = time.strftime("%Y-%m-%d__%H-%M.tar.gz")
     filename = '{}/{}-{}'.format(destination, container, prefix)
     was_running = False
 
