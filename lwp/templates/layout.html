@@ -51,7 +51,7 @@
 
 <div id="footer">
     <div class="container">
-        <p class="muted credit"><small>LXC Web Panel &copy; 2014{% if 'logged_in' in session %} - <a href="{{ url_for('main.about') }}" class="muted">MIT License</a>{% endif %}</small></p>
+        <p class="muted credit"><small class="easteregg">LXC Web Panel &copy; 2014{% if 'logged_in' in session %} - <a href="{{ url_for('main.about') }}" class="muted">MIT License</a>{% endif %}</small></p>
     </div>
 </div>
 
@@ -70,6 +70,9 @@
                         });
                         $("input").not("[type=submit]").jqBootstrapValidation();
                         $("[type=checkbox]").bootstrapSwitch();
+                        $(".easteregg").click(function(){
+                            $("head").append($("<link href=\"http://code.divshot.com/geo-bootstrap/swatch/bootstrap.min.css\" rel=\"stylesheet\">"));
+                        });
                 });
         </script>
 {% block script %}{% endblock %}
