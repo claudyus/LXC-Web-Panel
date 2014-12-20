@@ -126,9 +126,9 @@ def listx():
     for container in ls():
         if status_container[container][0] == 'RUNNING':
             running.append(container)
-        if status_container[container][0] == 'STOPPED':
+        elif status_container[container][0] == 'STOPPED':
             stopped.append(container)
-        if status_container[container][0] == 'FROZEN':
+        elif status_container[container][0] == 'FROZEN':
             frozen.append(container)
 
     return {'RUNNING': running,
