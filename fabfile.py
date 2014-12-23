@@ -74,8 +74,41 @@ def clone():
         local('git checkout origin/gh-pages -b gh-pages || true')
 
 
+@task(alias='assets')
+def build_assets():
+    """
+    Runs the assets pipeline, Grunt, bower, sass, etc.
+    """
+    # only run npm install when needed
+    if not os.path.exists('jsbuild/node_modules'):
+        with lcd('jsbuild'):
+            local('npm install')
+
+    # run Bower, then Grunt
+    with lcd('jsbuild'):
+        local('node_modules/.bin/bower install')
+        local('node_modules/.bin/grunt')
+
+
 @task
 def site():
     clone()
+    build_assets()
     debian()
     local('make -C gh-pages/')
+
+
+@task
+def clean_assets():
+    local('rm -rf lwp/static/js/vendor')
+    local('rm -f lwp/static/css/bootstrap.*')
+
+@task
+def clean_jsbuild():
+    local('rm -rf jsbuild/node_modules')
+    local('rm -rf jsbuild/bower_components')
+
+@task
+def clean():
+    clean_jsbuild()
+    clean_assets()
