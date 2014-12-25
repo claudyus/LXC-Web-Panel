@@ -447,6 +447,18 @@ def create_container():
                     except subprocess.CalledProcessError:
                         flash(u'Error! %s' % name, 'error')
 
+            elif storage_method == 'btrfs':
+                try:
+                    if lxc.create(name, template=template, storage='btrfs', xargs=command) == 0:
+                        flash(u'Container %s created successfully!' % name, 'success')
+                    else:
+                        flash(u'Failed to create %s!' % name, 'error')
+                except lxc.ContainerAlreadyExists:
+                    flash(u'The Container %s is already created!' % name, 'error')
+                except subprocess.CalledProcessError:
+                    flash(u'Error! %s' % name, 'error')
+                        
+                        
             elif storage_method == 'zfs':
                 zfs = request.form['zpoolname']
 
