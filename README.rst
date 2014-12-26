@@ -65,13 +65,13 @@ PAM
 ++++++++
 
 To enable authentication agains PAM you should set ``auth`` type to ``pam`` and ``service`` variable in ``pam`` section.
-Python PAM module needs to be installed:
-::
+Python PAM module needs to be installed::
+
   pip install python-pam
 
 With default ``login`` service all valid linux users can login to lwp.
 Many more options are available via PAM Configuration, see PAM docs.
-  
+
 File-bucket configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
