@@ -44,6 +44,19 @@ See lwp.example.conf for references.</p>
 <h3>htpasswd</h3>
 <p>To enable authentication agains htpasswd file you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">htpasswd</tt> and <tt class="docutils literal">file</tt> variable in <tt class="docutils literal">htpasswd</tt> section to point to the htpasswd file.</p>
 </div>
+<div class="section" id="pam">
+<h3>PAM</h3>
+<p>To enable authentication agains PAM you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">pam</tt> and <tt class="docutils literal">service</tt> variable in <tt class="docutils literal">pam</tt> section.
+Python PAM module needs to be installed:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 70)</p>
+Unexpected indentation.</div>
+<pre class="literal-block">
+pip install python-pam
+</pre>
+<p>With default <tt class="docutils literal">login</tt> service all valid linux users can login to lwp.
+Many more options are available via PAM Configuration, see PAM docs.</p>
+</div>
 </div>
 <div class="section" id="file-bucket-configuration">
 <h2>File-bucket configuration</h2>
