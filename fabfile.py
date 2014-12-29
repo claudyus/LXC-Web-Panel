@@ -51,7 +51,7 @@ def debian():
     local('git describe --tag > lwp/version')
     # the debian changelog is not stored on GIT and rebuilt each time
     generate_debian_changelog()
-    local('dpkg-buildpackage -us -uc -b')
+    local('sudo dpkg-buildpackage -us -uc -b')
 
     # dpkgb-buildpackage places debs one folder above
     version = get_version_from_debian_changelog()
@@ -59,10 +59,10 @@ def debian():
 
     # finally, move package into gh-pages dir
     target = 'debian-testing' if 'rc' in version else 'debian'
-    local('mv ../{} gh-pages/{}/'.format(package, target))
-    local('rm ../lwp_*.changes')
+    local('sudo mv ../{} gh-pages/{}/'.format(package, target))
+    local('sudo rm ../lwp_*.changes')
     if (os.environ['USER'] == 'claudyus'):
-        local('dpkg-sig -k 0DFD7CBB --sign builder gh-pages/{}/{}'.format(target, package))
+        local('sudo dpkg-sig -k 0DFD7CBB --sign builder gh-pages/{}/{}'.format(target, package))
 
 
 @task
@@ -74,8 +74,41 @@ def clone():
         local('git checkout origin/gh-pages -b gh-pages || true')
 
 
+@task(alias='assets')
+def build_assets():
+    """
+    Runs the assets pipeline, Grunt, bower, sass, etc.
+    """
+    # only run npm install when needed
+    if not os.path.exists('jsbuild/node_modules'):
+        with lcd('jsbuild'):
+            local('npm install')
+
+    # run Bower, then Grunt
+    with lcd('jsbuild'):
+        local('node_modules/.bin/bower install')
+        local('node_modules/.bin/grunt')
+
+
 @task
 def site():
     clone()
+    build_assets()
     debian()
     local('make -C gh-pages/')
+
+
+@task
+def clean_assets():
+    local('rm -rf lwp/static/js/vendor')
+    local('rm -f lwp/static/css/bootstrap.*')
+
+@task
+def clean_jsbuild():
+    local('rm -rf jsbuild/node_modules')
+    local('rm -rf jsbuild/bower_components')
+
+@task
+def clean():
+    clean_jsbuild()
+    clean_assets()

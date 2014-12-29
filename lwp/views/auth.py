@@ -23,6 +23,9 @@ try:
         OBJECT_CLASS = config.get('ldap', 'object_class')
     elif AUTH == 'htpasswd':
         HTPASSWD_FILE = config.get('htpasswd', 'file')
+    elif AUTH == 'pam':
+        import pam
+        PAM_SERVICE = config.get('pam', 'service')
 except NameError as err:
     print(' ! Revert to DB authentication ' + str(err))
     AUTH = 'database'
@@ -62,6 +65,15 @@ def login():
             from lwp.utils import check_htpasswd
             user = None
             if check_htpasswd(HTPASSWD_FILE, request_username, request_passwd):
+                user = {
+                    'username': request_username,
+                    'name': request_username,
+                    'su': 'Yes'
+                }
+        elif AUTH == 'pam':
+            user = None
+            p = pam.pam()
+            if p.authenticate(request_username, request_passwd, service=PAM_SERVICE):
                 user = {
                     'username': request_username,
                     'name': request_username,

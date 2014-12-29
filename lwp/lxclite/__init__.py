@@ -126,9 +126,9 @@ def listx():
     for container in ls():
         if status_container[container][0] == 'RUNNING':
             running.append(container)
-        if status_container[container][0] == 'STOPPED':
+        elif status_container[container][0] == 'STOPPED':
             stopped.append(container)
-        if status_container[container][0] == 'FROZEN':
+        elif status_container[container][0] == 'FROZEN':
             frozen.append(container)
 
     return {'RUNNING': running,
@@ -239,7 +239,7 @@ def backup(container, sr_type='local', destination='/var/lxc-backup/'):
 
     Returns path/filename of the backup instances
     """
-    prefix = time.strftime("%Y-%m-%d__%H-%m.tar.gz")
+    prefix = time.strftime("%Y-%m-%d__%H-%M.tar.gz")
     filename = '{}/{}-{}'.format(destination, container, prefix)
     was_running = False
 

@@ -447,6 +447,18 @@ def create_container():
                     except subprocess.CalledProcessError:
                         flash(u'Error! %s' % name, 'error')
 
+            elif storage_method == 'btrfs':
+                try:
+                    if lxc.create(name, template=template, storage='btrfs', xargs=command) == 0:
+                        flash(u'Container %s created successfully!' % name, 'success')
+                    else:
+                        flash(u'Failed to create %s!' % name, 'error')
+                except lxc.ContainerAlreadyExists:
+                    flash(u'The Container %s is already created!' % name, 'error')
+                except subprocess.CalledProcessError:
+                    flash(u'Error! %s' % name, 'error')
+                        
+                        
             elif storage_method == 'zfs':
                 zfs = request.form['zpoolname']
 
@@ -551,7 +563,10 @@ def backup_container():
     if request.method == 'POST':
         container = request.form['orig']
         sr_type = request.form['dest']
-        push = request.form['push']
+        if 'push' in request.form:
+            push = request.form['push']
+        else:
+            push = False
         sr_path = None
         for sr in storage_repos:
             if sr_type in sr:

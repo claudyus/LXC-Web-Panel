@@ -1,0 +1,22 @@
+{
+    "name": "lwp-bower",
+    "version": "0.1",
+    "authors": [
+        "Rob van der Linde <robvdl@gmail.com>",
+        "Claudio Mignanti <c.mignanti@gmail.com>"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "~2.0.3",
+        "bootstrap": "git@github.com:alonisser/bower-bootstrap-2.3.2-legacy.git",
+        "bootstrap-switch": "~2.0.1",
+        "jqBootstrapValidation": "git@github.com:ReactiveRaven/jqBootstrapValidation.git"
+    }
+}
