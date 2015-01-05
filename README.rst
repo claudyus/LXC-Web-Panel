@@ -35,7 +35,7 @@ Configuration
 2. edit it
 3. start lwp service ``# service lwp start``
 
-Your lwp panel is not at http://locahost:5000/
+Your lwp panel is not at http://localhost:5000/
 
 SSL configuration
 ^^^^^^^^^^^^^^^^^
