@@ -15,12 +15,15 @@ try:
         import ldap
         LDAP_HOST = config.get('ldap', 'host')
         LDAP_PORT = int(config.get('ldap', 'port'))
+        LDAP_PROTO = 'ldaps' if config.getboolean('ldap', 'ssl') else 'ldap'
+        LDAP_BIND_METHOD = config.get('ldap', 'bind_method')
         LDAP_BASE = config.get('ldap', 'base')
         LDAP_BIND_DN = config.get('ldap', 'bind_dn')
         LDAP_PASS = config.get('ldap', 'password')
         ID_MAPPING = config.get('ldap', 'id_mapping')
         DISPLAY_MAPPING = config.get('ldap', 'display_mapping')
         OBJECT_CLASS = config.get('ldap', 'object_class')
+        REQUIRED_GROUP = config.get('ldap', 'required_group')
     elif AUTH == 'htpasswd':
         HTPASSWD_FILE = config.get('htpasswd', 'file')
     elif AUTH == 'pam':
@@ -45,22 +48,33 @@ def login():
         current_url = request.form['url']
 
         if AUTH == 'ldap':
+            user = None
             try:
-                l = ldap.initialize('ldap://%s:%d' % (LDAP_HOST, LDAP_PORT))
+                l = ldap.initialize('%s://%s:%d' % (LDAP_PROTO, LDAP_HOST, LDAP_PORT))
                 l.set_option(ldap.OPT_REFERRALS, 0)
                 l.protocol_version = 3
-                l.simple_bind(LDAP_BIND_DN, LDAP_PASS)
-                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=' + OBJECT_CLASS + ')(' + ID_MAPPING + '=' + request_username + '))', [])[0]
-                l.bind_s(q[0], request_passwd, ldap.AUTH_SIMPLE)
-                #set the parameters for user by ldap objectClass
-                user = {
-                    'username': q[1][ID_MAPPING][0].decode('utf8'),
-                    'name': q[1][DISPLAY_MAPPING][0].decode('utf8'),
-                    'su': 'Yes'
-                }
+                if LDAP_BIND_METHOD == 'user':
+                    l.simple_bind(LDAP_BIND_DN, LDAP_PASS)
+                else:
+                    l.simple_bind()
+                attrs = ['memberOf', ID_MAPPING, DISPLAY_MAPPING] if REQUIRED_GROUP else []
+                q = l.search_s(LDAP_BASE, ldap.SCOPE_SUBTREE, '(&(objectClass=' + OBJECT_CLASS + ')(' + ID_MAPPING + '=' + request_username + '))', attrs)[0]
+                is_member = False
+                if 'memberOf' in q[1]:
+                    for group in q[1]['memberOf']:
+                        if group.find("cn=%s," % REQUIRED_GROUP) >= 0:
+                            is_member = True
+                            break
+                if is_member == True or not REQUIRED_GROUP:
+                    l.bind_s(q[0], request_passwd, ldap.AUTH_SIMPLE)
+                    #set the parameters for user by ldap objectClass
+                    user = {
+                        'username': q[1][ID_MAPPING][0].decode('utf8'),
+                        'name': q[1][DISPLAY_MAPPING][0].decode('utf8'),
+                        'su': 'Yes'
+                    }
             except Exception, e:
                 print(str(e))
-                user = None
         elif AUTH == 'htpasswd':
             from lwp.utils import check_htpasswd
             user = None
