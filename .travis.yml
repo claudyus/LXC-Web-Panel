@@ -1,8 +1,8 @@
 language: python
 
 install:
-    - pip install flake8
-    - sudo apt-get install nodejs build-essential
+    - pip install flake8 fabric
+    - sudo apt-get install nodejs build-essential dpkg-dev
 
 script:
     - flake8 --ignore=E501 lwp/
