@@ -34,7 +34,6 @@ except NameError as err:
     AUTH = 'database'
 
 
-
 # Flask module
 mod = Blueprint('auth', __name__)
 
@@ -65,9 +64,9 @@ def login():
                         if group.find("cn=%s," % REQUIRED_GROUP) >= 0:
                             is_member = True
                             break
-                if is_member == True or not REQUIRED_GROUP:
+                if is_member is True or not REQUIRED_GROUP:
                     l.bind_s(q[0], request_passwd, ldap.AUTH_SIMPLE)
-                    #set the parameters for user by ldap objectClass
+                    # set the parameters for user by ldap objectClass
                     user = {
                         'username': q[1][ID_MAPPING][0].decode('utf8'),
                         'name': q[1][DISPLAY_MAPPING][0].decode('utf8'),

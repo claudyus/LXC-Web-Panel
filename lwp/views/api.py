@@ -75,7 +75,7 @@ def add_container():
         except lxc.ContainerAlreadyExists:
             return jsonify(status="error", error="Container yet exists"), 409
     else:
-        #we want to clone a container
+        # we want to clone a container
         try:
             lxc.clone(data.clone, data.name)
         except lxc.ContainerAlreadyExists:

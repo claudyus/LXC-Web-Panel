@@ -88,7 +88,7 @@ def edit(container=None):
             g.db.commit()
             flash(u'Bucket config for %s saved' % container, 'success')
 
-        #convert boolean in correct value for lxc, if checkbox is inset value is not submitted inside POST
+        # convert boolean in correct value for lxc, if checkbox is inset value is not submitted inside POST
         form['flags'] = 'up' if 'flags' in form else 'down'
         form['start_auto'] = '1' if 'start_auto' in form else '0'
 
@@ -99,7 +99,7 @@ def edit(container=None):
             form['swlimit'] = ''
 
         for option in form.keys():
-            #if the key is supported AND is different
+            # if the key is supported AND is different
             if option in cfg.keys() and form[option] != cfg[option]:
                 # validate value with regex
                 if re.match(cgroup_ext[option][1], form[option]):
@@ -457,8 +457,7 @@ def create_container():
                     flash(u'The Container %s is already created!' % name, 'error')
                 except subprocess.CalledProcessError:
                     flash(u'Error! %s' % name, 'error')
-                        
-                        
+
             elif storage_method == 'zfs':
                 zfs = request.form['zpoolname']
 
@@ -603,8 +602,8 @@ def backup_container():
 @if_logged_in()
 def refresh_info():
     return jsonify({'cpu': lwp.host_cpu_percent(),
-            'uptime': lwp.host_uptime(),
-            'disk': lwp.host_disk_usage(partition=config.get('overview', 'partition'))})
+                    'uptime': lwp.host_uptime(),
+                    'disk': lwp.host_disk_usage(partition=config.get('overview', 'partition'))})
 
 
 @mod.route('/_refresh_memory_<name>')

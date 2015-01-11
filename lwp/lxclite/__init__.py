@@ -78,7 +78,7 @@ def info(container):
         raise ContainerDoesntExists('Container {} does not exist!'.format(container))
 
     output = _run('lxc-info -qn {}'.format(container), output=True).splitlines()
-    
+
     state = {'pid': 0}
     for val in output:
         state[val.split(':')[0].lower().strip().replace(" ", "_")] = val.split(':')[1].strip()
@@ -190,7 +190,7 @@ def freeze(container):
     """
     if not exists(container):
         raise ContainerDoesntExists('Container {} does not exists!'.format(container))
-    if not container in running():
+    if container not in running():
         raise ContainerNotRunning('Container {} is not running!'.format(container))
     return _run('lxc-freeze -n {}'.format(container))
 
@@ -201,7 +201,7 @@ def unfreeze(container):
     """
     if not exists(container):
         raise ContainerDoesntExists('Container {} does not exists!'.format(container))
-    if not container in frozen():
+    if container not in frozen():
         raise ContainerNotRunning('Container {} is not frozen!'.format(container))
     return _run('lxc-unfreeze -n {}'.format(container))
 

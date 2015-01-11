@@ -6,7 +6,7 @@ import hashlib
 import sqlite3
 import ConfigParser
 
-from flask import session, render_template, g, flash, redirect, url_for, request, jsonify
+from flask import session, render_template, g, flash, request, jsonify
 
 
 """
@@ -145,7 +145,7 @@ def api_auth():
             if token:
                 result = query_db('select * from api_tokens where token=?', [token], one=True)
                 if result is not None:
-                    #token exists, access granted
+                    # token exists, access granted
                     return handler(*args, **kwargs)
                 else:
                     return jsonify(status="error", error="Unauthorized"), 401
@@ -161,9 +161,9 @@ def check_htpasswd(htpasswd_file, username, password):
 
     lines = open(htpasswd_file, 'r').readlines()
     for line in lines:
-      htuser, htpasswd = line.split(':')
-      if username == htuser:
-        break
+        htuser, htpasswd = line.split(':')
+        if username == htuser:
+            break
 
     if htuser is None:
         return False
