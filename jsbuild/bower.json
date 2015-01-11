@@ -15,8 +15,8 @@
     ],
     "dependencies": {
         "jquery": "~2.0.3",
-        "bootstrap": "git@github.com:alonisser/bower-bootstrap-2.3.2-legacy.git",
+        "bootstrap": "https://github.com/alonisser/bower-bootstrap-2.3.2-legacy.git",
         "bootstrap-switch": "~2.0.1",
-        "jqBootstrapValidation": "git@github.com:ReactiveRaven/jqBootstrapValidation.git"
+        "jqBootstrapValidation": "https://github.com/ReactiveRaven/jqBootstrapValidation.git"
     }
 }
