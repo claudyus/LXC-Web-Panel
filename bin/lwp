@@ -4,7 +4,6 @@ from __future__ import absolute_import, print_function
 
 import os
 import sys
-import ConfigParser
 
 from flask import Flask, g
 
@@ -13,7 +12,7 @@ SESSION_SECRET_FILE = '/etc/lwp/session_secret'
 if '--generate_session_secret' in sys.argv[1:]:
     key = os.urandom(24)
     with os.fdopen(os.open(SESSION_SECRET_FILE, os.O_WRONLY | os.O_CREAT, 0644), 'w') as handle:
-      handle.write(key)
+        handle.write(key)
     exit(0)
 
 try:
@@ -43,6 +42,7 @@ if '--profiling' in sys.argv[1:]:
     app.config['PROFILE'] = True
     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
     app.debug = True  # also enable debug
+
 
 @app.before_request
 def before_request():
