@@ -1,0 +1,10 @@
+language: python
+
+install:
+    - pip install flake8
+    - sudo apt-get install nodejs build-essential
+
+script:
+    - flake8 --ignore=E501 lwp/
+    - fab build_assets
+    - fab debian
