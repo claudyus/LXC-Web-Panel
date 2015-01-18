@@ -18,14 +18,13 @@ def generate_package_date():
     return date_with_timezone.strftime('%a, %d %b %Y %H:%M:%S %z')
 
 
-def generate_debian_changelog():
+def generate_debian_changelog(version):
     """
     We don't store the debian/changelog file in the GIT repository, but build
     it each time from the current GIT tag.
     """
-    tag_version = local('git describe --tags', capture=True)
     with open('debian/changelog', 'w') as f:
-        f.write('lwp ({0}) unstable; urgency=low\n\n  * LWP release {0}\n\n'.format(tag_version))
+        f.write('lwp ({0}) unstable; urgency=low\n\n  * LWP release {0}\n\n'.format(version))
         f.write(' -- Claudio Mignanti <c.mignanti@gmail.com>  {}\n'.format(generate_package_date()))
 
 
@@ -48,13 +47,15 @@ def get_deb_architecture():
 
 @task(alias='deb')
 def debian():
-    local('git describe --tag > lwp/version')
+    version = local('git describe --tag', capture=True)
+    with open('lwp/version', 'w') as fd:
+        fd.write('{}\n'.format(version))
+
     # the debian changelog is not stored on GIT and rebuilt each time
-    generate_debian_changelog()
+    generate_debian_changelog(version)
     local('sudo dpkg-buildpackage -us -uc -b')
 
-    # dpkgb-buildpackage places debs one folder above
-    version = get_version_from_debian_changelog()
+    # dpkg-buildpackage places debs one folder above
     package = 'lwp_{}_all.deb'.format(version)
 
     # finally, move package into gh-pages dir
