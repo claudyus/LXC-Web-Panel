@@ -9,4 +9,3 @@ install:
 script:
     - flake8 --ignore=E501 lwp/ bin/lwp
     - fab build_assets
-    - fab debian
