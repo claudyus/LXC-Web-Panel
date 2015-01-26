@@ -36,7 +36,7 @@ Configuration
 2. edit it
 3. start lwp service as root ``service lwp start``
 
-Your lwp panel is not at http://localhost:5000/
+Your lwp panel is not at http://localhost:5000/ and default username and password are admin/admin.
 
 SSL configuration
 ^^^^^^^^^^^^^^^^^
