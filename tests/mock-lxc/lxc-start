@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# mock of the lxc-start used to test lxclite on travis due to:
+#  https://github.com/travis-ci/travis-ci/issues/1273
+
+if [[ $1 -eq '-dn' && $2 ]]; then
+	if [[ -f /tmp/$2 ]]; then
+		grep 'stopped' /tmp/$2 > /dev/null || exit 1 # already started
+		echo 'started' > /tmp/$2
+		exit 0
+	else
+		exit 1
+	fi
+fi
+
+exit 1
