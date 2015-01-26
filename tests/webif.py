@@ -41,12 +41,6 @@ class TestApi(LiveServerTestCase):
         app.config['DATABASE'] = '/tmp/db.sql'
         return app
 
-    def setUp(self):
-        shutil.copyfile('lwp.db', '/tmp/db.sql')
-        self.db = connect_db('/tmp/db.sql')
-        self.db.execute('insert into api_tokens(description, token) values(?, ?)', ['test', self.token])
-        self.db.commit()
-
     def test_get_containers(self):
         q = urllib2.Request(self.get_server_url() + '/api/v1/containers/')
         q.add_header('Private-Token', self.token)
