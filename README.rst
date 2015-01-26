@@ -66,6 +66,10 @@ htpasswd
 
 To enable authentication against htpasswd file you should set ``auth`` type to ``htpasswd`` and ``file`` variable in ``htpasswd`` section to point to the htpasswd file.
 
+This backend use the crypt function, here an example where ``-d`` force the use of crypt encryption when generating the htpasswd file::
+
+  htpasswd -d -b -c /etc/lwp/httpasswd admin admin
+
 PAM
 +++
 
