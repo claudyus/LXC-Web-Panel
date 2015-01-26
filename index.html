@@ -50,8 +50,9 @@
   <div class="row">
 
     <div class="col-lg-7">
-      <p>This is a fork of the original LXC-Web-Panel from <a class="reference external" href="https://github.com/lxc-webpanel/LXC-Web-Panel">https://github.com/lxc-webpanel/LXC-Web-Panel</a> with a lot of improvements and bug fix for LXC 1.0+.</p>
-<p>This version of lwp is featuring backup capability, RestAPI interface, LDAP support other that the necessary fixes to work with latest lxc version.</p>
+      <a class="reference external image-reference" href="https://travis-ci.org/claudyus/LXC-Web-Panel"><img alt="https://travis-ci.org/claudyus/LXC-Web-Panel.svg?branch=master" src="https://travis-ci.org/claudyus/LXC-Web-Panel.svg?branch=master" /></a>
+<p>This is a fork of the original LXC-Web-Panel from <a class="reference external" href="https://github.com/lxc-webpanel/LXC-Web-Panel">https://github.com/lxc-webpanel/LXC-Web-Panel</a> with a lot of improvements and bug fix for LXC 1.0+.</p>
+<p>This version of lwp is featuring backup capability, RestAPI interface, LDAP support other that the necessary fixes to work with latest lxc version. This project is also available as debian package for easly installation.</p>
 <p>If you use this fork please ensure to use al least lxc 1.0.4. The code was tested on Ubuntu 12.04 and 14.04.</p>
 <p>On ubuntu 12.04 you should install:</p>
 <blockquote>
@@ -69,7 +70,6 @@ echo &quot;deb http://claudyus.github.io/LXC-Web-Panel/ debian/&quot; | sudo tee
 sudo apt-get update
 sudo apt-get install lwp
 </pre>
-<p>Beware: The repository system was reorganize after the 0.6 release. See <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/posts/02-reorganize-deb-repo.html">this blog post</a> for more information</p>
 <p>Note: you can also include the debian-testing repo inside your source.list file to receive release candidate build.</p>
 </div>
 <div class="section" id="configuration">
@@ -77,32 +77,40 @@ sudo apt-get install lwp
 <ol class="arabic simple">
 <li>Copy /etc/lwp/lwp.example.conf to /etc/lwp/lwp.conf</li>
 <li>edit it</li>
-<li>start lwp service <tt class="docutils literal"># service lwp start</tt></li>
+<li>start lwp service as root <tt class="docutils literal">service lwp start</tt></li>
 </ol>
-<p>Your lwp panel is not at <a class="reference external" href="http://localhost:5000/">http://localhost:5000/</a></p>
+<p>Your lwp panel is not at <a class="reference external" href="http://localhost:5000/">http://localhost:5000/</a> and default username and password are admin/admin.</p>
 <div class="section" id="ssl-configuration">
 <h2>SSL configuration</h2>
 <p>SSL direct support was dropped after v0.6 release.</p>
 <p>You can configure nginx as reverse proxy if you want to use SSL encryption, see <a class="reference external" href="https://github.com/claudyus/LXC-Web-Panel/issues/34">bug #34</a> for info.</p>
 </div>
-<div class="section" id="authentication">
-<h2>Authentication</h2>
+<div class="section" id="authentication-methods">
+<h2>Authentication methods</h2>
 <p>Default authentication is against the internal sqlite database, but it's possible to configure alternative backends.</p>
 <div class="section" id="ldap">
 <h3>LDAP</h3>
 <p>To enable ldap auth you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">ldap</tt> inside your config file than configure all options inside ldap section.
 See lwp.example.conf for references.</p>
+<p>Pyhton LDAP need to be installed:</p>
+<pre class="literal-block">
+apt-get install python-ldap
+</pre>
 </div>
 <div class="section" id="htpasswd">
 <h3>htpasswd</h3>
-<p>To enable authentication agains htpasswd file you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">htpasswd</tt> and <tt class="docutils literal">file</tt> variable in <tt class="docutils literal">htpasswd</tt> section to point to the htpasswd file.</p>
+<p>To enable authentication against htpasswd file you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">htpasswd</tt> and <tt class="docutils literal">file</tt> variable in <tt class="docutils literal">htpasswd</tt> section to point to the htpasswd file.</p>
+<p>This backend use the crypt function, here an example where <tt class="docutils literal"><span class="pre">-d</span></tt> force the use of crypt encryption when generating the htpasswd file:</p>
+<pre class="literal-block">
+htpasswd -d -b -c /etc/lwp/httpasswd admin admin
+</pre>
 </div>
 <div class="section" id="pam">
 <h3>PAM</h3>
-<p>To enable authentication agains PAM you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">pam</tt> and <tt class="docutils literal">service</tt> variable in <tt class="docutils literal">pam</tt> section.
+<p>To enable authentication against PAM you should set <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">pam</tt> and <tt class="docutils literal">service</tt> variable in <tt class="docutils literal">pam</tt> section.
 Python PAM module needs to be installed:</p>
 <pre class="literal-block">
-pip install python-pam
+apt-get install python-pam
 </pre>
 <p>With default <tt class="docutils literal">login</tt> service all valid linux users can login to lwp.
 Many more options are available via PAM Configuration, see PAM docs.</p>
@@ -128,7 +136,7 @@ buckets_port = 1234
 <h1>Developers/Debug</h1>
 <p>After a fresh git clone you should download the bower component and setup the package for development purpose.</p>
 <pre class="literal-block">
-bower install
+fab build_assets
 sudo ./setup.py develop
 cp lwp.example.conf lwp.conf
 </pre>
@@ -137,13 +145,9 @@ cp lwp.example.conf lwp.conf
 used against the global installation using: <tt class="docutils literal">sudo lwp <span class="pre">--debug</span></tt></p>
 <p>Anyway ensure to stop the lwp service if any: <tt class="docutils literal">sudo service lwp stop</tt></p>
 </div>
-<div class="section" id="info">
-<h1>Info</h1>
-<p>This repo contains a lot of mixed up from spare forks, I like to thanks all contributors to this project.</p>
-</div>
 <div class="section" id="license">
 <h1>LICENSE</h1>
-<p>This work is released under MIT License</p>
+<p>This work is released under MIT License, see LICENSE file.</p>
 </div>
 
 
