@@ -35,6 +35,7 @@ class TestApi(LiveServerTestCase):
     type_json = {'Content-Type': 'application/json'}
 
     def create_app(self):
+        shutil.rmtree('/tmp/test_vm_sshd', ignore_errors=True)
         shutil.copyfile('lwp.db', '/tmp/db.sql')
         self.db = connect_db('/tmp/db.sql')
         self.db.execute('insert into api_tokens(description, token) values(?, ?)', ['test', self.token])
