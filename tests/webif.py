@@ -36,7 +36,6 @@ class TestApi(LiveServerTestCase):
     type_json = {'Content-Type': 'application/json'}
 
     def create_app(self):
-        shutil.rmtree('/tmp/lxc/', ignore_errors=True)
         shutil.copyfile('lwp.db', '/tmp/db.sql')
         self.db = connect_db('/tmp/db.sql')
         self.db.execute('insert into api_tokens(description, token) values(?, ?)', ['test', self.token])
@@ -45,6 +44,7 @@ class TestApi(LiveServerTestCase):
         return app
 
     def test_00_get_containers(self):
+        shutil.rmtree('/tmp/lxc/', ignore_errors=True)
         request = urllib2.Request(self.get_server_url() + '/api/v1/containers/')
         request.add_header('Private-Token', self.token)
         response = urllib2.urlopen(request)
