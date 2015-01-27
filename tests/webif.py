@@ -2,6 +2,7 @@ import unittest
 import urllib2
 import shutil
 import json
+import os
 
 from flask import Flask
 from flask.ext.testing import LiveServerTestCase
@@ -35,7 +36,7 @@ class TestApi(LiveServerTestCase):
     type_json = {'Content-Type': 'application/json'}
 
     def create_app(self):
-        shutil.rmtree('/tmp/test_vm_sshd', ignore_errors=True)
+        shutil.rmtree('/tmp/lxc/', ignore_errors=True)
         shutil.copyfile('lwp.db', '/tmp/db.sql')
         self.db = connect_db('/tmp/db.sql')
         self.db.execute('insert into api_tokens(description, token) values(?, ?)', ['test', self.token])
@@ -43,22 +44,23 @@ class TestApi(LiveServerTestCase):
         app.config['DATABASE'] = '/tmp/db.sql'
         return app
 
-    def test_get_containers(self):
+    def test_00_get_containers(self):
         request = urllib2.Request(self.get_server_url() + '/api/v1/containers/')
         request.add_header('Private-Token', self.token)
         response = urllib2.urlopen(request)
         self.assertEqual(response.code, 200)
         #assert isinstance(response.read(), list)
 
-    def test_put_containers(self):
+    def test_01_put_containers(self):
         data = {'name': 'test_vm_sshd', 'template': 'sshd'}
         request = urllib2.Request(self.get_server_url() + '/api/v1/containers/', json.dumps(data), self.type_json)
         request.add_header('Private-Token', self.token)
         request.get_method = lambda: 'PUT'
         response = urllib2.urlopen(request)
         self.assertEqual(response.code, 200)
+        assert data['name'] in os.listdir('/tmp/lxc')
 
-    def test_post_containers(self):
+    def test_02_post_containers(self):
         data = {'action': 'start'}
         request = urllib2.Request(self.get_server_url() + '/api/v1/containers/test_vm_sshd', json.dumps(data), self.type_json)
         request.add_header('Private-Token', self.token)
@@ -66,21 +68,21 @@ class TestApi(LiveServerTestCase):
         response = urllib2.urlopen(request)
         self.assertEqual(response.code, 200)
 
-    def test_delete_containers(self):
+    def test_03_delete_containers(self):
         request = urllib2.Request(self.get_server_url() + '/api/v1/containers/test_vm_sshd')
         request.add_header('Private-Token', self.token)
         request.get_method = lambda: 'DELETE'
         response = urllib2.urlopen(request)
         self.assertEqual(response.code, 200)
 
-    def test_post_token(self):
+    def test_04_post_token(self):
         data = {'token': 'test'}
         request = urllib2.Request(self.get_server_url() + '/api/v1/tokens/', json.dumps(data), self.type_json)
         request.add_header('Private-Token', self.token)
         response = urllib2.urlopen(request)
         self.assertEqual(response.code, 200)
 
-    def test_delete_token(self):
+    def test_05_delete_token(self):
         request = urllib2.Request(self.get_server_url() + '/api/v1/tokens/test')
         request.add_header('Private-Token', self.token)
         request.get_method = lambda: 'DELETE'

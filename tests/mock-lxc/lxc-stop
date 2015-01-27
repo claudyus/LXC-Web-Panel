@@ -3,10 +3,10 @@
 # mock of the lxc-stop used to test lxclite on travis due to:
 #  https://github.com/travis-ci/travis-ci/issues/1273
 
-if [[ $1 -eq '-dn' && $2 ]]; then
+if [[ $1 -eq '-n' && $2 ]]; then
 	if [[ -f /tmp/lxc/$2/status ]]; then
-		grep 'started' /tmp/lxc/$2/status > /dev/null || exit 1 # already started
-		echo 'stopped' > /tmp/lxc/$2/status
+		grep 'RUNNING' /tmp/lxc/$2/status > /dev/null || exit 1 # already started
+		echo 'STOPPED' > /tmp/lxc/$2/status
 		exit 0
 	else
 		exit 1

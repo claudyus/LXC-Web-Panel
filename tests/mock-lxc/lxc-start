@@ -5,8 +5,8 @@
 
 if [[ $1 -eq '-dn' && $2 ]]; then
 	if [[ -f /tmp/lxc/$2/status ]]; then
-		grep 'stopped' > /tmp/lxc/$2/status > /dev/null || exit 1 # already started
-		echo 'started' > /tmp/lxc/$2/status
+		grep 'STOPPED' /tmp/lxc/$2/status > /dev/null || exit 1 # already started
+		echo 'RUNNING' > /tmp/lxc/$2/status
 		exit 0
 	else
 		exit 1
