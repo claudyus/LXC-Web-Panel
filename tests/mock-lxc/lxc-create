@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# mock of the lxc-create used to test lxclite on travis due to:
+#  https://github.com/travis-ci/travis-ci/issues/1273
+
+# lxc-create -n <container_name>
+if [[ $1 -eq '-n' && $2 ]]; then
+	if [[ ! -d /tmp/lxc/$2 ]]; then
+		mkdir -p /tmp/lxc/$2
+		touch /tmp/lxc/$2/config
+		echo "STOPPED" > /tmp/lxc/$2/status
+		exit 0
+	else
+		echo "Container already exists"
+		exit 1
+	fi
+fi
+
+exit 1

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# mock of the lxc-ls used to test lxclite on travis due to:
+#  https://github.com/travis-ci/travis-ci/issues/1273
+
+# lxc-ls --fancy
+if [[ $1 == '--fancy' ]]; then
+    mkdir -p /tmp/lxc
+    echo "NAME  STATE  IPV4  IPV6  GROUPS  AUTOSTART"
+    echo "------------------------------------------"
+    for name in `ls /tmp/lxc`; do
+        status=`cat /tmp/lxc/${name}/status`
+        ip=192.168."$((RANDOM%=255))"."$((RANDOM%=255))"
+        echo "${name}   ${status}   $ip   -     -   NO"
+    done
+fi
+
+exit 1

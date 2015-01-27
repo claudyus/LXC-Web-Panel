@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# mock of the lxc-config used to test lxclite on travis due to:
+#  https://github.com/travis-ci/travis-ci/issues/1273
+
+if [[ $1 == 'lxc.lxcpath' ]]; then
+	echo "/tmp/lxc"
+	mkdir -p /tmp/lxc
+	exit 0
+fi
+
+exit 1

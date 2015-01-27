@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# mock of the lxc-destroy used to test lxclite on travis due to:
+#  https://github.com/travis-ci/travis-ci/issues/1273
+
+if [[ $1 -eq '-n' && $2 ]]; then
+	if [[ -d /tmp/lxc/$2 ]]; then
+		rm -rf /tmp/lxc/$2
+		exit 0
+	else
+		exit 1
+	fi
+fi
+
+exit 1

@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function
 
 import json
 
-from flask import Blueprint, request, g, abort, jsonify
+from flask import Blueprint, request, g, jsonify
 
 import lwp.lxclite as lxc
 from lwp.utils import api_auth
@@ -59,29 +59,26 @@ def add_container():
     if data is None:
         return jsonify(status="error", error="Bad request"), 400
 
-    if (bool('template' not in data) != bool('clone' not in data)) | bool('name' not in data):
-        return jsonify(status="error", error="Bad request"), 400
+    if (not(('template' in data) or ('clone' in data)) or ('name' not in data)):
+        return jsonify(status="error", error="Bad request"), 402
 
-    print(data)
     if 'template' in data:
         # we want a new container
         if 'store' not in data:
-            data.update(store=None)
+            data['store'] = ""
         if 'xargs' not in data:
-            data.update(xargs=None)
+            data['xargs'] = ""
 
         try:
-            lxc.create(data.name, data.template, data.store, data.xargs)
+            lxc.create(data['name'], data['template'], data['store'], data['xargs'])
         except lxc.ContainerAlreadyExists:
             return jsonify(status="error", error="Container yet exists"), 409
     else:
         # we want to clone a container
         try:
-            lxc.clone(data.clone, data.name)
+            lxc.clone(data['clone'], data['name'])
         except lxc.ContainerAlreadyExists:
             return jsonify(status="error", error="Container yet exists"), 409
-        finally:
-            abort(500)
     return jsonify(status="ok"), 200
 
 
