@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function
 
 import json
 
-from flask import Blueprint, request, g, abort, jsonify
+from flask import Blueprint, request, g, jsonify
 
 import lwp.lxclite as lxc
 from lwp.utils import api_auth
