@@ -3,6 +3,7 @@ import unittest
 import urllib2
 import shutil
 import json
+import ast
 import os
 
 from flask import Flask
@@ -11,11 +12,21 @@ from flask.ext.testing import LiveServerTestCase
 from lwp.app import app
 from lwp.utils import connect_db
 
+token = 'myrandomapites0987'
+
 class TestWebIf(LiveServerTestCase):
 
     render_templates = False
 
+    @classmethod
+    def setUpClass(cls):
+        shutil.copyfile('lwp.db', '/tmp/db.sql')
+        db = connect_db('/tmp/db.sql')
+        db.execute('insert into api_tokens(description, token) values(?, ?)', ['test', token])
+        db.commit()
+
     def create_app(self):
+        app.config['DATABASE'] = '/tmp/db.sql'
         return app
 
     def test_server_is_up_and_running(self):
@@ -29,6 +40,42 @@ class TestWebIf(LiveServerTestCase):
         for link in endpoints:
             response = urllib2.urlopen(self.get_server_url() + link)
             self.assertEqual(response.code, 200)
+
+    def test_home_rendering(self):
+        subprocess.check_output('lxc-create -n mocktest_00_lxc', shell=True)
+
+        request = urllib2.Request(self.get_server_url() + '/home')
+        request.add_header('Private-Token', token)
+        response = urllib2.urlopen(request)
+        self.assertEqual(response.code, 200)
+        assert 'mocktest_00_lxc' in response.read()
+
+    def test_refresh_info(self):
+        subprocess.check_output('lxc-create -n mocktest', shell=True)
+
+        request = urllib2.Request(self.get_server_url() + '/_refresh_info')
+        request.add_header('Private-Token', token)
+        response = urllib2.urlopen(request)
+        self.assertEqual(response.code, 200)
+        j_data = response.read()
+        assert 'cpu' in j_data
+        assert 'disk' in j_data
+        assert 'uptime' in j_data
+
+    # def test_00_action_create(self):
+    #     data = {'name': 'mocktest', 'template': 'sshd'}
+    #     request = urllib2.Request(self.get_server_url() + '/action/create-container', data)
+    #     request.add_header('Private-Token', token)
+    #     response = urllib2.urlopen(request)
+    #     self.assertEqual(response.code, 200)
+    #     assert 'mocktest' in os.listdir('/tmp/lxc')
+
+    # def test_01_action_start(self):
+    #     request = urllib2.Request(self.get_server_url() + '/action?name=mocktest&action=start')
+    #     request.add_header('Private-Token', token)
+    #     response = urllib2.urlopen(request)
+    #     self.assertEqual(response.code, 200)
+    #     assert 'RUNNING' in subprocess.check_output('lxc-ls --fancy', shell=True)
 
 class TestApi(LiveServerTestCase):
 
