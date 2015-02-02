@@ -27,11 +27,16 @@ try:
     elif AUTH == 'htpasswd':
         HTPASSWD_FILE = config.get('htpasswd', 'file')
     elif AUTH == 'pam':
-        import pam
+        # try Debian PAM first (PyPAM)
+        try:
+          import PAM
+        except ImportError:
+          import pam
         PAM_SERVICE = config.get('pam', 'service')
 except NameError as err:
     print(' ! Revert to DB authentication ' + str(err))
     AUTH = 'database'
+
 
 
 # Flask module
@@ -85,13 +90,52 @@ def login():
                 }
         elif AUTH == 'pam':
             user = None
-            p = pam.pam()
-            if p.authenticate(request_username, request_passwd, service=PAM_SERVICE):
-                user = {
-                    'username': request_username,
-                    'name': request_username,
-                    'su': 'Yes'
-                }
+
+            # try Debian PAM module (PyPAM)
+            try:
+                auth = PAM.pam()
+
+                # pam callback
+                def pam_conv(auth, query_list, userData):
+                     response = []
+
+                     for i in range(len(query_list)):
+                         query, type = query_list[i]
+                         if type == PAM.PAM_PROMPT_ECHO_ON:
+                             val = raw_input(query)
+                             response.append((val, 0))
+                         elif type == PAM.PAM_PROMPT_ECHO_OFF:
+                             response.append((request_passwd, 0))
+                         elif type == PAM.PAM_PROMPT_ERROR_MSG or type == PAM.PAM_PROMPT_TEXT_INFO:
+                             response.append(('', 0))
+                         else:
+                             return None
+
+                     return response
+
+                auth.start(PAM_SERVICE)
+                auth.set_item(PAM.PAM_USER, request_username)
+                auth.set_item(PAM.PAM_CONV, pam_conv)
+                try:
+                    auth.authenticate()
+                    auth.acct_mgmt()
+
+                    user = {
+                        'username': request_username,
+                        'name': request_username,
+                        'su': 'Yes'
+                    }
+                except PAM.error:
+                   pass
+
+            except NameError:
+                p = pam
+                if p.authenticate(request_username, request_passwd, service=PAM_SERVICE):
+                    user = {
+                        'username': request_username,
+                        'name': request_username,
+                        'su': 'Yes'
+                    }
         else:
             request_passwd = hash_passwd(request_passwd)
             user = query_db('select name, username, su from users where username=? and password=?', [request_username, request_passwd], one=True)
