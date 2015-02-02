@@ -29,14 +29,13 @@ try:
     elif AUTH == 'pam':
         # try Debian PAM first (PyPAM)
         try:
-          import PAM
+            import PAM
         except ImportError:
-          import pam
+            import pam
         PAM_SERVICE = config.get('pam', 'service')
 except NameError as err:
     print(' ! Revert to DB authentication ' + str(err))
     AUTH = 'database'
-
 
 
 # Flask module
@@ -97,21 +96,21 @@ def login():
 
                 # pam callback
                 def pam_conv(auth, query_list, userData):
-                     response = []
+                    response = []
 
-                     for i in range(len(query_list)):
-                         query, type = query_list[i]
-                         if type == PAM.PAM_PROMPT_ECHO_ON:
-                             val = raw_input(query)
-                             response.append((val, 0))
-                         elif type == PAM.PAM_PROMPT_ECHO_OFF:
-                             response.append((request_passwd, 0))
-                         elif type == PAM.PAM_PROMPT_ERROR_MSG or type == PAM.PAM_PROMPT_TEXT_INFO:
-                             response.append(('', 0))
-                         else:
-                             return None
+                    for i in range(len(query_list)):
+                        query, type = query_list[i]
+                        if type == PAM.PAM_PROMPT_ECHO_ON:
+                            val = raw_input(query)
+                            response.append((val, 0))
+                        elif type == PAM.PAM_PROMPT_ECHO_OFF:
+                            response.append((request_passwd, 0))
+                        elif type == PAM.PAM_PROMPT_ERROR_MSG or type == PAM.PAM_PROMPT_TEXT_INFO:
+                            response.append(('', 0))
+                        else:
+                            return None
 
-                     return response
+                    return response
 
                 auth.start(PAM_SERVICE)
                 auth.set_item(PAM.PAM_USER, request_username)
@@ -126,7 +125,7 @@ def login():
                         'su': 'Yes'
                     }
                 except PAM.error:
-                   pass
+                    pass
 
             except NameError:
                 p = pam
