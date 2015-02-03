@@ -3,8 +3,10 @@
 from lwp.app import app, DEBUG
 
 import sys
+import lwp.lxc_worker as worker
 
 if __name__ == '__main__':
+    worker.create_thread()
     # override debug configuration from command line
     app.debug = True if '--debug' in sys.argv[1:] else DEBUG
-    app.run(host=app.config['ADDRESS'], port=app.config['PORT'])
+    app.run(host=app.config['ADDRESS'], port=app.config['PORT'], threaded=True)
