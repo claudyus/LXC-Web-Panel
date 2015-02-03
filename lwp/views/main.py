@@ -11,6 +11,7 @@ from flask import Blueprint, request, session, g, redirect, url_for, abort, rend
 
 import lwp
 import lwp.lxclite as lxc
+from lwp.lxc_worker import LXC_QUEUE, WORKER_LOGGER, WorkerItem, LoggerItem
 from lwp.utils import query_db, if_logged_in, get_bucket_token, hash_passwd, config, cgroup_ext
 from lwp.views.auth import AUTH
 
@@ -340,50 +341,51 @@ def action():
     act = request.args['action']
     name = request.args['name']
 
-    # TODO: refactor this method, it's horrible to read
+    # TODO: refactor this method, it's horrible to read, refactor a bit (duplicite code)
     if act == 'start':
-        try:
-            if lxc.start(name) == 0:
-                time.sleep(1)  # Fix bug : "the container is randomly not displayed in overview list after a boot"
-                flash(u'Container %s started successfully!' % name, 'success')
-            else:
-                flash(u'Unable to start %s!' % name, 'error')
-        except lxc.ContainerAlreadyRunning:
-            flash(u'Container %s is already running!' % name, 'error')
+        item = WorkerItem()
+        item.params = {"container": name}
+        item.command = "start"
+        item.author = session["username"]
+        LXC_QUEUE.put(item)
+
+        flash(u'Action added into queue', 'success')
     elif act == 'stop':
-        try:
-            if lxc.stop(name) == 0:
-                flash(u'Container %s stopped successfully!' % name, 'success')
-            else:
-                flash(u'Unable to stop %s!' % name, 'error')
-        except lxc.ContainerNotRunning:
-            flash(u'Container %s is already stopped!' % name, 'error')
+        item = WorkerItem()
+        item.params = {"container": name}
+        item.command = "stop"
+        item.author = session["username"]
+        LXC_QUEUE.put(item)
+
+        flash(u'Action added into queue', 'success')
     elif act == 'freeze':
-        try:
-            if lxc.freeze(name) == 0:
-                flash(u'Container %s frozen successfully!' % name, 'success')
-            else:
-                flash(u'Unable to freeze %s!' % name, 'error')
-        except lxc.ContainerNotRunning:
-            flash(u'Container %s not running!' % name, 'error')
+        item = WorkerItem()
+        item.params = {"container": name}
+        item.command = "freeze"
+        item.author = session["username"]
+        LXC_QUEUE.put(item)
+
+        flash(u'Action added into queue', 'success')
     elif act == 'unfreeze':
-        try:
-            if lxc.unfreeze(name) == 0:
-                flash(u'Container %s unfrozen successfully!' % name, 'success')
-            else:
-                flash(u'Unable to unfeeze %s!' % name, 'error')
-        except lxc.ContainerNotRunning:
-            flash(u'Container %s not frozen!' % name, 'error')
+        item = WorkerItem()
+        item.params = {"container": name}
+        item.command = "unfreeze"
+        item.author = session["username"]
+        LXC_QUEUE.put(item)
+
+        flash(u'Action added into queue', 'success')
     elif act == 'destroy':
         if session['su'] != 'Yes':
             return abort(403)
-        try:
-            if lxc.destroy(name) == 0:
-                flash(u'Container %s destroyed successfully!' % name, 'success')
-            else:
-                flash(u'Unable to destroy %s!' % name, 'error')
-        except lxc.ContainerDoesntExists:
-            flash(u'The Container %s does not exists!' % name, 'error')
+
+        item = WorkerItem()
+        item.params = {"container": name}
+        item.command = "destroy"
+        item.author = session["username"]
+        LXC_QUEUE.put(item)
+
+        flash(u'Action added into queue', 'success')
+
     elif act == 'reboot' and name == 'host':
         if session['su'] != 'Yes':
             return abort(403)
@@ -423,54 +425,46 @@ def create_container():
             storage_method = request.form['backingstore']
 
             if storage_method == 'default':
-                try:
-                    if lxc.create(name, template=template, xargs=command) == 0:
-                        flash(u'Container %s created successfully!' % name, 'success')
-                    else:
-                        flash(u'Failed to create %s!' % name, 'error')
-                except lxc.ContainerAlreadyExists:
-                    flash(u'The Container %s is already created!' % name, 'error')
-                except subprocess.CalledProcessError:
-                    flash(u'Error! %s' % name, 'error')
+                item = WorkerItem()
+                item.params = {"container": name, "template": template, "storage": None, "xargs": command}
+                item.command = "create"
+                item.author = session["username"]
+                LXC_QUEUE.put(item)
+
+                flash(u'Action added into queue', 'success')
 
             elif storage_method == 'directory':
                 directory = request.form['dir']
 
                 if re.match('^/[a-zA-Z0-9_/-]+$', directory) and directory != '':
-                    try:
-                        if lxc.create(name, template=template, storage='dir --dir %s' % directory, xargs=command) == 0:
-                            flash(u'Container %s created successfully!' % name, 'success')
-                        else:
-                            flash(u'Failed to create %s!' % name, 'error')
-                    except lxc.ContainerAlreadyExists:
-                        flash(u'The Container %s is already created!' % name, 'error')
-                    except subprocess.CalledProcessError:
-                        flash(u'Error! %s' % name, 'error')
+                    item = WorkerItem()
+                    item.params = {"container": name, "template": template, "storage": "dir --dir {}".format(directory), "xargs": command}
+                    item.command = "create"
+                    item.author = session["username"]
+                    LXC_QUEUE.put(item)
+
+                    flash(u'Action added into queue', 'success')
 
             elif storage_method == 'btrfs':
-                try:
-                    if lxc.create(name, template=template, storage='btrfs', xargs=command) == 0:
-                        flash(u'Container %s created successfully!' % name, 'success')
-                    else:
-                        flash(u'Failed to create %s!' % name, 'error')
-                except lxc.ContainerAlreadyExists:
-                    flash(u'The Container %s is already created!' % name, 'error')
-                except subprocess.CalledProcessError:
-                    flash(u'Error! %s' % name, 'error')
+                item = WorkerItem()
+                item.params = {"container": name, "template": template, "storage": "btrfs", "xargs": command}
+                item.command = "create"
+                item.author = session["username"]
+                LXC_QUEUE.put(item)
+
+                flash(u'Action added into queue', 'success')
 
             elif storage_method == 'zfs':
                 zfs = request.form['zpoolname']
 
                 if re.match('^[a-zA-Z0-9_-]+$', zfs) and zfs != '':
-                    try:
-                        if lxc.create(name, template=template, storage='zfs --zfsroot %s' % zfs, xargs=command) == 0:
-                            flash(u'Container %s created successfully!' % name, 'success')
-                        else:
-                            flash(u'Failed to create %s!' % name, 'error')
-                    except lxc.ContainerAlreadyExists:
-                        flash(u'The Container %s is already created!' % name, 'error')
-                    except subprocess.CalledProcessError:
-                        flash(u'Error! %s' % name, 'error')
+                    item = WorkerItem()
+                    item.params = {"container": name, "template": template, "storage": "zfs --zfsroot {}".format(zfs), "xargs": command}
+                    item.command = "create"
+                    item.author = session["username"]
+                    LXC_QUEUE.put(item)
+
+                    flash(u'Action added into queue', 'success')
 
             elif storage_method == 'lvm':
                 lvname = request.form['lvname']
@@ -488,15 +482,13 @@ def create_container():
                 if re.match('^[0-9][G|M]$', fssize) and fssize != '':
                     storage_options += ' --fssize %s' % fssize
 
-                try:
-                    if lxc.create(name, template=template, storage=storage_options, xargs=command) == 0:
-                        flash(u'Container %s created successfully!' % name, 'success')
-                    else:
-                        flash(u'Failed to create %s!' % name, 'error')
-                except lxc.ContainerAlreadyExists:
-                    flash(u'The container/logical volume %s is already created!' % name, 'error')
-                except subprocess.CalledProcessError:
-                    flash(u'Error! %s' % name, 'error')
+                item = WorkerItem()
+                item.params = {"container": name, "template": template, "storage": storage_options, "xargs": command}
+                item.command = "create"
+                item.author = session["username"]
+                LXC_QUEUE.put(item)
+
+                flash(u'Action added into queue', 'success')
 
             else:
                 flash(u'Missing parameters to create container!', 'error')
@@ -530,19 +522,13 @@ def clone_container():
             snapshot = False
 
         if re.match('^(?!^containers$)|[a-zA-Z0-9_-]+$', name):
-            out = None
+            item = WorkerItem()
+            item.params = {"orig": orig, "new": name, "snapshot": snapshot}
+            item.command = "clone"
+            item.author = session["username"]
+            LXC_QUEUE.put(item)
 
-            try:
-                out = lxc.clone(orig=orig, new=name, snapshot=snapshot)
-            except lxc.ContainerAlreadyExists:
-                flash(u'The Container %s already exists!' % name, 'error')
-            except subprocess.CalledProcessError:
-                flash(u'Can\'t snapshot a directory', 'error')
-
-            if out and out == 0:
-                flash(u'Container %s cloned into %s successfully!' % (orig, name), 'success')
-            elif out and out != 0:
-                flash(u'Failed to clone %s into %s!' % (orig, name), 'error')
+            flash(u'Action added into queue', 'success')
 
         else:
             if name == '':

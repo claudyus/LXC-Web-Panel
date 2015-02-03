@@ -25,7 +25,7 @@ def create_thread():
     LXC_THREAD.start()
 
 
-## Supported commands are create / destroy / clone
+## Supported commands are create / destroy / clone / start / stop / freeze / unfreeze / backup
 class WorkerItem:
     def __init__(self):
         self.command = None
@@ -71,7 +71,7 @@ class WorkerItem:
 
             try:
                 if lxc.destroy(self.params["container"]) == 0:
-                    li.message = u"Container {} destroyes successfully!".format(self.params["container"])
+                    li.message = u"Container {} destroyed successfully!".format(self.params["container"])
                     li.type = "success"
                 else:
                     li.message = u"Failed to destroy container {}!".format(self.params["container"])
@@ -80,6 +80,72 @@ class WorkerItem:
                 li.message = u"Failed to destroy container {}: {}!".format(self.params["container"], str(sys.exc_info()[1]))
                 li.type = "error"
             WORKER_LOGGER.append(li)
+
+        elif self.command == "start":
+            li = LoggerItem()
+            li.author = self.author
+
+            try:
+                if lxc.start(self.params["container"]) == 0:
+                    li.message = u"Container {} started successfully!".format(self.params["container"])
+                    li.type = "success"
+                else:
+                    li.message = u"Failed to start container {}!".format(self.params["container"])
+                    li.type = "error"
+            except:
+                li.message = u"Failed to start container {}: {}!".format(self.params["container"], str(sys.exc_info()[1]))
+                li.type = "error"
+            WORKER_LOGGER.append(li)
+
+        elif self.command == "stop":
+            li = LoggerItem()
+            li.author = self.author
+
+            try:
+                if lxc.stop(self.params["container"]) == 0:
+                    li.message = u"Container {} stopped successfully!".format(self.params["container"])
+                    li.type = "success"
+                else:
+                    li.message = u"Failed to stop container {}!".format(self.params["container"])
+                    li.type = "error"
+            except:
+                li.message = u"Failed to stop container {}: {}!".format(self.params["container"], str(sys.exc_info()[1]))
+                li.type = "error"
+            WORKER_LOGGER.append(li)
+
+        elif self.command == "freeze":
+            li = LoggerItem()
+            li.author = self.author
+
+            try:
+                if lxc.freeze(self.params["container"]) == 0:
+                    li.message = u"Container {} frozen successfully!".format(self.params["container"])
+                    li.type = "success"
+                else:
+                    li.message = u"Failed to freeze container {}!".format(self.params["container"])
+                    li.type = "error"
+            except:
+                li.message = u"Failed to freeze container {}: {}!".format(self.params["container"], str(sys.exc_info()[1]))
+                li.type = "error"
+            WORKER_LOGGER.append(li)
+
+        elif self.command == "unfreeze":
+            li = LoggerItem()
+            li.author = self.author
+
+            try:
+                if lxc.unfreeze(self.params["container"]) == 0:
+                    li.message = u"Container {} unfrozen successfully!".format(self.params["container"])
+                    li.type = "success"
+                else:
+                    li.message = u"Failed to unfreeze container {}!".format(self.params["container"])
+                    li.type = "error"
+            except:
+                li.message = u"Failed to unfreeze container {}: {}!".format(self.params["container"], str(sys.exc_info()[1]))
+                li.type = "error"
+            WORKER_LOGGER.append(li)
+
+	# Backup TBD
 
 class LoggerItem:
     def __init__(self):
