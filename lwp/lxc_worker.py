@@ -14,7 +14,6 @@ def worker():
         if isinstance(item, WorkerItem):
             item.process()
         LXC_QUEUE.task_done()
-        print str(WORKER_LOGGER[0])
 
 
 
@@ -36,7 +35,6 @@ class WorkerItem:
         if self.command == "create":
             li = LoggerItem()
             li.author = self.author
-            print self.params["storage"]
             try:
                 if lxc.create(self.params["container"], template=self.params["template"], storage=self.params["storage"], xargs=self.params["xargs"]) == 0:
                     li.message = u"Container {} created successfully!".format(self.params["container"])
