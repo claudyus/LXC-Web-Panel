@@ -603,7 +603,7 @@ def backup_container():
 def refresh_info():
     return jsonify({'cpu': lwp.host_cpu_percent(),
                     'uptime': lwp.host_uptime(),
-                    'disk': lwp.host_disk_usage(partition=config.get('overview', 'partition'))})
+                    'disk': lwp.host_disk_usage()})
 
 
 @mod.route('/_refresh_memory_<name>')

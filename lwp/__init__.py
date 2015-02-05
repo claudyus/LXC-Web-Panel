@@ -129,8 +129,7 @@ def host_disk_usage(partition=None):
                     'free': usage[3],
                     'percent': usage[4]}
     """
-    if not partition:
-        partition = '/'
+    partition = lxcdir()
     usage = subprocess.check_output(['df -h %s' % partition], shell=True).split('\n')[1].split()
     return {'total': usage[1],
             'used': usage[2],
