@@ -193,11 +193,13 @@ used against the global installation using: <tt class="docutils literal">sudo lw
             }
           }
         });
-      $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stargazers',
+      $.ajax('https://api.github.com/repos/claudyus/LXC-Web-Panel/stargazers?per_page=100',
         {
           success: function (data, status) {
-            for (var i = data.length - 1; i >= 0; i--) {
-              var author = data[i];
+            for (var i = 0; i < 24; i++) { // extract 20 random stargazers
+              var r = Math.floor(Math.random() * (data.length - 1)) + 1;
+              var author = data[r];
+              data.splice(r , 1);
               $('#stars').append('<a href="' + author.html_url + '"><img src="' + author.avatar_url + '" class="img-circle star"/></a>');
             }
           }
