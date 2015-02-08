@@ -5,7 +5,8 @@ from lwp.utils import config
 try:
     import PAM
 except ImportError:
-    import pam
+    import pam as pam_m
+
 
 class pam:
     def __init__(self):
@@ -13,15 +14,15 @@ class pam:
 
     def authenticate(self, username, password):
         user = None
-     
+
         # try Debian PAM module (PyPAM)
         try:
             auth = PAM.pam()
-     
+
             # pam callback
             def pam_conv(auth, query_list, userData):
                 response = []
-     
+
                 for i in range(len(query_list)):
                     query, type = query_list[i]
                     if type == PAM.PAM_PROMPT_ECHO_ON:
@@ -33,16 +34,16 @@ class pam:
                         response.append(('', 0))
                     else:
                         return None
-     
+
                 return response
-     
+
             auth.start(self.PAM_SERVICE)
             auth.set_item(PAM.PAM_USER, username)
             auth.set_item(PAM.PAM_CONV, pam_conv)
             try:
                 auth.authenticate()
                 auth.acct_mgmt()
-     
+
                 user = {
                     'username': username,
                     'name': username,
@@ -50,14 +51,14 @@ class pam:
                 }
             except PAM.error:
                 pass
-     
+
         except NameError:
-            p = pam
+            p = pam_m
             if p.authenticate(username, password, service=self.PAM_SERVICE):
                 user = {
                     'username': username,
                     'name': username,
                     'su': 'Yes'
                 }
-     
+
         return user

@@ -5,7 +5,7 @@ import time
 
 from flask import Blueprint, request, session, redirect, url_for, render_template, flash
 
-from lwp.utils import query_db, hash_passwd, get_token, config
+from lwp.utils import get_token, config
 
 import lwp.authenticators as auth
 
