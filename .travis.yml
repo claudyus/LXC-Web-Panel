@@ -13,7 +13,7 @@ before_script:
     - export PATH=$PATH:$TRAVIS_BUILD_DIR/tests/mock-lxc
 
 script:
-    - flake8 --ignore=E501 lwp/ bin/lwp
+    - flake8 --ignore=E501,E402 lwp/ bin/lwp
     - fab build_assets
     - ./setup.py develop
     - python tests/webif.py
