@@ -11,7 +11,7 @@ from flask import Blueprint, request, session, g, redirect, url_for, abort, rend
 
 import lwp
 import lwp.lxclite as lxc
-from lwp.lxc_worker import LXC_QUEUE, WORKER_LOGGER, WorkerItem, LoggerItem
+from lwp.lxc_worker import LXC_QUEUE, WORKER_LOGGER, LoggerItem, create_worker
 from lwp.utils import query_db, if_logged_in, get_bucket_token, hash_passwd, config, cgroup_ext
 from lwp.views.auth import AUTH
 
@@ -341,49 +341,27 @@ def action():
     act = request.args['action']
     name = request.args['name']
 
-    # TODO: refactor this method, it's horrible to read, refactor a bit (duplicite code)
     if act == 'start':
-        item = WorkerItem()
-        item.params = {"container": name}
-        item.command = "start"
-        item.author = session["username"]
-        LXC_QUEUE.put(item)
-
+        create_worker({"container": name}, "start", session["username"])
         flash(u'Action added into queue', 'success')
+
     elif act == 'stop':
-        item = WorkerItem()
-        item.params = {"container": name}
-        item.command = "stop"
-        item.author = session["username"]
-        LXC_QUEUE.put(item)
-
+        create_worker({"container": name}, "stop", session["username"])
         flash(u'Action added into queue', 'success')
+
     elif act == 'freeze':
-        item = WorkerItem()
-        item.params = {"container": name}
-        item.command = "freeze"
-        item.author = session["username"]
-        LXC_QUEUE.put(item)
-
+        create_worker({"container": name}, "freeze", session["username"])
         flash(u'Action added into queue', 'success')
+
     elif act == 'unfreeze':
-        item = WorkerItem()
-        item.params = {"container": name}
-        item.command = "unfreeze"
-        item.author = session["username"]
-        LXC_QUEUE.put(item)
-
+        create_worker({"container": name}, "unfreeze", session["username"])
         flash(u'Action added into queue', 'success')
+
     elif act == 'destroy':
         if session['su'] != 'Yes':
             return abort(403)
 
-        item = WorkerItem()
-        item.params = {"container": name}
-        item.command = "destroy"
-        item.author = session["username"]
-        LXC_QUEUE.put(item)
-
+        create_worker({"container": name}, "destroy", session["username"])
         flash(u'Action added into queue', 'success')
 
     elif act == 'reboot' and name == 'host':
@@ -396,9 +374,11 @@ def action():
             flash(u'System will now restart!', 'success')
         except subprocess.CalledProcessError:
             flash(u'System error!', 'error')
+
     elif act == 'push':
         # TODO: implement push action
         pass
+
     try:
         if request.args['from'] == 'edit':
             return redirect(url_for('main.edit', container=name))
@@ -425,45 +405,25 @@ def create_container():
             storage_method = request.form['backingstore']
 
             if storage_method == 'default':
-                item = WorkerItem()
-                item.params = {"container": name, "template": template, "storage": None, "xargs": command}
-                item.command = "create"
-                item.author = session["username"]
-                LXC_QUEUE.put(item)
-
+                create_worker({"container": name, "template": template, "storage": None, "xargs": command}, "create", session["username"])
                 flash(u'Action added into queue', 'success')
 
             elif storage_method == 'directory':
                 directory = request.form['dir']
 
                 if re.match('^/[a-zA-Z0-9_/-]+$', directory) and directory != '':
-                    item = WorkerItem()
-                    item.params = {"container": name, "template": template, "storage": "dir --dir {}".format(directory), "xargs": command}
-                    item.command = "create"
-                    item.author = session["username"]
-                    LXC_QUEUE.put(item)
-
+                    create_worker({"container": name, "template": template, "storage": "dir --dir {}".format(directory), "xargs": command}, "create", session["username"])
                     flash(u'Action added into queue', 'success')
 
             elif storage_method == 'btrfs':
-                item = WorkerItem()
-                item.params = {"container": name, "template": template, "storage": "btrfs", "xargs": command}
-                item.command = "create"
-                item.author = session["username"]
-                LXC_QUEUE.put(item)
-
+                create_worker({"container": name, "template": template, "storage": "btrfs", "xargs": command}, "create", session["username"])
                 flash(u'Action added into queue', 'success')
 
             elif storage_method == 'zfs':
                 zfs = request.form['zpoolname']
 
                 if re.match('^[a-zA-Z0-9_-]+$', zfs) and zfs != '':
-                    item = WorkerItem()
-                    item.params = {"container": name, "template": template, "storage": "zfs --zfsroot {}".format(zfs), "xargs": command}
-                    item.command = "create"
-                    item.author = session["username"]
-                    LXC_QUEUE.put(item)
-
+                    create_worker({"container": name, "template": template, "storage": "zfs --zfsroot {}".format(zfs), "xargs": command}, "create", session["username"])
                     flash(u'Action added into queue', 'success')
 
             elif storage_method == 'lvm':
@@ -482,12 +442,7 @@ def create_container():
                 if re.match('^[0-9][G|M]$', fssize) and fssize != '':
                     storage_options += ' --fssize %s' % fssize
 
-                item = WorkerItem()
-                item.params = {"container": name, "template": template, "storage": storage_options, "xargs": command}
-                item.command = "create"
-                item.author = session["username"]
-                LXC_QUEUE.put(item)
-
+                create_worker({"container": name, "template": template, "storage": storage_options, "xargs": command}, "create", session["username"])
                 flash(u'Action added into queue', 'success')
 
             else:
@@ -522,12 +477,7 @@ def clone_container():
             snapshot = False
 
         if re.match('^(?!^containers$)|[a-zA-Z0-9_-]+$', name):
-            item = WorkerItem()
-            item.params = {"orig": orig, "new": name, "snapshot": snapshot}
-            item.command = "clone"
-            item.author = session["username"]
-            LXC_QUEUE.put(item)
-
+            create_worker({"orig": orig, "new": name, "snapshot": snapshot}, "clone", session["username"])
             flash(u'Action added into queue', 'success')
 
         else:

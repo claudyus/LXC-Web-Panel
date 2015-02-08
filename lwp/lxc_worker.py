@@ -15,14 +15,18 @@ def worker():
             item.process()
         LXC_QUEUE.task_done()
 
-
-
 def create_thread():
     print " * Creating LXC worker thread"
     LXC_THREAD = Thread(target=worker)
     LXC_THREAD.daemon = True
     LXC_THREAD.start()
 
+def create_worker(params, command, username):
+    item = WorkerItem()
+    item.params = params
+    item.command = command
+    item.author = username
+    LXC_QUEUE.put(item)
 
 ## Supported commands are create / destroy / clone / start / stop / freeze / unfreeze / backup
 class WorkerItem:
