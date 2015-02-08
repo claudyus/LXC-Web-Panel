@@ -11,12 +11,6 @@ class pam:
     def __init__(self):
         self.PAM_SERVICE = config.get('pam', 'service')
 
-    def can_change_password(self):
-        return False
-    
-    def can_register(self):
-        return False
-    
     def authenticate(self, username, password):
         user = None
      

@@ -18,12 +18,6 @@ class ldap:
         self.OBJECT_CLASS = config.get('ldap', 'object_class')
         self.REQUIRED_GROUP = config.get('ldap', 'required_group')
     
-    def can_change_password(self):
-        return False
-    
-    def can_register(self):
-        return False
-    
     def authenticate(self, username, password):
         user = None
         try:

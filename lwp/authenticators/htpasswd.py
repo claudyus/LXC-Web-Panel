@@ -3,12 +3,6 @@ from lwp.utils import check_htpasswd, config
 
 
 class htpasswd:
-    def can_change_password(self):
-        return True
-    
-    def can_register(self):
-        return True
-    
     def __init__(self):
         self.HTPASSWD_FILE = config.get('htpasswd', 'file')
     
