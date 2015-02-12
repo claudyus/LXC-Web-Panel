@@ -7,6 +7,9 @@ import sys
 
 from flask import Flask, g
 
+from lwp.utils import connect_db, check_session_limit, config
+from lwp.views import main, auth, api
+
 SESSION_SECRET_FILE = '/etc/lwp/session_secret'
 
 if '--generate_session_secret' in sys.argv[1:]:
@@ -20,9 +23,6 @@ try:
 except IOError:
     print(' * Missing session_secret file, your session will not survive server reboot')
     SECRET_KEY = os.urandom(24)
-
-from lwp.utils import connect_db, check_session_limit, config
-from lwp.views import main, auth, api
 
 DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
