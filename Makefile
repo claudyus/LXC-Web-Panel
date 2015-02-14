@@ -16,6 +16,8 @@ static-build:
 scanpkg:
 	dpkg-scanpackages debian/ /dev/null | gzip -9c > debian/Packages.gz
 	dpkg-scanpackages debian-testing/ /dev/null | gzip -9c > debian-testing/Packages.gz
+    #reprepro includedeb precise XXX
+    #reprepro includedeb precise XXX
 
 serve: all
 	cd site-src/; cactus serve

@@ -1,0 +1,5 @@
+Component: extra
+Origin: LXC-Web-Panel
+Label: lwp
+Architecture: x86_64
+Description: Apt repository for project LXC-Web-Panel

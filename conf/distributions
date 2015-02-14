@@ -1,0 +1,15 @@
+Origin: LXC-Web-Panel
+Label: lwp
+Codename: trusty
+Architectures: i386 amd64 powerpc armel
+Components: extra
+Description: Apt repository for project LXC-Web-Panel
+SignWith: 0DFD7CBB
+
+Origin: LXC-Web-Panel
+Label: lwp
+Codename: precise
+Architectures: i386 amd64 powerpc armel
+Components: extra
+Description: Apt repository for project LXC-Web-Panel
+SignWith: 0DFD7CBB
