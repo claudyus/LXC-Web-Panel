@@ -48,7 +48,7 @@ class TestWebIf(LiveServerTestCase):
         request.add_header('Private-Token', token)
         response = urllib2.urlopen(request)
         self.assertEqual(response.code, 200)
-        assert 'mocktest_00_lxc' in response.read()
+        assert response.read().find('mocktest_00_lxc')
 
     def test_refresh_info(self):
         subprocess.check_output('lxc-create -n mocktest', shell=True)
