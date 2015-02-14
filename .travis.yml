@@ -16,4 +16,4 @@ script:
     - flake8 --ignore=E501,E402 lwp/ bin/lwp
     - fab build_assets
     - ./setup.py develop
-    - python tests/webif.py
+    - python tests/webif.py && python tests/mock_lxc.py
