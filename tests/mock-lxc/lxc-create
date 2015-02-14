@@ -9,6 +9,7 @@ if [[ $1 -eq '-n' && $2 ]]; then
 		mkdir -p /tmp/lxc/$2
 		touch /tmp/lxc/$2/config
 		echo "STOPPED" > /tmp/lxc/$2/status
+        echo $* > /tmp/lxc/$2/params
 		exit 0
 	else
 		echo "Container already exists"
