@@ -50,6 +50,7 @@
                 <th class="hidden-phone">Hostname</th>
                 <th>IP Address</th>
                 <th>Mem. usage</th>
+                <th class="hidden-phone">Auto Start</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -62,6 +63,14 @@
                         <td class="hidden-phone">{{container.settings.utsname}}</td>
                         <td>{% if container.settings.ipv4  %}{{container.settings.ipv4}}{% else %}-{% endif %}</td>
                         <td id="{{container.name}}">{{ render_memory_wrapper(container.memusg, container.settings.memlimit) }}</td>
+                        <td class="hidden-phone">
+                            {% if container.settings.start_auto == '1' %}
+                                <i class="icon-ok"></i>
+                                {% if container.settings.start_order %} {{ container.settings.start_order }} {% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         <td>
                             <div class="btn-toolbar" style="margin:8px 0;">
                                 <div class="btn-group">
