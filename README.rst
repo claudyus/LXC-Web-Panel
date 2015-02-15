@@ -78,8 +78,25 @@ Python PAM module needs to be installed::
 
   apt-get install python-pam
 
+or
+
+::
+
+  pip install pam
+
+or
+
+::
+
+  yum install python-pam
+
 With default ``login`` service all valid linux users can login to lwp.
 Many more options are available via PAM Configuration, see PAM docs.
+
+Custom autenticators
++++++++++++++++++++
+
+If you want to use different type of authentication, create appropriate file in ``authenticators/`` directory with specific structure (example can be viewed in ``stub`` authenticator)
 
 File-bucket configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -12,7 +12,7 @@ from lwp.views import main, auth, api
 
 SESSION_SECRET_FILE = '/etc/lwp/session_secret'
 
-if '--generate_session_secret' in sys.argv[1:]:
+if '--generate-session-secret' in sys.argv[1:]:
     key = os.urandom(24)
     with os.fdopen(os.open(SESSION_SECRET_FILE, os.O_WRONLY | os.O_CREAT, 0644), 'w') as handle:
         handle.write(key)
@@ -21,7 +21,7 @@ if '--generate_session_secret' in sys.argv[1:]:
 try:
     SECRET_KEY = open(SESSION_SECRET_FILE, 'r').read()
 except IOError:
-    print(' * Missing session_secret file, your session will not survive server reboot')
+    print(' * Missing session_secret file, your session will not survive server reboot. Run with --generate-session-secret to generate permanent file.')
     SECRET_KEY = os.urandom(24)
 
 DEBUG = config.getboolean('global', 'debug')
