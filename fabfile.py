@@ -1,7 +1,8 @@
 import os
+import sys
 from datetime import datetime
 
-from fabric.api import local, task, lcd
+from fabric.api import local, task, lcd, settings
 from pytz.reference import LocalTimezone
 
 
@@ -47,6 +48,12 @@ def get_deb_architecture():
 
 @task(alias='deb')
 def debian():
+    with settings(warn_only=True):
+        result = local('git diff-index --quiet HEAD --', capture=True)
+    if result.failed:
+        print "!!! GIT REPO NOT CLEAN - ABORT PACKAGING !!!"
+        sys.exit(1)
+
     version = local('git describe --tag', capture=True)
     with open('lwp/version', 'w') as fd:
         fd.write('{}\n'.format(version))
@@ -96,8 +103,8 @@ def site():
     clone()
     build_assets()
     debian()
-    local('make -C gh-pages/')
-
+    version = local('git describe --tag', capture=True)
+    local('DEB_PKG=lwp_{}_all.deb make -C gh-pages/'.format(version))
 
 @task
 def clean_assets():
