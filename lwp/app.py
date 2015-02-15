@@ -12,7 +12,7 @@ from lwp.views import main, auth, api
 
 SESSION_SECRET_FILE = '/etc/lwp/session_secret'
 
-if '--generate_session_secret' in sys.argv[1:]:
+if '--generate-session-secret' in sys.argv[1:]:
     key = os.urandom(24)
     with os.fdopen(os.open(SESSION_SECRET_FILE, os.O_WRONLY | os.O_CREAT, 0644), 'w') as handle:
         handle.write(key)
