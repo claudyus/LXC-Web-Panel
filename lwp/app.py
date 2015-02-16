@@ -28,13 +28,14 @@ DEBUG = config.getboolean('global', 'debug')
 DATABASE = config.get('database', 'file')
 ADDRESS = config.get('global', 'address')
 PORT = int(config.get('global', 'port'))
+PREFIX = config.get('global', 'prefix')
 
 # Flask app
 app = Flask('lwp')
 app.config.from_object(__name__)
-app.register_blueprint(main.mod)
-app.register_blueprint(auth.mod)
-app.register_blueprint(api.mod)
+app.register_blueprint(main.mod, url_prefix=PREFIX)
+app.register_blueprint(auth.mod, url_prefix=PREFIX)
+app.register_blueprint(api.mod, url_prefix=PREFIX)
 
 
 if '--profiling' in sys.argv[1:]:
