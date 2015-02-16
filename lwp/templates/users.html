@@ -49,7 +49,7 @@
             $(document).ready(function(){
                 $(".delete").not('.disabled').on('click',function(e){
                     var _this = $(this);
-                    $(".delete-link").attr('href',"/lwp/users?username="+ _this.data('username') + "&trash=1&userid="+ _this.data('userid'));
+                    $(".delete-link").attr('href',"{{ url_for('main.lwp_users') }}?token=" + token + "&username=" + _this.data('username') + "&trash=1&userid=" + _this.data('userid'));
                     $('#delete').modal('show');
                 });
             });

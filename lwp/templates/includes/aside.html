@@ -2,7 +2,7 @@
     <div class="well sidebar-nav">
         <ul class="nav nav-list">
             <li class="nav-header">General</li>
-            <li{% if request.path=="/" or request.path=="/home" %} class="active"{% endif %}><a href="{{ url_for('main.home') }}" id="home-btn"><i class="icon-home"></i> Overview<i class="icon-refresh hide" id="home-load" style="float:right;margin-top:3px;"></i></a></li>
+            <li{% if request.url_rule.endpoint=="main.home" %} class="active"{% endif %}><a href="{{ url_for('main.home') }}" id="home-btn"><i class="icon-home"></i> Overview<i class="icon-refresh hide" id="home-load" style="float:right;margin-top:3px;"></i></a></li>
         </ul>
         {% if containers != [] %}
         <ul class="nav nav-list">
@@ -14,16 +14,16 @@
         {% if session.su == 'Yes' %}
         <ul class="nav nav-list">
             <li class="nav-header">LXC Settings</li>
-            <li{% if request.path=="/settings/lxc-net" %} class="active"{% endif %}><a href="{{ url_for('main.lxc_net') }}"><i class="icon-globe"></i> Networking</a></li>
-            <li{% if request.path=="/lwp/tokens" %} class="active"{% endif %}><a href="{{ url_for('main.lwp_tokens') }}"><i class="icon-lock"></i> API tokens</a></li>
-            <li{% if request.path=="/checkconfig" %} class="active"{% endif %}><a href="{{ url_for('main.checkconfig') }}"><i class="icon-check"></i> Check config</a></li>
+            <li{% if request.url_rule.endpoint=="main.lxc_net" %} class="active"{% endif %}><a href="{{ url_for('main.lxc_net') }}"><i class="icon-globe"></i> Networking</a></li>
+            <li{% if request.url_rule.endpoint=="main.lwp_tokens" %} class="active"{% endif %}><a href="{{ url_for('main.lwp_tokens') }}"><i class="icon-lock"></i> API tokens</a></li>
+            <li{% if request.url_rule.endpoint=="main.checkconfig" %} class="active"{% endif %}><a href="{{ url_for('main.checkconfig') }}"><i class="icon-check"></i> Check config</a></li>
         </ul>{% endif %}
         <ul class="nav nav-list">
             <li class="nav-header">LXC Web Panel</li>
             {% if session.su == 'Yes' and auth != 'ldap' %}
-            <li{% if request.path=="/lwp/users" %} class="active"{% endif %}><a href="{{ url_for('main.lwp_users') }}"><i class="icon-user"></i> Users</a></li>
+            <li{% if request.url_rule.endpoint=="main.lwp_users" %} class="active"{% endif %}><a href="{{ url_for('main.lwp_users') }}"><i class="icon-user"></i> Users</a></li>
             {% endif %}
-            <li{% if request.path=="/about" %} class="active"{% endif %}><a href="{{ url_for('main.about') }}"><i class="icon-info-sign"></i> About</a></li>
+            <li{% if request.url_rule.endpoint=="main.about" %} class="active"{% endif %}><a href="{{ url_for('main.about') }}"><i class="icon-info-sign"></i> About</a></li>
         </ul>
     </div>
 </div>
