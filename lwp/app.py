@@ -31,7 +31,7 @@ PORT = int(config.get('global', 'port'))
 PREFIX = config.get('global', 'prefix')
 
 # Flask app
-app = Flask('lwp')
+app = Flask('lwp', static_url_path = "{0}/static".format(PREFIX))
 app.config.from_object(__name__)
 app.register_blueprint(main.mod, url_prefix=PREFIX)
 app.register_blueprint(auth.mod, url_prefix=PREFIX)
