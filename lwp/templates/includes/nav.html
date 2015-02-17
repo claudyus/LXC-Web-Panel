@@ -11,7 +11,7 @@
                 <ul class="nav visible-phone">
                     {% if containers != [] %}
                     <li class="divider"></li>
-                    <li class="nav-header">Containerss</li>
+                    <li class="nav-header">Containers</li>
                     {% for c in containers %}
                     <li{% if request.path=='/'+ c +'/edit' %} class="active"{% endif %}><a href="{{ url_for('main.edit',container=c) }}"><i class="icon-hdd icon-white"></i> {{c}}</a></li>
                     {% endfor %}
