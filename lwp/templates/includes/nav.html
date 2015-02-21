@@ -13,7 +13,7 @@
                     <li class="divider"></li>
                     <li class="nav-header">Containers</li>
                     {% for c in containers %}
-                    <li{% if request.path=='/'+ c +'/edit' %} class="active"{% endif %}><a href="{{ url_for('main.edit',container=c) }}"><i class="icon-hdd icon-white"></i> {{c}}</a></li>
+                    <li{% if request.endpoint=="main.edit" and container==c %} class="active"{% endif %}><a href="{{ url_for('main.edit',container=c) }}"><i class="icon-hdd icon-white"></i> {{c}}</a></li>
                     {% endfor %}
                     {% endif %}
                     {% if session.su == 'Yes' %}
