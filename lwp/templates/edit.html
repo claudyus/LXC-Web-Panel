@@ -252,7 +252,7 @@
             }
 
             function refreshMemory(container){
-                $.getJSON('/_refresh_memory_' + container, function(data) {
+                $.getJSON('{{ url_for('main.refresh_memory_containers', name='CONTAINER') }}'.replace("CONTAINER", container), function(data) {
                     var el = $('#'+container+' span');
                     el.text(data.memusg+' MB');
                     el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data.memusg));

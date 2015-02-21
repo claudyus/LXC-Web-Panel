@@ -104,7 +104,7 @@
 {% block script %}
 <script type="text/javascript">
             function refreshMemoryHost(){
-                $.getJSON('/_refresh_memory_host', function(data) {
+                $.getJSON('{{ url_for('main.refresh_memory_containers', name='host') }}', function(data) {
                     $('#memory-usage').text(data.used +' / '+ data.total +' MB').fadeIn();
                     $('#memory-usage-bar').css({'width':data.percent+'%'});
                     $('#memory-cache-usage-bar').css({'width':data.percent_cached+'%'});
@@ -114,7 +114,7 @@
             }
 
             function refreshMemoryContainers(){
-                $.getJSON('/_refresh_memory_containers', function(data) {
+                $.getJSON('{{ url_for('main.refresh_memory_containers', name='containers') }}', function(data) {
                     data = data.data;
                     for (i in data) {
                         var el = $('#'+data[i].name+' span');
@@ -143,8 +143,7 @@
             function refresh(){
                 $('#home-load').fadeIn();
 
-                $.getJSON('/_refresh_info', function(data) {
-                    console.log(data);
+                $.getJSON('{{ url_for('main.refresh_info') }}', function(data) {
                     $('#uptime').text(data.uptime.day +' day(s) '+ data.uptime.time).fadeIn();
 
                     $('#cpu-usage').text(data.cpu +'%').fadeIn();

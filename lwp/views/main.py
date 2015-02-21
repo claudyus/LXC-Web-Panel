@@ -399,7 +399,7 @@ def action():
         pass
     try:
         if request.args['from'] == 'edit':
-            return redirect('../%s/edit' % name)
+            return redirect(url_for('main.edit', container=name))
         else:
             return redirect(url_for('main.home'))
     except KeyError:
