@@ -7,3 +7,6 @@ insert_final_newline = true
 indent_size = 4
 trim_trailing_whitespace = true
 indent_style = space
+
+[Makefile]
+indent_style = tab
