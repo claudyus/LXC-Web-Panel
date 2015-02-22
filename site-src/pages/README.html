@@ -60,8 +60,20 @@ Python PAM module needs to be installed:</p>
 <pre class="literal-block">
 apt-get install python-pam
 </pre>
+<p>or</p>
+<pre class="literal-block">
+pip install pam
+</pre>
+<p>or</p>
+<pre class="literal-block">
+yum install python-pam
+</pre>
 <p>With default <tt class="docutils literal">login</tt> service all valid linux users can login to lwp.
 Many more options are available via PAM Configuration, see PAM docs.</p>
+</div>
+<div class="section" id="custom-autenticators">
+<h3>Custom autenticators</h3>
+<p>If you want to use different type of authentication, create appropriate file in <tt class="docutils literal">authenticators/</tt> directory with specific structure (example can be viewed in <tt class="docutils literal">stub</tt> authenticator)</p>
 </div>
 </div>
 <div class="section" id="file-bucket-configuration">
