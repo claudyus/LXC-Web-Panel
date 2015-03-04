@@ -15,8 +15,8 @@ On ubuntu 12.04 you should install:
   - LXC from this ppa: https://launchpad.net/~ubuntu-lxc/+archive/daily
   - python-flask from ppa: https://launchpad.net/~chris-lea/+archive/python-flask
 
-Installation
-------------
+Installation on deb based system
+------------------------------------
 
 You can download latest debian packages from http://claudyus.github.io/LXC-Web-Panel/download.html or, better, you can also use the lwp debian repo:
 
@@ -28,6 +28,33 @@ You can download latest debian packages from http://claudyus.github.io/LXC-Web-P
   sudo apt-get install lwp
 
 Note: you can also include the debian-testing repo inside your source.list file to receive release candidate build.
+
+Installation on rpm system or from source code
+----------------------------------------------
+
+If you want to run lwp from source code or in a rpm based system like Fedora you can follow steps.
+
+On a fedora system you should install those deps.
+
+::
+
+  sudo yum update
+  sudo yum install lxc lxc-devel lxc-libs lxc-extra lxc-templates python-pam python-flask fabric pytz npm
+
+Now you should download source code and inside the source code directory run this steps
+
+::
+
+  fab build_assets         # build assets using python-fabric
+  ./setup.py develop       # install python package
+  mkdir -p /etc/lwp        # create config/var dirs and popolate it
+  mkdir -p /var/lwp
+  cp lwp.example.conf /etc/lwp/lwp.conf
+  cp lwp.db /var/lwp/lwp.db
+  service firewalld stop   # for fedora
+  service lxc start        # if service lxc exists
+  ./bin/lwp --debug        # run lwp wth debug support
+
 
 Configuration
 -------------
