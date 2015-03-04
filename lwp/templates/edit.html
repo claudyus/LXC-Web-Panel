@@ -17,7 +17,7 @@
         <div class="control-group">
             <label class="control-label" for="inputHostname">Hostname</label>
             <div class="controls">
-                <input pattern="(?!^containers$)|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$" type="text" id="inputHostname" name="hostname" value="{{ settings.utsname }}">
+                <input pattern="^[\w.-\_]+$" type="text" id="inputHostname" name="hostname" value="{{ settings.utsname }}">
             </div>
         </div>
 
