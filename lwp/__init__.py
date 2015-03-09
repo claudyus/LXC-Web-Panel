@@ -314,7 +314,7 @@ def push_config_value(key, value, container=None):
 
             while i < len(read):
                 if not read[i].startswith('#') and \
-                        re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow', read[i]):
+                        re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow|lxc.mount.entry|lxc.cap.drop', read[i]):
                     values.append(read[i])
                 i += 1
             return values
