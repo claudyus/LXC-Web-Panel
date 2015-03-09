@@ -17,11 +17,11 @@ cgroup_ext is a data structure where for each input of edit.html we have an arra
 """
 ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
 cidr_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(\d|[1-2]\d|3[0-2]))*$'
-file_match = '^[\w.-/]+$'
+file_match = '^\/\w[\w.-/]+$'
 
 cgroup_ext = {
     'arch': ['lxc.arch', '^(x86|i686|x86_64|amd64)$', ''],
-    'utsname': ['lxc.utsname', '^[\w.-]+$', 'Hostname updated'],
+    'utsname': ['lxc.utsname', '^\w[\w.-]+$', 'Hostname updated'],
     'type': ['lxc.network.type', '^(none|empty|veth|vlan|macvlan|phys)$', 'Link network type updated'],
     'link': ['lxc.network.link', '^[\w.-/]+$', 'Link name updated'],
     'flags': ['lxc.network.flags', '^(up|down)$', 'Network flag updated'],
