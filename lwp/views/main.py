@@ -114,7 +114,11 @@ def edit(container=None):
     info = lxc.info(container)
     infos = {'status': info['state'], 'pid': info['pid'], 'memusg': lwp.memory_usage(container)}
 
-    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos)
+    # prepare a regex dict from cgroups_ext definition
+    regex = {}
+    for k, v in cgroup_ext.items():
+        regex[k] = v[1]
+    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos, regex=regex)
 
 
 @mod.route('/settings/lxc-net', methods=['POST', 'GET'])
