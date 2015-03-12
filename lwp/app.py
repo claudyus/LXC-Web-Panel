@@ -6,6 +6,7 @@ import os
 import sys
 
 from flask import Flask, g
+from flask_sqlalchemy import SQLAlchemy
 
 from lwp.utils import connect_db, check_session_limit, config
 from lwp.views import main, auth, api
@@ -44,6 +45,8 @@ if '--profiling' in sys.argv[1:]:
     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
     app.debug = True  # also enable debug
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(app.config['DATABASE'])
+db = SQLAlchemy(app)
 
 @app.before_request
 def before_request():
@@ -51,8 +54,6 @@ def before_request():
     executes functions before all requests
     """
     check_session_limit()
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(app.config['DATABASE'])
-    g.db = SQLAlchemy(app)
 
 
 @app.teardown_request
@@ -61,4 +62,4 @@ def teardown_request(exception):
     executes functions after all requests
     """
     if hasattr(g, 'db'):
-        g.db.close()
+        pass # g.db.close()
