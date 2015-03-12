@@ -15,9 +15,9 @@
 
     <form id="config" class="form-horizontal" action="{{ url_for('main.edit', container=container) }}" method="post">
         <div class="control-group">
-            <label class="control-label" for="inputHostname">Hostname</label>
+            <label class="control-label" for="utsname">Hostname</label>
             <div class="controls">
-                <input pattern="^[\w.-\_]+$" type="text" id="inputHostname" name="hostname" value="{{ settings.utsname }}">
+                <input pattern="^[\w.-\_]+$" type="text" id="utsname" name="utsname" value="{{ settings.utsname }}">
             </div>
         </div>
 
