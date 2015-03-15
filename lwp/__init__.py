@@ -152,22 +152,13 @@ def host_uptime():
             'time': '%d:%02d' % (hours, minutes)}
 
 
-def check_ubuntu():
+def name_distro():
     """
     return the System version
     """
-    dist = '%s %s' % (platform.linux_distribution()[0], platform.linux_distribution()[1])
+    dist = '%s %s - %s' % platform.linux_distribution()
 
-    supported_dists = ['Ubuntu 12.04',
-                       'Ubuntu 12.10',
-                       'Ubuntu 13.04',
-                       'Ubuntu 13.10',
-                       'Ubuntu 14.04',
-                       'Ubuntu 14.10']
-
-    if dist in supported_dists:
-        return dist
-    return 'unknown'
+    return dist
 
 
 def get_templates_list():
@@ -208,9 +199,7 @@ def get_net_settings():
     if not file_exist(filename):
         filename = '/etc/default/lxc'
     if not file_exist(filename):
-        return False
-    if check_ubuntu() == "unknown":
-        raise LxcConfigFileNotComplete('This is not a Ubuntu distro ! Check if all config params are set in /etc/default/lxc')
+        raise LxcConfigFileNotComplete('Cannot find lxc-net config file! Check if /etc/default/lxc-net exists')
     config = ConfigParser.SafeConfigParser()
 
     config.readfp(FakeSection(open(filename)))

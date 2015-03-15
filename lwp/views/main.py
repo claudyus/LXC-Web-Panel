@@ -57,7 +57,7 @@ def home():
             'containers': containers_by_status
         })
 
-    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.check_ubuntu(),
+    return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.name_distro(),
                            host=socket.gethostname(), templates=lwp.get_templates_list(), storage_repos=storage_repos,
                            auth=AUTH)
 
