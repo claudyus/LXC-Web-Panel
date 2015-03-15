@@ -37,3 +37,7 @@
     background-color: #E0DFDF;
     border-radius: 5px;
 }
+
+.carousel-caption{
+    background: rgba(0, 0, 0, 0.5);
+}
