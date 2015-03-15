@@ -38,6 +38,10 @@
     border-radius: 5px;
 }
 
-.carousel-caption{
+.carousel-caption {
     background: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-inner img {
+    align: middle;
 }

@@ -19,5 +19,9 @@ scanpkg:
 	reprepro includedeb precise debian/$(DEB_PKG)
 	reprepro includedeb precise debian/$(DEB_PKG)
 
-serve: all
+serve: just_web
 	cd site-src/; cactus serve
+
+just_web:
+	cd site-src; cactus build; cd ..
+	cp -r site-src/.build/* .
