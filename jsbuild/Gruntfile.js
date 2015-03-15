@@ -13,22 +13,23 @@ module.exports = function(grunt) {
                     'bower_components/bootstrap-switch/build/js/bootstrap-switch.js',
                     'bower_components/jqBootstrapValidation/dist/jqBootstrapValidation-1.3.7.js'
                 ],
-                dest: '../lwp/static/js/bootstrap.js'
+                dest: '../lwp/static/js/vendor.js'
             },
             css: {
                 src: [
                     'bower_components/bootstrap/bootstrap/css/bootstrap.css',
                     'bower_components/bootstrap/bootstrap/css/bootstrap-responsive.css',
-                    'bower_components/bootstrap-switch/build/css/bootstrap2/bootstrap-switch.css'
+                    'bower_components/bootstrap-switch/build/css/bootstrap2/bootstrap-switch.css',
+                    'bower_components/font-awesome/css/font-awesome.css'
                 ],
-                dest: '../lwp/static/css/bootstrap.css'
+                dest: '../lwp/static/css/vendor.css'
             }
         },
 
         uglify: {
             compress: {
                 files: {
-                    '../lwp/static/js/bootstrap.min.js': ['../lwp/static/js/bootstrap.js']
+                    '../lwp/static/js/vendor.min.js': ['../lwp/static/js/vendor.js']
                 },
                 options: {
                     mangle: true
@@ -38,8 +39,8 @@ module.exports = function(grunt) {
 
         cssmin: {
             build: {
-                src: '../lwp/static/css/bootstrap.css',
-                dest: '../lwp/static/css/bootstrap.min.css'
+                src: '../lwp/static/css/vendor.css',
+                dest: '../lwp/static/css/vendor.min.css'
             }
         },
 
