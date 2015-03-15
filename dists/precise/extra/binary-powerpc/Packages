@@ -1,16 +1,16 @@
 Package: lwp
-Version: 0.8-16-g3802a2b
+Version: 0.8-25-g62597b1
 Architecture: all
 Maintainer: Claudio Mignanti <c.mignanti@gmail.com>
 Installed-Size: 1048
 Depends: sysv-rc (>= 2.88dsf-24) | file-rc (>= 0.8.16), python (>= 2.7), python (<< 2.8), python:any (>= 2.7.1-0ubuntu2), python-flask (>= 0.10), python-jinja2, python-ldap, python-openssl, lxc (>= 1.0)
 Priority: extra
 Section: net
-Filename: pool/extra/l/lwp/lwp_0.8-16-g3802a2b_all.deb
-Size: 202982
-SHA256: be8f74eb52544e9a583b423ace9d988691c2b1dc21af64a47653ff153a318f4e
-SHA1: 7eb58e1ed89f95225a6215f353be92f43a23be35
-MD5sum: 8ff2c4aa03a43446f26fa4b783fa36c2
+Filename: pool/extra/l/lwp/lwp_0.8-25-g62597b1_all.deb
+Size: 203066
+SHA256: 666569036f01587dd1b6fb49b613011f73968a724c22d636bb80fad58f645112
+SHA1: 08b78551e9ad5fe6fd19a322f8508ee8d507406f
+MD5sum: a803663fbe4be95dccdcaee31d708ac2
 Description: LXC Web Panel improved
- Built dom 22 feb 2015, 10.51.14, CET
+ Built dom 15 mar 2015, 11.57.32, CET
 
