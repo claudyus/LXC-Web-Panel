@@ -27,10 +27,6 @@
 	margin: 0 0 3px 20px;
 }
 
-.item img {
-	height: 300px !important;
-}
-
 .literal {
     color: brown;
     padding: 2px 7px;
@@ -42,6 +38,6 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
-.carousel-inner img {
-    align: middle;
+.img-center {
+      margin: 0 auto;
 }
