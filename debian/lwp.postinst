@@ -1,5 +1,10 @@
 #!/bin/sh
 
-[ -e /etc/lwp/session_secret ] || /usr/bin/lwp --generate-session-secret
+[ -e /etc/lwp/session_secret ] || /usr/bin/lwp --generate_session_secret
+if [ -f /var/lwp/lwp.db ]; then
+	/usr/bin/lwp --update-db
+else
+	cp /var/lwp/lwp.db.base /var/lwp/lwp.db
+fi
 
 #DEBHELPER#

@@ -1,2 +1,2 @@
-lwp.db           var/lwp
+lwp.db.base      var/lwp
 lwp.example.conf etc/lwp

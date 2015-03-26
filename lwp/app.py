@@ -19,6 +19,11 @@ if '--generate-session-secret' in sys.argv[1:]:
         handle.write(key)
     exit(0)
 
+# TODO implement a database migration ?
+if '--update-db' in sys1.argv[1:]:
+    print "ERROR not implement."
+    exit(0)
+
 try:
     SECRET_KEY = open(SESSION_SECRET_FILE, 'r').read()
 except IOError:
