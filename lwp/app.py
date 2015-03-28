@@ -21,7 +21,7 @@ if '--generate-session-secret' in sys.argv[1:]:
 
 # TODO implement a database migration ?
 if '--update-db' in sys1.argv[1:]:
-    print "ERROR not implement."
+    print ("ERROR not implement.")
     exit(0)
 
 try:

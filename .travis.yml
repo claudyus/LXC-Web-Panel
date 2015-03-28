@@ -9,7 +9,7 @@ install:
 before_script:
     - cp lwp.example.conf lwp.conf
     - sudo mkdir -p /var/lwp
-    - sudo cp lwp.db /var/lwp
+    - sudo cp lwp.db.base /var/lwp/lwp.db
     - export PATH=$PATH:$TRAVIS_BUILD_DIR/tests/mock-lxc
 
 script:

@@ -50,7 +50,7 @@ Now you should download source code and inside the source code directory run thi
   mkdir -p /etc/lwp        # create config/var dirs and popolate it
   mkdir -p /var/lwp
   cp lwp.example.conf /etc/lwp/lwp.conf
-  cp lwp.db /var/lwp/lwp.db
+  cp lwp.db.base /var/lwp/lwp.db
   service firewalld stop   # for fedora
   service lxc start        # if service lxc exists
   ./bin/lwp --debug        # run lwp wth debug support
