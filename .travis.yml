@@ -7,7 +7,8 @@ install:
     - sudo apt-get install nodejs build-essential dpkg-dev
 
 before_script:
-    - cp lwp.example.conf lwp.conf
+    - sudo mkdir -m 777 /etc/lwp
+    - cp lwp.example.conf /etc/lwp/lwp.conf
     - sudo mkdir -p /var/lwp
     - sudo cp lwp.db /var/lwp
     - export PATH=$PATH:$TRAVIS_BUILD_DIR/tests/mock-lxc
