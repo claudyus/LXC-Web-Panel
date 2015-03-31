@@ -18,8 +18,8 @@ script:
     - fab build_assets
     - ./setup.py develop
     - coverage run --source=lwp tests/webif.py
-    - coverage run --source=lwp tests/mock_lxc.py
-    - coverage run --source=lwp tests/utils.py
+    - coverage run -a --source=lwp tests/mock_lxc.py
+    - coverage run -a --source=lwp tests/utils.py
 
 after_script:
   coveralls
