@@ -20,5 +20,5 @@ script:
     - coverage run --source=lwp tests/mock_lxc.py
     - coverage run --source=lwp tests/utils.py
 
-after_success:
+after_script:
   coveralls
