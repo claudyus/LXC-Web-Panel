@@ -18,6 +18,7 @@ script:
     - ./setup.py develop
     - coverage run --source=lwp tests/webif.py
     - coverage run --source=lwp tests/mock_lxc.py
+    - coverage run --source=lwp tests/utils.py
 
 after_success:
   coveralls
