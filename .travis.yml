@@ -20,6 +20,7 @@ script:
     - coverage run --source=lwp tests/webif.py
     - coverage run -a --source=lwp tests/mock_lxc.py
     - coverage run -a --source=lwp tests/utils.py
+    - coverage run -a --source=lwp tests/lxc_lite.py
 
 after_script:
   coveralls
