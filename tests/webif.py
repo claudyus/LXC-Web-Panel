@@ -41,14 +41,14 @@ class TestWebIf(LiveServerTestCase):
             response = urllib2.urlopen(self.get_server_url() + link)
             self.assertEqual(response.code, 200)
 
-    def test_home_rendering(self):
-        subprocess.check_output('lxc-create -n mocktest_00_lxc', shell=True)
+    # def test_home_rendering(self):
+    #     subprocess.check_output('lxc-create -n mocktest_00_lxc', shell=True)
 
-        request = urllib2.Request(self.get_server_url() + '/home',
-            headers={'Private-Token': token})
-        response = urllib2.urlopen(request)
-        self.assertEqual(response.code, 200)
-        assert response.read().find('mocktest_00_lxc')
+    #     request = urllib2.Request(self.get_server_url() + '/home',
+    #         headers={'Private-Token': token})
+    #     response = urllib2.urlopen(request)
+    #     self.assertEqual(response.code, 200)
+    #     assert response.read().find('mocktest_00_lxc')
 
     def test_refresh_info(self):
         subprocess.check_output('lxc-create -n mocktest', shell=True)
