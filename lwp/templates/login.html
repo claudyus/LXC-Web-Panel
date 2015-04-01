@@ -3,7 +3,7 @@
 {% block content %}
 <div class="span4 offset4">
     {{ super() }}
-    <form action="{{ url_for('auth.login') }}" method="POST" class="form-signin">
+    <form action="{{ url_for('auth.login') }}" method="POST" class="form-signin" name="form-signin">
         <fieldset>
             <legend>LXC Web Panel</legend>
             <div class="control-group">

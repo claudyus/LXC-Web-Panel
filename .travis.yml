@@ -1,7 +1,7 @@
 language: python
 
 install:
-    - pip install flake8 fabric pytz Flask-Testing coveralls
+    - pip install flake8 fabric pytz Flask-Testing coveralls mechanize
     - sudo add-apt-repository -y ppa:chris-lea/node.js
     - sudo apt-get update -qq
     - sudo apt-get install nodejs build-essential dpkg-dev
@@ -21,6 +21,7 @@ script:
     - coverage run -a --source=lwp tests/mock_lxc.py
     - coverage run -a --source=lwp tests/utils.py
     - coverage run -a --source=lwp tests/lxc_lite.py
+    - coverage run -a --source=lwp tests/browser.py
 
 after_script:
   coveralls
