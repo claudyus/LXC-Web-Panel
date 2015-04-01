@@ -96,5 +96,23 @@ class TestWebBrowser(LiveServerTestCase):
         assert '/home'  in resp.geturl()
         assert 'mocktest_00_lxc' in resp.read()
 
+    def test_05_create_token(self):
+        """
+            try to create "test_created_container"
+        """
+        self.br.open(self.get_server_url() + "/lwp/tokens")
+
+        # select create-container form and fill it
+        self.br.select_form(name="lwp-token")
+        self.br['token'] = "mechanize_token"
+        self.br['description'] = "my_token_desc"
+        resp = self.br.submit()
+        body = resp.read()
+
+        assert '/lwp/tokens'  in resp.geturl()
+        assert 'mechanize_token' in body
+        assert 'my_token_desc' in body
+
+
 if __name__ == '__main__':
     unittest.main()
