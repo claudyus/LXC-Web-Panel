@@ -23,7 +23,7 @@ class TestWebBrowser(LiveServerTestCase):
     def setUpClass(cls):
         # cleanup
         shutil.copyfile('lwp.db.base', '/tmp/db.sql')
-        shutil.rmtree('/tmp/lxc')
+        shutil.rmtree('/tmp/lxc', ignore_errors=True)
 
     def create_app(self):
         app.config['DATABASE'] = '/tmp/db.sql'

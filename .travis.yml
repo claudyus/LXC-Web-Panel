@@ -12,6 +12,9 @@ before_script:
     - sudo mkdir -p /var/lwp
     - sudo cp lwp.db /var/lwp
     - export PATH=$PATH:$TRAVIS_BUILD_DIR/tests/mock-lxc
+    # mock the presence of lxc-templates
+    - sudo mkdir -p /usr/share/lxc/templates
+    - sudo touch /usr/share/lxc/templates/lxc-busybox /usr/share/lxc/templates/lxc-ubuntu
 
 script:
     - flake8 --ignore=E501,E402 lwp/ bin/lwp
