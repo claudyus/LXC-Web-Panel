@@ -27,6 +27,7 @@ class TestWebBrowser(LiveServerTestCase):
 
     def create_app(self):
         app.config['DATABASE'] = '/tmp/db.sql'
+        app.config['DEBUG'] = True
         return app
 
     def test_00_login(self):
