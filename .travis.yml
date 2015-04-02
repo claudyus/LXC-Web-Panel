@@ -23,5 +23,5 @@ script:
     - coverage run -a --source=lwp tests/lxc_lite.py
     - coverage run -a --source=lwp tests/browser.py
 
-after_script:
+after_success:
   coveralls
