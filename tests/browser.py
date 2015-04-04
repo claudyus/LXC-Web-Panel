@@ -17,8 +17,6 @@ class TestWebBrowser(LiveServerTestCase):
         and use the cookie and standard login form to operate on the lwp.
     """
 
-    br = mechanize.Browser()
-
     @classmethod
     def setUpClass(cls):
         # cleanup
@@ -29,6 +27,12 @@ class TestWebBrowser(LiveServerTestCase):
         app.config['DATABASE'] = '/tmp/db.sql'
         app.config['DEBUG'] = True
         return app
+
+    def setUp(self):
+        self.br = mechanize.Browser()
+
+    def tearDown(self):
+        self.br.close()
 
     def test_00_login(self):
         """
