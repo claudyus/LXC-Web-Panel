@@ -20,11 +20,12 @@ script:
     - flake8 --ignore=E501,E402 lwp/ bin/lwp
     - fab build_assets
     - ./setup.py develop
-    - coverage run --source=lwp tests/webif.py
-    - coverage run -a --source=lwp tests/mock_lxc.py
-    - coverage run -a --source=lwp tests/utils.py
-    - coverage run -a --source=lwp tests/lxc_lite.py
-    - coverage run -a --source=lwp tests/browser.py
+    - coverage run --source=lwp,bin tests/webif.py
+    - coverage run -a --source=lwp,bin tests/mock_lxc.py
+    - coverage run -a --source=lwp,bin tests/utils.py
+    - coverage run -a --source=lwp,bin tests/lxc_lite.py
+    - coverage run -a --source=lwp,bin tests/browser.py
+    - coverage report -m
 
 after_success:
   coveralls
