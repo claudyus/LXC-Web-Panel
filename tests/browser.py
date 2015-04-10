@@ -1,5 +1,6 @@
 import subprocess
 import mechanize
+import cookielib
 import unittest
 import shutil
 import os
@@ -22,17 +23,13 @@ class TestWebBrowser(LiveServerTestCase):
         # cleanup
         shutil.copyfile('lwp.db.base', '/tmp/db.sql')
         shutil.rmtree('/tmp/lxc', ignore_errors=True)
+        cj = cookielib.LWPCookieJar()
+        cls.br = mechanize.Browser()
+        cls.br.set_cookiejar(cj)
 
     def create_app(self):
         app.config['DATABASE'] = '/tmp/db.sql'
-        app.config['DEBUG'] = True
         return app
-
-    def setUp(self):
-        self.br = mechanize.Browser()
-
-    def tearDown(self):
-        self.br.close()
 
     def test_00_login(self):
         """
@@ -59,6 +56,7 @@ class TestWebBrowser(LiveServerTestCase):
 
         self.br.open(self.get_server_url() + "/home")
         resp = self.br.response().read()
+        assert self.br.viewing_html()
 
         assert 'mocktest_00_lxc' in resp
         assert 'Stopped' in resp
@@ -71,6 +69,7 @@ class TestWebBrowser(LiveServerTestCase):
 
         self.br.open(self.get_server_url() + "/home")
         resp = self.br.response().read()
+        assert self.br.viewing_html()
 
         assert 'mocktest_00_lxc' in resp
         assert 'Running' in resp
@@ -83,6 +82,7 @@ class TestWebBrowser(LiveServerTestCase):
 
         self.br.open(self.get_server_url() + "/home")
         resp = self.br.response().read()
+        assert self.br.viewing_html()
 
         assert 'mocktest_00_lxc' in resp
         assert 'Stopped' in resp
@@ -94,7 +94,7 @@ class TestWebBrowser(LiveServerTestCase):
         self.br.open(self.get_server_url() + "/home")
 
         # select create-container form and fill it
-        self.br.select_form(name="create-container")
+        self.br.select_form(name="create_container")
         self.br['name'] = "test_created_container"
         resp = self.br.submit()
 
@@ -108,7 +108,7 @@ class TestWebBrowser(LiveServerTestCase):
         self.br.open(self.get_server_url() + "/lwp/tokens")
 
         # select create-container form and fill it
-        self.br.select_form(name="lwp-token")
+        self.br.select_form(name="lwp_token")
         self.br['token'] = "mechanize_token"
         self.br['description'] = "my_token_desc"
         resp = self.br.submit()

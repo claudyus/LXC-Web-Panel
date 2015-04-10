@@ -27,6 +27,7 @@ class TestWebIf(LiveServerTestCase):
 
     def create_app(self):
         app.config['DATABASE'] = '/tmp/db.sql'
+        app.config['LIVESERVER_PORT'] = 5005
         return app
 
     def test_server_is_up_and_running(self):
