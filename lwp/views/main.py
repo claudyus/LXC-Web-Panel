@@ -186,11 +186,8 @@ def lwp_users():
     if session['su'] != 'Yes':
         return abort(403)
 
-    if AUTH == 'ldap':
-        return abort(403, 'You are using ldap as AUTH backend.')
-
-    if AUTH == 'htpasswd':
-        return abort(403, 'You are using htpasswd as AUTH backend.')
+    if AUTH != 'database':
+        return abort(403, 'You are using an auth method other that database.')
 
     try:
         trash = request.args.get('trash')

@@ -25,10 +25,10 @@
         </tbody>
     </table>
 
-    <form class="form-inline" action="{{ url_for('main.lwp_tokens') }}" method="post">
+    <form class="form-inline" action="{{ url_for('main.lwp_tokens') }}" method="post" name="lwp_token">
         <input type="text" id="token" name="token" class="input-medium" placeholder="token" required>
-        <button id="generate" class="btn"><i class="icon-refresh"></i></button>
-        <input type="text" name="description" class="input-large" placeholder="description">
+        <button id="generate" class="btn" name="generate"><i class="icon-refresh"></i></button>
+        <input type="text" name="description" class="input-large" placeholder="description" name="description">
         <input type="hidden" name="action" value="add">
         <button type="submit" class="btn btn-success">Add token</button>
     </form>

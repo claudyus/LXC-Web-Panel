@@ -93,7 +93,12 @@ def if_logged_in(function=render_template, f_args=('login.html', )):
             if 'logged_in' in session:
                 return handler(*args, **kwargs)
             else:
-                return function(*f_args)
+                token = request.headers.get('Private-Token')
+                result = query_db('select * from api_tokens where token=?', [token], one=True)
+                if result is not None:
+                    # token exists, access granted
+                    return handler(*args, **kwargs)
+            return function(*f_args)
         new_handler.func_name = handler.func_name
         return new_handler
     return decorator
