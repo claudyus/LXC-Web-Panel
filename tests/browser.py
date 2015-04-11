@@ -87,6 +87,17 @@ class TestWebBrowser(LiveServerTestCase):
         assert 'mocktest_00_lxc' in resp
         assert 'Stopped' in resp
 
+    def test_03_refresh_info(self):
+        """
+            the _refresh_info should return json object with host info
+        """
+        self.br.open(self.get_server_url() + '/_refresh_info')
+
+        j_data = self.br.response().read()
+        assert 'cpu' in j_data
+        assert 'disk' in j_data
+        assert 'uptime' in j_data
+
     def test_04_create_container(self):
         """
             try to create "test_created_container"
