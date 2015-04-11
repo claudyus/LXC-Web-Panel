@@ -29,3 +29,7 @@ jsbuild/bower_components/*
 lwp/static/css/*.css
 lwp/static/js/*.js
 lwp/static/img/*
+
+#coverage
+htmlcov/
+.coverage
