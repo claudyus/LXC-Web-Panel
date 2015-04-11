@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# mock of the lxc-freeze used to test lxclite on travis due to:
+#  https://github.com/travis-ci/travis-ci/issues/1273
+
+if [[ $1 -eq '-dn' && $2 ]]; then
+	if [[ -f /tmp/lxc/$2/status ]]; then
+		grep 'RUNNING' /tmp/lxc/$2/status > /dev/null || exit 1 # not running
+		echo 'FROZEN' > /tmp/lxc/$2/status
+        echo $* > /tmp/lxc/$2/params
+		exit 0
+	else
+		exit 1
+	fi
+fi
+
+exit 1

@@ -63,7 +63,7 @@ class TestWebBrowser(LiveServerTestCase):
 
     def test_02_start_container(self):
         """
-            the container exists, start it usinf /action and check badge on home
+            the container exists, start it using /action and check badge on home
         """
         self.br.open(self.get_server_url() + "/action?action=start&name=mocktest_00_lxc")
 
@@ -74,7 +74,33 @@ class TestWebBrowser(LiveServerTestCase):
         assert 'mocktest_00_lxc' in resp
         assert 'Running' in resp
 
-    def test_03_stop_container(self):
+    def test_03_freeze_container(self):
+        """
+            freeze the container using /action and check badge on home
+        """
+        self.br.open(self.get_server_url() + "/action?action=freeze&name=mocktest_00_lxc")
+
+        self.br.open(self.get_server_url() + "/home")
+        resp = self.br.response().read()
+        assert self.br.viewing_html()
+
+        assert 'mocktest_00_lxc' in resp
+        assert 'Frozen' in resp
+
+    def test_04_unfreeze_container(self):
+        """
+            unfreeze container using /action and check badge on home
+        """
+        self.br.open(self.get_server_url() + "/action?action=unfreeze&name=mocktest_00_lxc")
+
+        self.br.open(self.get_server_url() + "/home")
+        resp = self.br.response().read()
+        assert self.br.viewing_html()
+
+        assert 'mocktest_00_lxc' in resp
+        assert 'Running' in resp
+
+    def test_05_stop_container(self):
         """
             try to stop it
         """
@@ -87,7 +113,7 @@ class TestWebBrowser(LiveServerTestCase):
         assert 'mocktest_00_lxc' in resp
         assert 'Stopped' in resp
 
-    def test_03_refresh_info(self):
+    def test_06_refresh_info(self):
         """
             the _refresh_info should return json object with host info
         """
@@ -98,7 +124,7 @@ class TestWebBrowser(LiveServerTestCase):
         assert 'disk' in j_data
         assert 'uptime' in j_data
 
-    def test_04_create_container(self):
+    def test_07_create_container(self):
         """
             try to create "test_created_container"
         """
@@ -112,7 +138,7 @@ class TestWebBrowser(LiveServerTestCase):
         assert '/home'  in resp.geturl()
         assert 'mocktest_00_lxc' in resp.read()
 
-    def test_05_create_token(self):
+    def test_08_create_token(self):
         """
             try to create "test_created_container"
         """
