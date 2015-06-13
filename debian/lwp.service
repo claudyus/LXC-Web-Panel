@@ -1,0 +1,15 @@
+[Unit]
+Description=LXC Web Panel
+   
+[Service]
+User=root
+Group=root
+# Restart=on-failure
+# RestartSec=5
+Type=simple
+ExecStart=/usr/bin/lwp
+StandardOutput=null
+StandardError=null 
+
+[Install]
+WantedBy=multi-user.target
