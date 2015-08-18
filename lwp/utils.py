@@ -1,7 +1,5 @@
 import sys
-import hmac
 import time
-import crypt
 import hashlib
 import sqlite3
 import ConfigParser
@@ -162,4 +160,3 @@ def api_auth():
         new_handler.func_name = handler.func_name
         return new_handler
     return decorator
-

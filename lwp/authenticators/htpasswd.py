@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
+import hmac
 import crypt
 
 from lwp.utils import read_config_file
-
 
 
 class htpasswd:
