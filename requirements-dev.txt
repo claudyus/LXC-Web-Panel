@@ -1,0 +1,8 @@
+flake8
+fabric
+pytz
+Flask-Testing
+mechanize
+coveralls
+nose
+mock
