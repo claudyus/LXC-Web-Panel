@@ -163,21 +163,3 @@ def api_auth():
         return new_handler
     return decorator
 
-
-def check_htpasswd(htpasswd_file, username, password):
-    htuser = None
-
-    lines = open(htpasswd_file, 'r').readlines()
-    for line in lines:
-        htuser, htpasswd = line.split(':')
-        htpasswd = htpasswd.rstrip('\n')
-        if username == htuser:
-            break
-
-    if htuser is None:
-        return False
-    else:
-        if sys.version_info < (2, 7, 7):
-            return crypt.crypt(password, htpasswd) == htpasswd
-        else:
-            return hmac.compare_digest(crypt.crypt(password, htpasswd), htpasswd)

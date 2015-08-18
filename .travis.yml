@@ -22,7 +22,7 @@ script:
     # test the genearation of secret file without lwp.conf
     - nosetests --cover-package=lwp --with-coverage tests/utils.py
     - cp lwp.example.conf /etc/lwp/lwp.conf
-    - nosetests --cover-package=lwp --with-coverage tests/{api,browser,lxc_lite,mock_lxc}.py
+    - nosetests --cover-package=lwp --with-coverage tests/{auth,api,browser,lxc_lite,mock_lxc}.py
 
 after_success:
   coveralls
