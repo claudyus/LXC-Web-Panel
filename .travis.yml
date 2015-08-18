@@ -8,7 +8,7 @@ install:
 
 before_script:
     - sudo mkdir -m 777 /etc/lwp
-    - sudo mkdir -p /var/lwp
+    - sudo mkdir -m 777 -p /var/lwp
     - sudo cp lwp.db /var/lwp
     - export PATH=$PATH:$TRAVIS_BUILD_DIR/tests/mock-lxc
     # mock the presence of lxc-templates

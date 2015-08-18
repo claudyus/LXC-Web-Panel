@@ -9,13 +9,14 @@ class TestAuths(unittest.TestCase):
     """
 
     def test_http_passwd_auth(self):
-        global config
-        config = MagicMock()
-        config.get('htpasswd', 'file', return_value='/tmp/htpasswd')
-
+        # FIXME the config mock is ovewrite by lwp.app load
+        #       align test file to default example.conf
+        #global config
+        #config = MagicMock()
+        #config.get('htpasswd', 'file', return_value='/var/lwp/htpasswd')
         from lwp.authenticators.htpasswd import htpasswd
 
-        with open('/tmp/htpasswd', 'w+') as file_pass:
+        with open('/var/lwp/htpasswd', 'w') as file_pass:
             file_pass.write('user_test:L2HG274hqrFwo\n')
 
         h = htpasswd()
@@ -23,13 +24,9 @@ class TestAuths(unittest.TestCase):
         assert user.get('username') == 'user_test'
 
     def test_http_passwd_auth_wrongpass(self):
-        global config
-        config = MagicMock()
-        config.get('htpasswd', 'file', return_value='/tmp/htpasswd')
-
         from lwp.authenticators.htpasswd import htpasswd
 
-        with open('/tmp/htpasswd', 'w+') as file_pass:
+        with open('/var/lwp/htpasswd', 'w') as file_pass:
             file_pass.write('user_test:L2HG274hqrFwo\n')
 
         h = htpasswd()
