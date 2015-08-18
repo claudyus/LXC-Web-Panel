@@ -17,7 +17,7 @@ cgroup_ext is a data structure where for each input of edit.html we have an arra
 """
 ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
 cidr_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(\d|[1-2]\d|3[0-2]))*$'
-file_match = '^\/\w[\w.-\/-]+$'
+file_match = '^\/\w[\w.\/-]+$'
 
 cgroup_ext = {
     'arch': ['lxc.arch', '^(x86|i686|x86_64|amd64)$', ''],
@@ -32,7 +32,7 @@ cgroup_ext = {
     'ipv6gw': ['lxc.network.ipv6.gateway', '^([0-9a-fA-F:]+)+$', 'IPv6 gateway address updated'],
     'script_up': ['lxc.network.script.up', file_match, 'Network script down updated'],
     'script_down': ['lxc.network.script.down', file_match, 'Network script down updated'],
-    'rootfs': ['lxc.rootfs', '^(\/|overlayfs:\/)[\w.-\/:]+$', 'Rootfs updated'],
+    'rootfs': ['lxc.rootfs', '^(\/|overlayfs:\/)[\w.\/:-]+$', 'Rootfs updated'],
     'memlimit': ['lxc.cgroup.memory.limit_in_bytes', '^([0-9]+|)$', 'Memory limit updated'],
     'swlimit': ['lxc.cgroup.memory.memsw.limit_in_bytes', '^([0-9]+|)$', 'Swap limit updated'],
     'cpus': ['lxc.cgroup.cpuset.cpus', '^[0-9,-]+$', 'CPUs updated'],
