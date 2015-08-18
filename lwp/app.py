@@ -8,15 +8,8 @@ import sys
 from flask import Flask, g
 
 from lwp.utils import connect_db, check_session_limit, config
+from lwp import SESSION_SECRET_FILE
 from lwp.views import main, auth, api
-
-SESSION_SECRET_FILE = '/etc/lwp/session_secret'
-
-if '--generate-session-secret' in sys.argv[1:]:
-    key = os.urandom(24)
-    with os.fdopen(os.open(SESSION_SECRET_FILE, os.O_WRONLY | os.O_CREAT, 0644), 'w') as handle:
-        handle.write(key)
-    exit(0)
 
 try:
     SECRET_KEY = open(SESSION_SECRET_FILE, 'r').read()

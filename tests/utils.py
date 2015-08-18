@@ -11,7 +11,8 @@ class TestCmdLine(unittest.TestCase):
 
     def test_generate_secret(self):
         assert not os.path.exists('/etc/lwp/session_secret')
-        subprocess.check_output('python bin/lwp --generate-session-secret', shell=True)
+        assert not os.path.exists('/etc/lwp/lwp.conf')
+        subprocess.check_call('python bin/lwp --generate-session-secret', shell=True)
         assert os.path.exists('/etc/lwp/session_secret')
 
 

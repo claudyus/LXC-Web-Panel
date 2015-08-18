@@ -12,6 +12,8 @@ from lwp.lxclite import exists, stopped
 from lwp.lxclite import lxcdir
 from lwp.utils import cgroup_ext
 
+SESSION_SECRET_FILE = '/etc/lwp/session_secret'
+
 
 class FakeSection(object):
     def __init__(self, fp):

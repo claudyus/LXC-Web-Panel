@@ -11,11 +11,12 @@ from flask import Blueprint, request, session, g, redirect, url_for, abort, rend
 
 import lwp
 import lwp.lxclite as lxc
-from lwp.utils import query_db, if_logged_in, get_bucket_token, hash_passwd, config, cgroup_ext
+from lwp.utils import query_db, if_logged_in, get_bucket_token, hash_passwd, read_config_file, cgroup_ext
 from lwp.views.auth import AUTH
 
 # TODO: see if we can move this block somewhere better
 try:
+    config = read_config_file()
     USE_BUCKET = config.getboolean('global', 'buckets')
     BUCKET_HOST = config.get('buckets', 'buckets_host')
     BUCKET_PORT = config.get('buckets', 'buckets_port')

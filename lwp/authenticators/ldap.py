@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from lwp.utils import config
+from lwp.utils import read_config_file
 
 import ldap as ldap_m
 
 
 class ldap:
     def __init__(self):
+        config = read_config_file()
         self.LDAP_HOST = config.get('ldap', 'host')
         self.LDAP_PORT = int(config.get('ldap', 'port'))
         self.LDAP_PROTO = 'ldaps' if config.getboolean('ldap', 'ssl') else 'ldap'

@@ -5,11 +5,11 @@ import time
 
 from flask import Blueprint, request, session, redirect, url_for, render_template, flash
 
-from lwp.utils import get_token, config
+from lwp.utils import get_token, read_config_file
 
 import lwp.authenticators as auth
 
-AUTH = config.get('global', 'auth')
+AUTH = read_config_file().get('global', 'auth')
 AUTH_INSTANCE = auth.get_authenticator(AUTH)
 print(' * Auth type: ' + AUTH)
 
