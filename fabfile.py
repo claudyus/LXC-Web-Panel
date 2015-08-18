@@ -120,3 +120,8 @@ def clean_jsbuild():
 def clean():
     clean_jsbuild()
     clean_assets()
+
+@task
+def dev_test():
+    local('flake8 --ignore=E501,E402 lwp/ bin/lwp')
+    local('nosetests --cover-package=lwp --with-coverage tests/auth.py tests/api.py tests/browser.py tests/lxc_lite.py tests/mock_lxc.py')

@@ -16,13 +16,12 @@ before_script:
     - sudo touch /usr/share/lxc/templates/lxc-busybox /usr/share/lxc/templates/lxc-ubuntu
 
 script:
-    - flake8 --ignore=E501,E402 lwp/ bin/lwp
     - fab build_assets
     - ./setup.py develop
     # test the genearation of secret file without lwp.conf
     - nosetests --cover-package=lwp --with-coverage tests/utils.py
     - cp lwp.example.conf /etc/lwp/lwp.conf
-    - nosetests --cover-package=lwp --with-coverage tests/{auth,api,browser,lxc_lite,mock_lxc}.py
+    - fab dev_test  # dev_test run all the other tests and flake8
 
 after_success:
   coveralls
