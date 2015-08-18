@@ -57,18 +57,21 @@ cgroup_ext = {
 # configuration
 config = ConfigParser.SafeConfigParser()
 
-try:
-    # TODO: should really use with statement here rather than rely on cpython reference counting
-    config.readfp(open('/etc/lwp/lwp.conf'))
-except:
-    # TODO: another blind exception
-    print(' * missed /etc/lwp/lwp.conf file')
+
+def read_config_file():
     try:
-        # fallback on local config file
-        config.readfp(open('lwp.conf'))
+        # TODO: should really use with statement here rather than rely on cpython reference counting
+        config.readfp(open('/etc/lwp/lwp.conf'))
     except:
-        print(' * cannot read config files. Exit!')
-        sys.exit(1)
+        # TODO: another blind exception
+        print(' * missed /etc/lwp/lwp.conf file')
+        try:
+            # fallback on local config file
+            config.readfp(open('lwp.conf'))
+        except:
+            print(' * cannot read config files. Exit!')
+            sys.exit(1)
+    return config
 
 
 def connect_db(db_path):
