@@ -574,13 +574,14 @@ def backup_container():
                 sr_path = sr[1]
                 break
 
-        out = None
+        backup_failed = True
 
         try:
             backup_file = lxc.backup(container=container, sr_type=sr_type, destination=sr_path)
             bucket_token = get_bucket_token(container)
             if push and bucket_token and USE_BUCKET:
                     os.system('curl http://{}:{}/{} -F file=@{}'.format(BUCKET_HOST, BUCKET_PORT, bucket_token, backup_file))
+            backup_failed = False
         except lxc.ContainerDoesntExists:
             flash(u'The Container %s does not exist !' % container, 'error')
         except lxc.DirectoryDoesntExists:
@@ -592,9 +593,9 @@ def backup_container():
         except:
             flash(u'Error during transfert !', 'error')
 
-        if out == 0:
+        if backup_failed is not True:
             flash(u'Container %s backed up successfully' % container, 'success')
-        elif out != 0:
+        else:
             flash(u'Failed to backup %s container' % container, 'error')
 
     return redirect(url_for('main.home'))
