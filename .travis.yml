@@ -1,14 +1,14 @@
 language: python
 
 install:
-    - pip install flake8 fabric pytz Flask-Testing mechanize coveralls nose
+    - pip install -r requirements-dev.txt
     - sudo add-apt-repository -y ppa:chris-lea/node.js
     - sudo apt-get update -qq
     - sudo apt-get install nodejs build-essential dpkg-dev
 
 before_script:
     - sudo mkdir -m 777 /etc/lwp
-    - sudo mkdir -p /var/lwp
+    - sudo mkdir -m 777 -p /var/lwp
     - sudo cp lwp.db /var/lwp
     - export PATH=$PATH:$TRAVIS_BUILD_DIR/tests/mock-lxc
     # mock the presence of lxc-templates
@@ -16,13 +16,12 @@ before_script:
     - sudo touch /usr/share/lxc/templates/lxc-busybox /usr/share/lxc/templates/lxc-ubuntu
 
 script:
-    - flake8 --ignore=E501,E402 lwp/ bin/lwp
     - fab build_assets
     - ./setup.py develop
     # test the genearation of secret file without lwp.conf
     - nosetests --cover-package=lwp --with-coverage tests/utils.py
     - cp lwp.example.conf /etc/lwp/lwp.conf
-    - nosetests --cover-package=lwp --with-coverage tests/{api,browser,lxc_lite,mock_lxc}.py
+    - fab dev_test  # dev_test run all the other tests and flake8
 
 after_success:
   coveralls

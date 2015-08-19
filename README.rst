@@ -159,6 +159,10 @@ used against the global installation using: ``sudo lwp --debug``
 
 Anyway ensure to stop the lwp service if any: ``sudo service lwp stop``
 
+To run test locally unsure that mock-lxc scripts are in PATH (``export PATH=`pwd`/tests/mock-lxc:$PATH``) than run ``fab dev_test``
+
+To build a local debian package run ``fab debian``
+
 LICENSE
 -------
 This work is released under MIT License, see LICENSE file.
