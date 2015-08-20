@@ -9,7 +9,7 @@
                 <div class="controls input-prepend">
                     <span class="add-on"><i class="icon-download-alt"></i></span>
                     <select id="selectContainer" name="orig">
-                        {% for c in containers %}
+                        {% for c in clonable_containers %}
                         {% if c == container %}
                         <option value="{{ c }}" selected>{{c}}</option>
                         {% else %}

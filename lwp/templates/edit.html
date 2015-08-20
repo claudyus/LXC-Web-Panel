@@ -226,7 +226,9 @@
         <li><strong>Network :</strong> {% if settings.flags == 'up' %}<span class="label label-success">Up</span>{% else %}<span class="label label-important">Down</span>{% endif %}</li>
         {% if infos.memusg %}<li id="{{ container }}"><strong>Mem. usage :</strong> {{ render_memory_wrapper(infos.memusg) }}</li>{% endif %}{% endif %}
         <li><strong>Arch :</strong> {{ settings.arch }}</li>
+        {% if infos.status == "STOPPED" %}
         <p style="padding-top: 10px;"><a class="btn btn-small btn-inverse" data-toggle="modal" data-target="#cloneCT"> <i class="icon-repeat icon-white"></i> Clone <abbr title="Container">CT</abbr></a></p>
+        {% endif %}
         {% if storage_repos %}
         <p style="padding-top: 10px;"><a class="btn btn-small btn-primary" data-toggle="modal" data-target="#backupCT"> <i class="icon-hdd icon-white"></i> Backup <abbr title="Container">CT</abbr></a></p>
         {% endif %}

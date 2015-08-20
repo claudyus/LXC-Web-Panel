@@ -57,10 +57,11 @@ def home():
             'status': status.lower(),
             'containers': containers_by_status
         })
+        clonable_containers = listx['STOPPED']
 
     return render_template('index.html', containers=lxc.ls(), containers_all=containers_all, dist=lwp.name_distro(),
                            host=socket.gethostname(), templates=lwp.get_templates_list(), storage_repos=storage_repos,
-                           auth=AUTH)
+                           auth=AUTH, clonable_containers=clonable_containers)
 
 
 @mod.route('/about')
@@ -119,7 +120,10 @@ def edit(container=None):
     regex = {}
     for k, v in cgroup_ext.items():
         regex[k] = v[1]
-    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos, settings=cfg, host_memory=host_memory, storage_repos=storage_repos, regex=regex)
+
+    return render_template('edit.html', containers=lxc.ls(), container=container, infos=infos,
+                           settings=cfg, host_memory=host_memory, storage_repos=storage_repos, regex=regex,
+                           clonable_containers=lxc.listx()['STOPPED'])
 
 
 @mod.route('/settings/lxc-net', methods=['POST', 'GET'])
