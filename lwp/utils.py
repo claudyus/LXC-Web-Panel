@@ -30,7 +30,7 @@ cgroup_ext = {
     'ipv6gw': ['lxc.network.ipv6.gateway', '^([0-9a-fA-F:]+)+$', 'IPv6 gateway address updated'],
     'script_up': ['lxc.network.script.up', file_match, 'Network script down updated'],
     'script_down': ['lxc.network.script.down', file_match, 'Network script down updated'],
-    'rootfs': ['lxc.rootfs', '^(\/|overlayfs:\/)[\w.\/:-]+$', 'Rootfs updated'],
+    'rootfs': ['lxc.rootfs', '^(\/|loop:\/|overlayfs:\/)[\w.\/:-]+$', 'Rootfs updated'],
     'memlimit': ['lxc.cgroup.memory.limit_in_bytes', '^([0-9]+|)$', 'Memory limit updated'],
     'swlimit': ['lxc.cgroup.memory.memsw.limit_in_bytes', '^([0-9]+|)$', 'Swap limit updated'],
     'cpus': ['lxc.cgroup.cpuset.cpus', '^[0-9,-]+$', 'CPUs updated'],
