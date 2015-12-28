@@ -120,6 +120,11 @@ or
 With default ``login`` service all valid linux users can login to lwp.
 Many more options are available via PAM Configuration, see PAM docs.
 
+HTTP
++++++
+
+This auth method is used to authenticate the users using an external http server through a POST request. To enable this method  ``auth`` type to ``http`` and configure the option under ``http`` section.
+
 Custom autenticators
 ++++++++++++++++++++
 
