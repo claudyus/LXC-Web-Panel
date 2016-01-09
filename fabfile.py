@@ -124,4 +124,7 @@ def clean():
 @task
 def dev_test():
     local('flake8 --ignore=E501,E402 lwp/ bin/lwp')
-    local('nosetests --cover-package=lwp --with-coverage tests/auth.py tests/api.py tests/browser.py tests/lxc_lite.py tests/mock_lxc.py')
+    for test_file in ['auth', 'api', 'browser', 'lxc_lite', 'mock_lxc']:
+        local('nosetests --cover-package=lwp --with-coverage tests/{}.py'.format(test_file))
+        local('mv .coverage .coverage.{}'.format(test_file))
+    local('coverage combine')
