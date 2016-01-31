@@ -18,16 +18,15 @@ On ubuntu 12.04 you should install:
 Installation on deb based system
 ------------------------------------
 
-You can download latest debian packages from http://claudyus.github.io/LXC-Web-Panel/download.html or, better, you can also use the lwp debian repo:
+The latest debian packages are released using packagecloud.io service since version 0.9, please update your repo config.
+The install script can be found at https://packagecloud.io/claudyus/LXC-Web-Panel/install
 
-::
+Installation of the package can be done typing::
 
-  wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
-  echo "deb http://claudyus.github.io/LXC-Web-Panel/ debian/" | sudo tee /etc/apt/sources.list.d/lwp.list
-  sudo apt-get update
   sudo apt-get install lwp
 
-Note: you can also include the debian-testing repo inside your source.list file to receive release candidate build.
+Version released before 0.9 can be downloaded at http://claudyus.github.io/LXC-Web-Panel/download.html
+
 
 Installation on rpm system or from source code
 ----------------------------------------------
