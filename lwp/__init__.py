@@ -304,9 +304,10 @@ def push_config_value(key, value, container=None):
                 read = load.readlines()
 
             while i < len(read):
-                if not read[i].startswith('#') and \
-                        re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow|lxc.mount.entry|lxc.cap.drop', read[i]):
-                    values.append(read[i])
+                if not read[i].startswith('#'):
+                    if not (read[i] in values):
+                        if re.match('lxc.cgroup.devices.deny|lxc.cgroup.devices.allow|lxc.mount.entry|lxc.cap.drop', read[i]):
+                            values.append(read[i])
                 i += 1
             return values
 
@@ -324,9 +325,14 @@ def push_config_value(key, value, container=None):
             config.set('DEFAULT', key, value)
 
         # Bugfix (can't duplicate keys with config parser)
-        if config.has_option('DEFAULT', cgroup_ext['deny'][0]) or config.has_option('DEFAULT', cgroup_ext['allow'][0]):
+        if config.has_option('DEFAULT', cgroup_ext['deny'][0]):
             config.remove_option('DEFAULT', cgroup_ext['deny'][0])
+        if config.has_option('DEFAULT', cgroup_ext['allow'][0]):
             config.remove_option('DEFAULT', cgroup_ext['allow'][0])
+        if config.has_option('DEFAULT', 'lxc.cap.drop'):
+            config.remove_option('DEFAULT', 'lxc.cap.drop')
+        if config.has_option('DEFAULT', 'lxc.mount.entry'):
+            config.remove_option('DEFAULT', 'lxc.mount.entry')
 
         with open(filename, 'wb') as configfile:
             config.write(configfile)
