@@ -11,14 +11,13 @@
 </blockquote>
 <div class="section" id="installation-on-deb-based-system">
 <h1>Installation on deb based system</h1>
-<p>You can download latest debian packages from <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/download.html">http://claudyus.github.io/LXC-Web-Panel/download.html</a> or, better, you can also use the lwp debian repo:</p>
+<p>The latest debian packages are released using packagecloud.io service since version 0.9, please update your repo config.
+The install script can be found at <a class="reference external" href="https://packagecloud.io/claudyus/LXC-Web-Panel/install">https://packagecloud.io/claudyus/LXC-Web-Panel/install</a></p>
+<p>Installation of the package can be done typing:</p>
 <pre class="literal-block">
-wget -O - http://claudyus.github.io/LXC-Web-Panel/claudyus.gpg.key | sudo apt-key add -
-echo &quot;deb http://claudyus.github.io/LXC-Web-Panel/ debian/&quot; | sudo tee /etc/apt/sources.list.d/lwp.list
-sudo apt-get update
 sudo apt-get install lwp
 </pre>
-<p>Note: you can also include the debian-testing repo inside your source.list file to receive release candidate build.</p>
+<p>Version released before 0.9 can be downloaded at <a class="reference external" href="http://claudyus.github.io/LXC-Web-Panel/download.html">http://claudyus.github.io/LXC-Web-Panel/download.html</a></p>
 </div>
 <div class="section" id="installation-on-rpm-system-or-from-source-code">
 <h1>Installation on rpm system or from source code</h1>
@@ -92,6 +91,10 @@ yum install python-pam
 <p>With default <tt class="docutils literal">login</tt> service all valid linux users can login to lwp.
 Many more options are available via PAM Configuration, see PAM docs.</p>
 </div>
+<div class="section" id="http">
+<h3>HTTP</h3>
+<p>This auth method is used to authenticate the users using an external http server through a POST request. To enable this method  <tt class="docutils literal">auth</tt> type to <tt class="docutils literal">http</tt> and configure the option under <tt class="docutils literal">http</tt> section.</p>
+</div>
 <div class="section" id="custom-autenticators">
 <h3>Custom autenticators</h3>
 <p>If you want to use different type of authentication, create appropriate file in <tt class="docutils literal">authenticators/</tt> directory with specific structure (example can be viewed in <tt class="docutils literal">stub</tt> authenticator)</p>
@@ -125,6 +128,8 @@ cp lwp.example.conf lwp.conf
 <p>Debug is just one of the available options to profile lwp you can use <tt class="docutils literal"><span class="pre">--profiling</span></tt> options, those options can also be
 used against the global installation using: <tt class="docutils literal">sudo lwp <span class="pre">--debug</span></tt></p>
 <p>Anyway ensure to stop the lwp service if any: <tt class="docutils literal">sudo service lwp stop</tt></p>
+<p>To run test locally unsure that mock-lxc scripts are in PATH (<tt class="docutils literal">export <span class="pre">PATH=`pwd`/tests/mock-lxc:$PATH</span></tt>) than run <tt class="docutils literal">fab dev_test</tt></p>
+<p>To build a local debian package run <tt class="docutils literal">fab debian</tt></p>
 </div>
 <div class="section" id="license">
 <h1>LICENSE</h1>
