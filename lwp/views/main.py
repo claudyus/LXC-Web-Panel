@@ -503,6 +503,20 @@ def create_container():
                     flash(u'The container/logical volume %s is already created!' % name, 'error')
                 except subprocess.CalledProcessError:
                     flash(u'Error! %s' % name, 'error')
+            elif storage_method == 'ceph':
+                rbd_name = request.form['rbd_name']
+                rbd_pool = request.form['rbd_pool']
+
+                # TODO better check
+                storage_options = 'rbd'
+                storage_options += ' --rbdname=%s' % rbd_name if rbd_name is not None else name
+                storage_options += ' --rbdpool=%s' % rbd_pool if rbd_pool is not None else 'lwp'
+
+                try:
+                    ret = lxc.create(name, template=template, storage=storage_options, xargs=command)
+                    flash(u'Container %s created successfully!' % name, 'success')
+                except:
+                    flash(u'Error! %s' % name, 'error')
 
             else:
                 flash(u'Missing parameters to create container!', 'error')
