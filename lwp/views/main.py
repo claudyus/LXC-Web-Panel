@@ -513,7 +513,7 @@ def create_container():
                 storage_options += ' --rbdpool=%s' % rbd_pool if rbd_pool is not None else 'lwp'
 
                 try:
-                    ret = lxc.create(name, template=template, storage=storage_options, xargs=command)
+                    lxc.create(name, template=template, storage=storage_options, xargs=command)
                     flash(u'Container %s created successfully!' % name, 'success')
                 except:
                     flash(u'Error! %s' % name, 'error')
