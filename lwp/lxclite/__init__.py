@@ -118,7 +118,7 @@ def listx():
     running = []
     status_container = {}
 
-    outcmd = _run('lxc-ls --fancy | tail -n+3', output=True).splitlines()
+    outcmd = _run('lxc-ls --fancy | grep -o \'^[^-].*\' | tail -n+2', output=True).splitlines()
 
     for line in outcmd:
         status_container[line.split()[0]] = line.split()[1:]
