@@ -5,6 +5,9 @@
 
 # lxc-clone <old> <new>
 if [[ $1 && $2 ]]; then
+    if [[ $LXC_VER == "2" ]]; then
+        echo "lxc-clone is deprecated in favor of lxc-copy."
+    fi
 	if [[ -d /tmp/lxc/$1 ]]; then
         cp -r /tmp/lxc/$1 /tmp/lxc/$2
         exit 0

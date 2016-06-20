@@ -1,5 +1,9 @@
 language: python
 
+env:
+    - LXC_VER=1
+    - LXC_VER=2
+
 install:
     - pip install -r requirements-dev.txt
     - sudo add-apt-repository -y ppa:chris-lea/node.js
