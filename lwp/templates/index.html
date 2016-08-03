@@ -132,21 +132,32 @@
                         } else {
                             el.text(data[i].memusg + " / " + data[i].settings.memlimit + ' MB');
                         }
-                        el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg));
+                        el[0].className = el[0].className.replace(/label\-(success|warning|important)/g,'label-'+memory_color(data[i].memusg, data[i].settings.memlimit));
                     }
                 });
 
                 $('#home-load').fadeOut();
             }
 
-            function memory_color(value){
-                if(value != 0)
-                    if ('0' <= value && value <= '512')
+            function memory_color(value, total){
+                if(total == '') {
+                    if(value != 0)
+                        if ('0' <= value && value <= '512')
+                            return 'success';
+                        else if ('512' <= value && value < '1024')
+                            return 'warning';
+                        else
+                            return 'important';
+                }
+                else {
+                    value = value / total;
+                    if (0 <= value && value <= 0.6)
                          return 'success';
-                    else if ('512' <= value && value < '1024')
+                    else if (0.6 <= value && value < 0.8)
                         return 'warning';
                     else
                         return 'important';
+                }
             }
 
             function refresh(){
