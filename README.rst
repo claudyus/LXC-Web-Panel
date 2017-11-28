@@ -4,11 +4,11 @@ LXC-Web-Panel
 .. image:: https://travis-ci.org/claudyus/LXC-Web-Panel.svg?branch=master
     :target: https://travis-ci.org/claudyus/LXC-Web-Panel
 
-This is a fork of the original LXC-Web-Panel from https://github.com/lxc-webpanel/LXC-Web-Panel with a lot of improvements and bug fix for LXC 1.0+.
+This is a fork of the original LXC-Web-Panel from https://github.com/lxc-webpanel/LXC-Web-Panel with a lot of improvements and bug fixes for LXC 1.0+.
 
-This version of lwp is featuring backup capability, RestAPI interface, LDAP support other that the necessary fixes to work with latest lxc version. This project is also available as debian package for easly installation.
+This version of lwp features backup capability, RestAPI interface, LDAP support, and other necessary fixes to work with the latest lxc version. This project is also available as debian package for easy installation.
 
-If you use this fork please ensure to use al least lxc 1.0.4. The code was tested on Ubuntu 12.04 and 14.04.
+If you use this fork please ensure to use at least lxc 1.0.4. The code was tested on Ubuntu 12.04 and 14.04.
 
 On ubuntu 12.04 you should install:
 
@@ -31,16 +31,16 @@ Version released before 0.9 can be downloaded at http://claudyus.github.io/LXC-W
 Installation on rpm system or from source code
 ----------------------------------------------
 
-If you want to run lwp from source code or in a rpm based system like Fedora you can follow steps.
+If you want to run lwp from source code or in a rpm based system like Fedora you can follow the steps below.
 
-On a fedora system you should install those deps.
+On a fedora system you should install these deps.
 
 ::
 
   sudo yum update
   sudo yum install lxc lxc-devel lxc-libs lxc-extra lxc-templates python-pam python-flask fabric pytz npm
 
-Now you should download source code and inside the source code directory run this steps
+Now you should download the source code and inside the source code directory run these steps below
 
 ::
 
@@ -80,7 +80,7 @@ Default authentication is against the internal sqlite database, but it's possibl
 LDAP
 ++++
 
-To enable ldap auth you should set ``auth`` type to ``ldap`` inside your config file than configure all options inside ldap section.
+To enable ldap auth you should set ``auth`` type to ``ldap`` inside your config file then configure all options inside ldap section.
 See lwp.example.conf for references.
 
 Pyhton LDAP need to be installed::
